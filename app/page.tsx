@@ -1,9 +1,16 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { signIn, useSession } from 'next-auth/react'
+import React from 'react'
+
+function page() {
+
+
   return (
-    <>
-    page
-    </>
-  );
+    <div>
+      <button onClick={()=> signIn("google")}>Sign In</button>
+    </div>
+  )
 }
+
+export default page
