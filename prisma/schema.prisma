@@ -20,9 +20,21 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
-
+  followers Follows[] @relation("following")
+  following Follows[] @relation("follower")
   posts Post[]
 }
+
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId String
+
+  @@id([followerId, followingId])
+}
+
 
 
 
@@ -52,9 +64,19 @@ model Post {
   title     String
   content   String?
   published Boolean @default(false)
+  coverImg  String? 
+  createdAt  DateTime   @default(now())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             String  @map("user_id")
+  categories Category[]
+  likes     Int @default(0)
+}
 
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
 }
 
 
