@@ -26,6 +26,7 @@ export default async function Page({
 
 
 
+
   if(!user){
     // TODO: User doesnt exist wala page
     return null;
@@ -36,17 +37,11 @@ export default async function Page({
 
 
   return <div className="w-full h-screen flex">
-    <aside className="w-[30%] h-full bg-slate-50 flex flex-col gap-4 items-center p-4">
+    <aside className="w-[30%] h-full bg-slate-50 flex flex-col gap-2 items-center p-4">
       {user.image ? (
         <Image src={user?.image.replace("s96-c", "s384-c")} width={500} height={500} alt="Profile Pic" className="rounded-xl w-64" />
       ) : (<Skeleton className="rounded-xl w-48" />)}
-      
-      <h1>{user.name}</h1>
-      {post.map((item, idx)=>(
-        <p key={idx}>
-          {idx} Posts
-        </p>
-      ))}
+      <p>{post.length} Post</p>
     </aside>
 
     <div className="w-full h-full px-16 py-4">
