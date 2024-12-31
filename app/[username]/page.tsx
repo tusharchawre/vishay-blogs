@@ -3,6 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/prisma";
 import { useSession } from "next-auth/react"
 import Image from "next/image";
+import { PostItem } from "../_components/PostItem";
 
 export default async function Page({
   params,
@@ -62,16 +63,8 @@ export default async function Page({
       <div>
       {
         post.map((post, idx)=>(
-          <>
-          <div className="border-b border-white/20 w-full h-40">
-          <p>{post.title}</p>
-          <p className="line-clamp-2">{post.content}</p>
-          <p>{post.createdAt.getFullYear()} {months[post.createdAt.getUTCMonth()]}</p>
-          <p>{post.likes} Likes</p>
-          <p>{post.user.name}</p>
+          <PostItem key={idx} title={post.title} content={post.content} date={`${post.createdAt.getFullYear()}  ${months[post.createdAt.getUTCMonth()]}`} likes={post.likes} coverImg={post.coverImg}  />
 
-          </div>
-          </>
         ))
       }
 
