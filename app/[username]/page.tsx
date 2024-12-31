@@ -21,9 +21,18 @@ export default async function Page({
   const post = await prisma.post.findMany({
     where: {
       userId: user?.id
+    },
+    include:{
+      user:{
+        select:{
+          name: true,
+          image: true
+        }
+      }
     }
   })
 
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
 
 
@@ -50,7 +59,25 @@ export default async function Page({
       <p className="text-slate-700">{user.email}</p>
       </div>
 
+      <div>
+      {
+        post.map((post, idx)=>(
+          <>
+          <div className="border-b border-white/20 w-full h-40">
+          <p>{post.title}</p>
+          <p className="line-clamp-2">{post.content}</p>
+          <p>{post.createdAt.getFullYear()} {months[post.createdAt.getUTCMonth()]}</p>
+          <p>{post.likes} Likes</p>
+          <p>{post.user.name}</p>
+
+          </div>
+          </>
+        ))
+      }
+
+</div>
     </div>
+
 
     
   </div>
