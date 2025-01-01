@@ -1,0 +1,32 @@
+"use server"
+
+import { auth } from "@/auth"
+import { prisma } from "@/prisma"
+import { Block } from "@blocknote/core"
+
+export const savePost = async (content: Block[]) =>{
+
+    const session = await auth()
+
+    if (!session || !session.user || !session.user.email) {
+        throw new Error("User not authenticated or session invalid")
+    }
+
+    const email  = session.user.email
+
+    const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
+
+      const post = await prisma.post.create({
+          data: {
+            title: parsedTitle,
+            content:  JSON.stringify(content),
+            published: true,
+            user: {
+                connect: {
+                    email: email
+                }
+            }
+          }
+
+        })
+}

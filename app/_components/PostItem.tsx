@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react"
 import Image from "next/image"
+import { constSelector } from "recoil"
 
 interface PostProps {
     title : string
@@ -11,6 +12,11 @@ interface PostProps {
 
 
 export const PostItem = ({title,content, date, coverImg, likes}: PostProps) =>{
+
+    if(!content) return content="Content not found"
+
+
+
     return(
         <div className="flex w-full h-40  border-b border-black/25">
         <div className="w-[70%] h-full flex flex-col justify-around p-4">
