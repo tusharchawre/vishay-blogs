@@ -20,7 +20,8 @@ export const PostItem = ({title,content, date, coverImg, likes,user}: PostProps)
 
 
     return(
-        <Link href={`/${user}/${title.replaceAll(" ", "-")}`}>
+        //TODO :  Encode the URL in good dash wala fashion
+        <Link href={`/${user}/${encodeURIComponent(title)}`}>
         <div className="flex w-full h-40  border-b border-black/25">
         <div className="w-[70%] h-full flex flex-col justify-around p-4">
         <h1 className="text-2xl font-bold">{title}</h1>

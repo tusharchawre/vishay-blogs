@@ -3,6 +3,7 @@
 import { auth } from "@/auth"
 import { prisma } from "@/prisma"
 import { Block } from "@blocknote/core"
+import { title } from "process"
 
 export const savePost = async (content: Block[]) =>{
 
@@ -15,6 +16,7 @@ export const savePost = async (content: Block[]) =>{
     const email  = session.user.email
 
     const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
+
 
       const post = await prisma.post.create({
           data: {
@@ -36,6 +38,9 @@ interface GetPostProps {
   username: string
   blogTitle: string
 }
+
+
+
 
 
 export const getPost = async ({ username, blogTitle }: GetPostProps) => {

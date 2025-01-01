@@ -18,7 +18,7 @@ const Page = () => {
 
   return (
     <div>
-      <Editor onSave={saveContent} />
+      <Editor onSave={saveContent} editable={true} />
     </div>
   );
 };
