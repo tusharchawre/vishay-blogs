@@ -63,7 +63,7 @@ export default async function Page({
       <div>
       {
         post.map((post, idx)=>(
-          <PostItem key={idx} title={post.title} content={post.content} date={`${post.createdAt.getFullYear()}  ${months[post.createdAt.getUTCMonth()]}`} likes={post.likes} coverImg={post.coverImg}  />
+          <PostItem key={idx} user={post.user.name} title={post.title} content={post.content} date={`${post.createdAt.getFullYear()}  ${months[post.createdAt.getUTCMonth()]}`} likes={post.likes} coverImg={post.coverImg}  />
 
         ))
       }

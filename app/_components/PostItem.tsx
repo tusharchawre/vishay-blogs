@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { constSelector } from "recoil"
 
 interface PostProps {
@@ -8,16 +9,18 @@ interface PostProps {
     date: string
     coverImg: string | null //TODO: Generate Image from AI for Cover
     likes: number
+    user: string | null
 }
 
 
-export const PostItem = ({title,content, date, coverImg, likes}: PostProps) =>{
+export const PostItem = ({title,content, date, coverImg, likes,user}: PostProps) =>{
 
     if(!content) return content="Content not found"
 
 
 
     return(
+        <Link href={`/${user}/${title.replaceAll(" ", "-")}`}>
         <div className="flex w-full h-40  border-b border-black/25">
         <div className="w-[70%] h-full flex flex-col justify-around p-4">
         <h1 className="text-2xl font-bold">{title}</h1>
@@ -36,6 +39,8 @@ export const PostItem = ({title,content, date, coverImg, likes}: PostProps) =>{
 
         
         </div>
+
+        </Link>
     )
 }
 

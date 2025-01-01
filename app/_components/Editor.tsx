@@ -8,20 +8,20 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { useState } from "react";
 
 interface EditorProps {
-    onSave: (content: Block[]) => void
+    onSave?: (content: Block[]) => void
+    initialContent?: string | undefined
+    editable?: boolean
 }
 
-function Editor({onSave}: EditorProps) {
+function Editor({onSave, initialContent, editable}: EditorProps) {
 
     const [content, setContent] = useState<Block[]>()
-
-
 
 
     const handleSave = async () => {
         setContent(editor.document)
         if(!content) return null;
-        onSave(content)
+        if(onSave) onSave(content)
     }
 
 
@@ -29,7 +29,7 @@ function Editor({onSave}: EditorProps) {
 
 
     const editor = useCreateBlockNote({
-        initialContent:[
+        initialContent: initialContent ? JSON.parse(initialContent) as Block[] : [
             {
                 type: "heading",
                 content: "Your Title Here"
@@ -52,8 +52,8 @@ function Editor({onSave}: EditorProps) {
 
     return (
         <>  
-        <BlockNoteView editor={editor} theme="light" onChange={()=> setContent(editor.document)} />
-        <Button className="absolute top-4 right-4" onClick={handleSave}>Publish Post</Button>
+        <BlockNoteView editor={editor} editable={editable} theme="light" onChange={()=> setContent(editor.document)} />
+       {editable && <Button className="absolute top-4 right-4" onClick={handleSave}>Publish Post</Button>}
         </>
 
 )

@@ -30,3 +30,42 @@ export const savePost = async (content: Block[]) =>{
 
         })
 }
+
+
+interface GetPostProps {
+  username: string
+  blogTitle: string
+}
+
+
+export const getPost = async ({ username, blogTitle }: GetPostProps) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      name: username
+    }
+  })
+  if (!user) {
+    return null
+  }
+  const post = await prisma.post.findMany({
+    where: {
+      userId: user?.id,
+      title: blogTitle
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          image: true
+        }
+      }
+    }
+  })
+
+  if(!post[0].content){
+    return null
+  }
+
+
+  return post;
+}
