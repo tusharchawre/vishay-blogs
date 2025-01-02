@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Skeleton } from '@/components/ui/skeleton'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Newsreader } from 'next/font/google'
-import Image from 'next/image'
+
 
 
 
@@ -20,7 +20,7 @@ export const Navbar = () =>{
 
     return (
     <>
-    <nav className="w-full h-20 flex justify-between px-4 py-4">
+    <nav className="w-full h-16 flex justify-between items-center px-12 py-4 border-b border-black/10">
 
         <p className={`${newsReader.className} text-2xl`}>Vishay</p>
         <div>

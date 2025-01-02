@@ -3,9 +3,11 @@
 import { auth } from "@/auth"
 import { prisma } from "@/prisma"
 import { Block } from "@blocknote/core"
-import { title } from "process"
+import { redirect } from "next/navigation"
 
 export const savePost = async (content: Block[]) =>{
+
+
 
     const session = await auth()
 
@@ -18,7 +20,7 @@ export const savePost = async (content: Block[]) =>{
     const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
 
 
-      const post = await prisma.post.create({
+      await prisma.post.create({
           data: {
             title: parsedTitle,
             content:  JSON.stringify(content),
@@ -31,6 +33,9 @@ export const savePost = async (content: Block[]) =>{
           }
 
         })
+        redirect(`/${session.user.name}`)
+
+
 }
 
 

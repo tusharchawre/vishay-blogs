@@ -5,6 +5,7 @@ import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
 interface EditorProps {
@@ -16,12 +17,14 @@ interface EditorProps {
 function Editor({onSave, initialContent, editable}: EditorProps) {
 
     const [content, setContent] = useState<Block[]>()
-
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSave = async () => {
+        setIsLoading(true)
         setContent(editor.document)
         if(!content) return null;
         if(onSave) onSave(content)
+        setIsLoading(false)
     }
 
 
@@ -53,7 +56,7 @@ function Editor({onSave, initialContent, editable}: EditorProps) {
     return (
         <>  
         <BlockNoteView editor={editor} editable={editable} theme="light" onChange={()=> setContent(editor.document)} />
-       {editable && <Button className="absolute top-4 right-4" onClick={handleSave}>Publish Post</Button>}
+       {editable && <Button className="absolute top-4 right-4" onClick={handleSave}>{isLoading ? (<Loader2 className="text-white animate-spin duration-1000" />) : "Publish"}</Button>}
         </>
 
 )
