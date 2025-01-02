@@ -18,8 +18,6 @@ const Page = () => {
 
   return (
     <div>
-      <Navbar />
-     
       <Editor onSave={saveContent} editable={true} />
     </div>
   );

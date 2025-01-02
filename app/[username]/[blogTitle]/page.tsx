@@ -13,12 +13,20 @@ const page = async ({ params }: { params: { blogTitle: string, username: string 
     }
 
     const userImg = post[0].user.image
+    const coverImg = post[0].coverImg
 
 
     return (
-      <div className="w-full mx-auto md:max-w-[55rem] md:px-8 py-4">
-        <Editor initialContent={post[0].content} editable={false} />
+      <>
+      
+      <div className="w-full mx-auto md:max-w-[55rem] md:px-8">
+        <div className="w-full flex items-center">
+                {coverImg && <img width={500} height={500} className="h-40 mx-auto object-cover w-full" src={coverImg} />
+                 }
+                </div>
+                <Editor initialContent={post[0].content} editable={false} />
       </div>
+      </>
     )
   }
 

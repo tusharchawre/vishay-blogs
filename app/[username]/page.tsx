@@ -49,7 +49,6 @@ export default async function Page({
 
   return (
   <div className="h-screen">
-  <Navbar />
   <div className="w-full h-[calc(100vh-4rem)] flex">
     <aside className="w-[30%] h-full bg-slate-50 flex flex-col gap-2 items-center p-4">
       {user.image ? (

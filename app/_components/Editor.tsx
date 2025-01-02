@@ -6,7 +6,7 @@ import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 
 interface EditorProps {
@@ -62,19 +62,12 @@ function Editor({onSave, initialContent, editable}: EditorProps) {
     return (
         <>  
         <div className="relative">
-       {editable && 
+
        <div className="w-full flex items-center">
         {coverImg ? <img width={500} height={500} className="h-40 mx-auto object-cover w-full" src={coverImg} /> : 
-        (
-            <div className="w-full h-8 mx-auto max-w-7xl my-2 ">
-                <UploadImage  setCoverImg={setCoverImg}/>
-            </div>
-        )
-        
-        
+           (editable ? <UploadImage setCoverImg={setCoverImg} /> : null)
          }
         </div>
-        }
         <BlockNoteView editor={editor} editable={editable} theme="light" onChange={()=> setContent(editor.document)} />
        {editable && <Button disabled={isLoading} className="absolute top-4 right-4" onClick={handleSave}>{isLoading ? (
         <div className="flex items-center justify-center gap-2">

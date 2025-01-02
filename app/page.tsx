@@ -21,7 +21,6 @@ async function page() {
   if(posts === undefined){
     return (
       <div>
-      <Navbar />
       <div className='flex w-full max-w-[75rem] mx-auto'>
       <div className='w-full px-8'>
       <PostItem.Skeleton />
@@ -39,9 +38,6 @@ async function page() {
     )
   }
 
-  if(!posts[0].content) {
-    return null
-  }
 
   
 
@@ -51,7 +47,6 @@ async function page() {
 
   return (
     <div>
-      <Navbar />
       <div className='flex w-full max-w-[75rem] mx-auto'>
       <div className='w-full px-8'>
       {
