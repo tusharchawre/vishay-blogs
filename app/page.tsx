@@ -64,7 +64,7 @@ async function page() {
             }
       </div>
 
-      <div className='w-[30rem] h-screen bg-blue-900'>
+      <div className='w-[30rem] hidden md:block h-screen bg-blue-900'>
 
       </div>
       </div>

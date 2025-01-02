@@ -1,6 +1,5 @@
 import { Editor } from "@/app/_components/DynamicEditor"
 import { getPost } from "@/app/action"
-import Image from "next/image"
 
 const page = async ({ params }: { params: { blogTitle: string, username: string } }) => {
     const encodedTitle = (await params).blogTitle
@@ -17,7 +16,7 @@ const page = async ({ params }: { params: { blogTitle: string, username: string 
 
 
     return (
-      <div className="w-full mx-auto max-w-[55rem] px-8 py-4">
+      <div className="w-full mx-auto md:max-w-[55rem] md:px-8 py-4">
         <Editor initialContent={post[0].content} editable={false} />
       </div>
     )

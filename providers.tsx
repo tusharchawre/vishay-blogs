@@ -4,6 +4,7 @@ import React from 'react'
 import {
   RecoilRoot,
 } from 'recoil';
+import { EdgeStoreProvider } from './lib/edgestore';
 
 
 export default function Providers({children}:{
@@ -11,9 +12,9 @@ export default function Providers({children}:{
 }) {
   return (
     <SessionProvider>
-      <RecoilRoot>
+      <EdgeStoreProvider>
         {children}
-      </RecoilRoot>
+      </EdgeStoreProvider>
     </SessionProvider>
   )
 }

@@ -23,7 +23,7 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
     return(
         //TODO :  Encode the URL in good dash wala fashion
         <Link href={`/${username}/${encodeURIComponent(title)}`}>
-        <div className="flex flex-col w-full h-56  border-b border-black/25 py-4">
+        <div className="flex w-full h-56  border-b border-black/25 py-4">
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
             <div className="flex gap-2 h-5 items-center">
                 {
@@ -38,9 +38,9 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
             <p className="text-sm opacity-60">{date}</p>
         </div>
         </div>
-        <div>
+        <div className="h-full">
             {
-                coverImg && <Image width={500} height={500} className="h-full w-fit p-8" src={coverImg} alt={title} />
+                coverImg && <Image width={500} height={500} className="h-full object-cover w-fit p-2" src={coverImg} alt={title} />
             }
         </div>
       

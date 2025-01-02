@@ -5,7 +5,12 @@ import { prisma } from "@/prisma"
 import { Block } from "@blocknote/core"
 import { redirect } from "next/navigation"
 
-export const savePost = async (content: Block[]) =>{
+interface SavePostProps {
+  content: Block[]
+  coverImg: string
+}
+
+export const savePost = async ({content, coverImg}: SavePostProps) =>{
 
 
 
@@ -25,6 +30,7 @@ export const savePost = async (content: Block[]) =>{
             title: parsedTitle,
             content:  JSON.stringify(content),
             published: true,
+            coverImg: coverImg,
             user: {
                 connect: {
                     email: email
