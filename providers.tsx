@@ -5,6 +5,7 @@ import {
   RecoilRoot,
 } from 'recoil';
 import { EdgeStoreProvider } from './lib/edgestore';
+import { ThemeProvider } from './components/theme-provider';
 
 
 export default function Providers({children}:{
@@ -12,8 +13,15 @@ export default function Providers({children}:{
 }) {
   return (
     <SessionProvider>
+      
       <EdgeStoreProvider>
+      <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      >
         {children}
+      </ThemeProvider>
       </EdgeStoreProvider>
     </SessionProvider>
   )

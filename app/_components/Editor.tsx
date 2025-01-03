@@ -7,6 +7,7 @@ import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import { Loader2, Upload } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useState } from "react";
 
 interface EditorProps {
@@ -16,10 +17,12 @@ interface EditorProps {
 }
 
 function Editor({onSave, initialContent, editable}: EditorProps) {
+    const {theme} = useTheme()
 
     const [content, setContent] = useState<Block[]>()
     const [isLoading, setIsLoading] = useState(false)
     const [coverImg, setCoverImg] = useState<string>()
+
 
 
 
@@ -61,14 +64,19 @@ function Editor({onSave, initialContent, editable}: EditorProps) {
 
     return (
         <>  
-        <div className="relative">
+        <div className="relative dark:bg-[#1F1F1F] h-screen">
 
        <div className="w-full flex items-center">
         {coverImg ? <img width={500} height={500} className="h-40 mx-auto object-cover w-full" src={coverImg} /> : 
-           (editable ? <UploadImage setCoverImg={setCoverImg} /> : null)
+           (editable ? (
+            <div className="px-8 py-4">
+                <UploadImage setCoverImg={setCoverImg} />
+            </div>
+        ) : null)
          }
         </div>
-        <BlockNoteView editor={editor} editable={editable} theme="light" onChange={()=> setContent(editor.document)} />
+        
+        <BlockNoteView editor={editor} editable={editable} theme={theme === "dark" ? "dark" : "light"} onChange={()=> setContent(editor.document)} />
        {editable && <Button disabled={isLoading} className="absolute top-4 right-4" onClick={handleSave}>{isLoading ? (
         <div className="flex items-center justify-center gap-2">
         <Loader2 className="text-white animate-spin duration-1000" />

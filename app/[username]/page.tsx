@@ -48,9 +48,9 @@ export default async function Page({
 
 
   return (
-  <div className="h-screen">
+  <div className="h-full">
   <div className="w-full h-[calc(100vh-4rem)] flex">
-    <aside className="w-[30%] h-full bg-slate-50 flex flex-col gap-2 items-center p-4">
+    <aside className="w-[30%] h-full bg-[#ECECEC30] dark:bg-[#20202030] flex flex-col gap-2 items-center p-4">
       {user.image ? (
         <Image src={user?.image.replace("s96-c", "s384-c")} width={500} height={500} alt="Profile Pic" className="rounded-xl w-64" />
       ) : (<Skeleton className="rounded-xl w-48" />)}
@@ -58,12 +58,8 @@ export default async function Page({
     </aside>
 
     <div className="w-full h-full px-16 py-4 overflow-y-scroll">
-      <div className="w-full border-b border-slate-400 py-4">
-      <p className="text-5xl font-medium">{user.name}</p>
-      <p className="text-slate-700">{user.email}</p>
-      </div>
 
-      <div className="h-full flex flex-col">
+      <div className="h-full flex flex-col gap-5 py-5">
       {
         post.map((post, idx)=>(
            <PostItem key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes} coverImg={post.coverImg}  />

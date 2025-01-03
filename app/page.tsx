@@ -46,9 +46,10 @@ async function page() {
 
 
   return (
-    <div>
-      <div className='flex w-full max-w-[75rem] mx-auto'>
-      <div className='w-full px-8'>
+    <div className='relative'>
+      <div className='flex w-full max-w-[75rem] mx-auto bg-transparent '>
+        
+      <div className='w-full px-8 flex flex-col gap-5 py-5'>
       {
               posts.map((post, idx)=>(
 
@@ -59,7 +60,7 @@ async function page() {
             }
       </div>
 
-      <div className='w-[30rem] hidden md:block h-screen bg-blue-900'>
+      <div className='w-[30rem] hidden md:block h-screen bg-[#ECECEC30] dark:bg-[#20202030]'>
 
       </div>
       </div>

@@ -23,24 +23,26 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
     return(
         //TODO :  Encode the URL in good dash wala fashion
         <Link href={`/${username}/${encodeURIComponent(title)}`}>
-        <div className="flex w-full h-56  border-b border-black/25 py-4">
+        <div className="flex w-full h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg">
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
             <div className="flex gap-2 h-5 items-center">
                 {
-                    userImg && <Image src={userImg} width={50} height={50} alt="Profile Pic" className="rounded-full w-5 h-5" />
+                    userImg && <Image src={userImg} width={50} height={50} alt="Profile Pic" className="rounded-full w-4 h-4" />
                 }
-            <p>{username}</p>
+            <p className="text-sm text-black/45 dark:text-white/45">{username}</p>
             </div>
-        <h1 className="text-2xl font-bold" >{title}</h1>
-        <p className="text-black/70 line-clamp-2 ">{parsedContent}</p>
+        <h1 className="text-lg font-semibold" >{title}</h1>
+        <p className="text-black/45 dark:text-white/45 line-clamp-2 text-base font-normal">
+            {parsedContent}
+        </p>
         <div className="flex w-full  gap-8">
+            <p className="text-sm text-black/45 dark:text-white/45">{date}</p>
             <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likes} <Heart className="size-3" /></p>
-            <p className="text-sm opacity-60">{date}</p>
         </div>
         </div>
-        <div className="h-full">
+        <div className="h-full rounded-lg p-4 ">
             {
-                coverImg && <Image width={500} height={500} className="h-full object-cover w-fit p-2" src={coverImg} alt={title} />
+                coverImg && <Image width={500} height={500} className="h-full object-cover w-52 rounded-lg" src={coverImg} alt={title} />
             }
         </div>
       

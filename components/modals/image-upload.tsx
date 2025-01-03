@@ -29,7 +29,9 @@ export default function UploadImage({setCoverImg}: UploadImageProps) {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="secondary" className="flex text-black/60 hover:bg-black/5 transition-all ease-out h-full">
+          <Button variant="secondary" className="flex text-foreground/60 
+          dark:hover:bg-foreground/30
+          hover:bg-foreground/5 transition-all ease-out h-full">
                   <ImageIcon />
                     Add Cover
                   </Button>

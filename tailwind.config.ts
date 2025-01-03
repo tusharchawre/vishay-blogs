@@ -9,6 +9,12 @@ export default {
   ],
   theme: {
   	extend: {
+		fontSize: {
+			sm: ['14px', '20px'],
+			base: ['16px', '20px'],
+			lg: ['23px', '28px'],
+			xl: ['24px', '32px'],
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -55,7 +61,8 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+		
   	}
   },
   plugins: [require("tailwindcss-animate")],
