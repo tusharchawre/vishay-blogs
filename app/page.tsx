@@ -3,6 +3,7 @@ import { Navbar } from './_components/Navbar'
 import { prisma } from '@/prisma'
 import { PostItem } from './_components/PostItem'
 import { auth } from '@/auth'
+import { MostLikedItem } from './_components/MostLikedItem'
 
 async function page() {
 
@@ -36,6 +37,37 @@ async function page() {
   })
 
 
+  const likedPost = await prisma.post.findMany({
+    include:{
+      user:{
+        select:{
+          name: true,
+          image: true
+        }
+      },
+      likes:{
+        select:{
+          user:{
+            select:{
+              name: true,
+              image: true
+            }
+          }
+        }
+      },
+      
+    },
+    orderBy:{
+      likes: {
+        _count : "desc"
+      }
+    },
+    take: 3
+  })
+
+
+
+
 
   if(posts === undefined){
     return (
@@ -66,7 +98,7 @@ async function page() {
 
   return (
     <div className='relative'>
-      <div className='flex w-full max-w-[75rem] mx-auto bg-transparent '>
+      <div className='flex w-full max-w-[75rem] mx-auto bg-transparent'>
         
       <div className='w-full px-8 flex flex-col gap-5 py-5'>
       {
@@ -78,8 +110,27 @@ async function page() {
               })}
       </div>
 
-      <div className='w-[30rem] hidden md:block h-screen bg-[#ECECEC30] dark:bg-[#20202030]'>
+      <div className='w-[30rem] hidden md:block h-screen bg-[#ECECEC30] dark:bg-[#20202030] '>
 
+        <p className='px-4 pt-8  text-base font-semibold'>Most Liked</p>
+        <div className='w-full h-full flex flex-col gap-2'>
+      {
+              likedPost.map((post, idx)=>
+                {
+                  return (<>
+
+                  <MostLikedItem 
+                  postId={post.id}
+                  date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getDate()}, ${post.createdAt.getFullYear()}`}
+                  title={post.title}
+                  userImg={post.user.image}
+                  key={idx}
+                  username={post.user.name}
+                  likes={post.likes.length}
+                  /></>)
+              })}
+
+</div>
       </div>
       </div>
 
