@@ -1,9 +1,9 @@
 import React from 'react'
-import { Navbar } from './_components/Navbar'
 import { prisma } from '@/prisma'
-import { PostItem } from './_components/PostItem'
+import PostItem, { ItemSkeleton } from './_components/PostItem'
 import { auth } from '@/auth'
 import { MostLikedItem } from './_components/MostLikedItem'
+import { getAllPost, getMostLiked } from './action'
 
 async function page() {
 
@@ -15,74 +15,30 @@ async function page() {
     }
   })
 
-  const posts = await prisma.post.findMany({
-    include:{
-      user:{
-        select:{
-          name: true,
-          image: true
-        },
-      },
-      likes:{
-        select:{
-          user:{
-            select:{
-              name: true,
-              image: true
-            }
-          } 
-        }
-      },
-    }
-  })
 
 
-  const likedPost = await prisma.post.findMany({
-    include:{
-      user:{
-        select:{
-          name: true,
-          image: true
-        }
-      },
-      likes:{
-        select:{
-          user:{
-            select:{
-              name: true,
-              image: true
-            }
-          }
-        }
-      },
-      
-    },
-    orderBy:{
-      likes: {
-        _count : "desc"
-      }
-    },
-    take: 3
-  })
+  const posts = await getAllPost()
+
+  const likedPost = await getMostLiked()
 
 
 
 
 
-  if(posts === undefined){
+  if(!posts){
     return (
       <div>
       <div className='flex w-full max-w-[75rem] mx-auto'>
       <div className='w-full px-8'>
-      <PostItem.Skeleton />
-      <PostItem.Skeleton />
-      <PostItem.Skeleton />
+      <ItemSkeleton />
+      <ItemSkeleton />
+      <ItemSkeleton />
       </div>
       <div className='w-[30rem] h-screen'>
-      <PostItem.Skeleton />
-      <PostItem.Skeleton />
-      <PostItem.Skeleton />
-      <PostItem.Skeleton />
+      <ItemSkeleton />
+      <ItemSkeleton />
+      <ItemSkeleton />
+      <ItemSkeleton />
       </div>
       </div>
     </div>
@@ -90,15 +46,13 @@ async function page() {
   }
 
 
-  
-
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
 
   return (
-    <div className='relative'>
-      <div className='flex w-full max-w-[75rem] mx-auto bg-transparent'>
+
+      <div className='flex w-full max-w-[75rem] h-fit mx-auto bg-transparent'>
         
       <div className='w-full px-8 flex flex-col gap-5 py-5'>
       {
@@ -110,15 +64,14 @@ async function page() {
               })}
       </div>
 
-      <div className='w-[30rem] hidden md:block h-screen bg-[#ECECEC30] dark:bg-[#20202030] '>
+      <div className='w-[30rem] hidden md:block h-full bg-[#ECECEC40] dark:bg-[#20202040] mt-5 rounded-md py-2'>
 
-        <p className='px-4 pt-8  text-base font-semibold'>Most Liked</p>
+        <p className='px-4   text-base font-semibold'>Most Liked</p>
         <div className='w-full h-full flex flex-col gap-2'>
       {
               likedPost.map((post, idx)=>
                 {
                   return (<>
-
                   <MostLikedItem 
                   postId={post.id}
                   date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getDate()}, ${post.createdAt.getFullYear()}`}
@@ -129,16 +82,9 @@ async function page() {
                   likes={post.likes.length}
                   /></>)
               })}
-
 </div>
       </div>
       </div>
-
-
-
-
-     
-    </div>
   )
 }
 

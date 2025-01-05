@@ -59,7 +59,7 @@ export default async function Page({
 
 
   return (
-  <div className="h-full">
+  <div className="h-fit">
   <div className="w-full h-[calc(100vh-4rem)] flex">
     <aside className="w-[30%] h-full bg-[#ECECEC30] dark:bg-[#20202030] flex flex-col gap-2 items-center p-4">
       {user.image ? (

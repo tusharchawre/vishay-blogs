@@ -11,7 +11,6 @@ const Page = () => {
 
 
   const saveContent = (content: Block[], coverImg: string) => {
-
     savePost({content, coverImg})
 
   };

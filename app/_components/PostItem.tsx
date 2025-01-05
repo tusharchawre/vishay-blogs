@@ -19,7 +19,7 @@ interface PostProps {
 }
 
 
-export const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId, hasLiked}: PostProps) =>{
+const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId, hasLiked}: PostProps) =>{
 
     const [hasLikedState , setHasLiked] =  useState(hasLiked)
     const [likesCount , setLikesCount] = useState(likes)
@@ -82,21 +82,31 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
 
 
 
-
-PostItem.Skeleton = function ItemSkeleton() {
+export function ItemSkeleton() {
     return (
-        <div className="flex w-full h-56  border-b border-black/25 ">
+      <div className="flex w-full h-56 border-b border-black/25 ">
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
-            <div className="flex gap-2 h-5 items-center">
-                <Skeleton className="rounded-md w-5 h-5" />
-                <Skeleton className="h-4 w-16" />
-            </div>
-        <h1 className="text-2xl font-bold" ><Skeleton className="w-full h-8" /></h1>
-        <p className="text-black/70 line-clamp-2 "><Skeleton className="w-full h-6" /></p>
-        <div className="flex w-full  gap-8">
+          <div className="flex gap-2 h-5 items-center">
+            <Skeleton className="rounded-md w-5 h-5" />
+            <Skeleton className="h-4 w-16" />
+          </div>
+          <h1 className="text-2xl font-bold">
+            <Skeleton className="w-full h-8" />
+          </h1>
+          <p className="text-black/70 line-clamp-2">
+            <Skeleton className="w-full h-6" />
+          </p>
+          <div className="flex w-full gap-8">
             <Skeleton className="w-full h-4" />
-            <p className="text-sm opacity-60"><Skeleton className="w-full h-4" /></p>
+            <p className="text-sm opacity-60">
+              <Skeleton className="w-full h-4" />
+            </p>
+          </div>
         </div>
-        </div>
-    </div>
-)}
+      </div>
+    );
+  };
+  
+  
+
+export default PostItem

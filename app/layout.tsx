@@ -20,8 +20,10 @@ export default function RootLayout({
       <body>
         <Providers>
           <Navbar />
-          <Gradient />
-        {children}
+          <div className="relative overflow-hidden">
+            <Gradient />
+            <div className="relative z-10">{children}</div>
+          </div>
         </Providers>
       </body>
     </html>

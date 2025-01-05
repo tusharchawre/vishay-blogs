@@ -162,3 +162,67 @@ export async function handleLike(postId: number) {
     return { message: "Database Error: Failed to Like Post." };
   }
 }
+
+
+
+
+export const getAllPost = async () => {
+     const posts = await prisma.post.findMany({
+        include:{
+          user:{
+            select:{
+              name: true,
+              image: true
+            },
+          },
+          likes:{
+            select:{
+              user:{
+                select:{
+                  name: true,
+                  image: true
+                }
+              } 
+            }
+          },
+        }
+      })
+
+
+      return posts;
+}
+
+
+export const getMostLiked = async () => {
+  const likedPost = await prisma.post.findMany({
+      include:{
+        user:{
+          select:{
+            name: true,
+            image: true
+          }
+        },
+        likes:{
+          select:{
+            user:{
+              select:{
+                name: true,
+                image: true
+              }
+            }
+          }
+        },
+        
+      },
+      orderBy:{
+        likes: {
+          _count : "desc"
+        }
+      },
+      take: 3
+    })
+
+
+    return likedPost;
+
+}
