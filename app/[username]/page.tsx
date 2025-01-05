@@ -31,8 +31,19 @@ export default async function Page({
           image: true
         }
       },
+      likes:{
+        select:{
+          user:{
+            select:{
+              name: true,
+              image: true
+            }
+          } 
+        }
+      },
     }
   })
+
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
@@ -58,12 +69,14 @@ export default async function Page({
     </aside>
 
     <div className="w-full h-full px-16 py-4 overflow-y-scroll">
-
       <div className="h-full flex flex-col gap-5 py-5">
       {
-        post.map((post, idx)=>(
-           <PostItem postId={post.id} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={0} coverImg={post.coverImg}  />
-        ))
+        post.map((post, idx)=>
+          {
+            const hasLiked = post.likes.some(like => like.user.name === user.name);
+            
+            return <PostItem postId={post.id} hasLiked={hasLiked} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes.length} coverImg={post.coverImg}  />
+        })
       }
 
 </div>

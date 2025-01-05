@@ -18,20 +18,30 @@ interface PostProps {
     likes: number
     username: string | null
     userImg: string | null
+    hasLiked:  boolean
 }
 
 
-export const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId}: PostProps) =>{
+export const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId, hasLiked}: PostProps) =>{
 
-    const [hasLiked , setHasLiked] =  useState(false)
+    const [hasLikedState , setHasLiked] =  useState(hasLiked)
+    const [likesCount , setLikesCount] = useState(likes)
 
 
 
     const clickedLike = async (e: React.MouseEvent) => {
         e.stopPropagation()
         e.preventDefault()
-        setHasLiked(true)
-        await handleLike(postId)
+        setHasLiked((prev)=>!prev)
+        setLikesCount((prev)=> hasLikedState ? prev-1 : prev+1)
+
+         try {
+            await handleLike(postId)
+        } catch (error) {
+            setHasLiked((prev) => !prev)
+            setLikesCount((prev) => (hasLikedState ? prev + 1 : prev - 1))
+            console.error("Failed to update like status", error)
+        }
     }
 
 
@@ -56,7 +66,7 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
         </p>
         <div className="flex w-full  gap-8">
             <p className="text-sm text-black/45 dark:text-white/45">{date}</p>
-            <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likes} <Heart className={`size-3 ${hasLiked ? "fill-red-500" : ""}`} onClick={clickedLike} /></p>
+            <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likesCount} <Heart className={`size-3 ${hasLikedState ? "fill-red-500" : ""}`} onClick={clickedLike} /></p>
         </div>
         </div>
         <div className="h-full rounded-lg p-4 ">

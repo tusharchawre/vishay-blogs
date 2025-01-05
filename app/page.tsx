@@ -2,8 +2,17 @@ import React from 'react'
 import { Navbar } from './_components/Navbar'
 import { prisma } from '@/prisma'
 import { PostItem } from './_components/PostItem'
+import { auth } from '@/auth'
 
 async function page() {
+
+  const session =  await auth()
+
+  const user = await prisma.user.findFirst({
+    where: {
+      email: session?.user?.email
+    }
+  })
 
   const posts = await prisma.post.findMany({
     include:{
@@ -61,13 +70,12 @@ async function page() {
         
       <div className='w-full px-8 flex flex-col gap-5 py-5'>
       {
-              posts.map((post, idx)=>(
-
-
-                <PostItem key={idx} postId={post.id} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={0} coverImg={post.coverImg}  />
-      
-              ))
-            }
+              posts.map((post, idx)=>
+                {
+                  const hasLiked = post.likes.some(like => like.user.name === user?.name);
+                  
+                  return <PostItem postId={post.id} hasLiked={hasLiked} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes.length} coverImg={post.coverImg}  />
+              })}
       </div>
 
       <div className='w-[30rem] hidden md:block h-screen bg-[#ECECEC30] dark:bg-[#20202030]'>

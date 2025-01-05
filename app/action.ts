@@ -74,6 +74,11 @@ export const getPost = async ({ username, blogTitle }: GetPostProps) => {
           name: true,
           image: true
         }
+      },
+      likes: {
+        select:{
+          user: true
+        }
       }
     }
   })
