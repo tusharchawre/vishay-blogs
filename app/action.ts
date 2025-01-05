@@ -85,3 +85,75 @@ export const getPost = async ({ username, blogTitle }: GetPostProps) => {
 
   return post;
 }
+
+
+export async function handleLike(postId: number) {
+
+
+
+  const session = await auth()
+
+  if (!session || !session.user || !session.user.email) {
+    throw new Error("User not authenticated or session invalid")
+  }
+
+  const userEmail = session.user.email
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: userEmail,
+    },
+  });
+
+  const userId = user?.id;
+  if (!userId) {
+    throw new Error("User not found");
+  }
+
+  const post = await prisma.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  const like = await prisma.like.findUnique({
+    where: {
+      postId_userId: {
+        postId,
+        userId,
+      },
+    },
+  });
+
+  if (like) {
+    try {
+      await prisma.like.delete({
+        where: {
+          postId_userId: {
+            postId,
+            userId,
+          },
+        },
+      })
+      return { message: "Unliked Post." };
+    } catch (error) {
+      return { message: "Database Error: Failed to Unlike Post." };
+    }
+  }
+
+  try {
+    await prisma.like.create({
+      data: {
+        postId,
+        userId,
+      },
+    });
+    return { message: "Liked Post." };
+  } catch (error) {
+    return { message: "Database Error: Failed to Like Post." };
+  }
+}

@@ -1,9 +1,16 @@
+"use client"
 import { Skeleton } from "@/components/ui/skeleton"
+import { prisma } from "@/prisma"
 import { Heart } from "lucide-react"
+import { useSession } from "next-auth/react"
 import Image from "next/image"
 import Link from "next/link"
+import React, { useState } from "react"
+import { handleLike } from "../action"
+import { set } from "zod"
 
 interface PostProps {
+    postId : number
     title : string
     content: string | null
     date: string
@@ -14,7 +21,19 @@ interface PostProps {
 }
 
 
-export const PostItem = ({title,content, date, coverImg, likes,username, userImg}: PostProps) =>{
+export const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId}: PostProps) =>{
+
+    const [hasLiked , setHasLiked] =  useState(false)
+
+
+
+    const clickedLike = async (e: React.MouseEvent) => {
+        e.stopPropagation()
+        e.preventDefault()
+        setHasLiked(true)
+        await handleLike(postId)
+    }
+
 
     if(!content) return content="Content not found"
 
@@ -37,7 +56,7 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
         </p>
         <div className="flex w-full  gap-8">
             <p className="text-sm text-black/45 dark:text-white/45">{date}</p>
-            <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likes} <Heart className="size-3" /></p>
+            <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likes} <Heart className={`size-3 ${hasLiked ? "fill-red-500" : ""}`} onClick={clickedLike} /></p>
         </div>
         </div>
         <div className="h-full rounded-lg p-4 ">

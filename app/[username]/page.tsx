@@ -30,7 +30,7 @@ export default async function Page({
           name: true,
           image: true
         }
-      }
+      },
     }
   })
 
@@ -62,7 +62,7 @@ export default async function Page({
       <div className="h-full flex flex-col gap-5 py-5">
       {
         post.map((post, idx)=>(
-           <PostItem key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes} coverImg={post.coverImg}  />
+           <PostItem postId={post.id} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={0} coverImg={post.coverImg}  />
         ))
       }
 

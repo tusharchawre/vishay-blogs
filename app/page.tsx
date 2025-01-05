@@ -11,8 +11,18 @@ async function page() {
         select:{
           name: true,
           image: true
+        },
+      },
+      likes:{
+        select:{
+          user:{
+            select:{
+              name: true,
+              image: true
+            }
+          } 
         }
-      }
+      },
     }
   })
 
@@ -54,7 +64,7 @@ async function page() {
               posts.map((post, idx)=>(
 
 
-                <PostItem key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes} coverImg={post.coverImg}  />
+                <PostItem key={idx} postId={post.id} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={0} coverImg={post.coverImg}  />
       
               ))
             }

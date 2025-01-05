@@ -17,6 +17,7 @@ model User {
   followers     Follows[] @relation("following")
   posts         Post[]
   accounts      Account[]
+  likes         Like[]
 }
 
 model Follows {
@@ -55,9 +56,9 @@ model Post {
   userId     String     @map("user_id")
   coverImg   String?
   createdAt  DateTime   @default(now())
-  likes      Int        @default(0)
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   categories Category[] @relation("CategoryToPost")
+  likes      Like[]
 }
 
 model Category {
@@ -65,3 +66,18 @@ model Category {
   name  String
   posts Post[] @relation("CategoryToPost")
 }
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  userId    String   @map("user_id")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@index([userId])
+}
+
