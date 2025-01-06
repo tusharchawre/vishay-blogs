@@ -1,10 +1,8 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/prisma";
-
 import Image from "next/image";
-import { PostItem } from "../_components/PostItem";
-import { Navbar } from "../_components/Navbar";
+import PostItem  from "../_components/PostItem";
 
 export default async function Page({
   params,
@@ -51,7 +49,7 @@ export default async function Page({
 
   if(!user){
     // TODO: User doesnt exist wala page
-    return null;
+    return <p>Tushar</p>;
   }
 
 
@@ -75,15 +73,20 @@ export default async function Page({
           {
             const hasLiked = post.likes.some(like => like.user.name === user.name);
             
-            return <PostItem postId={post.id} hasLiked={hasLiked} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes.length} coverImg={post.coverImg}  />
+            return <PostItem 
+            postId={post.id} 
+            hasLiked={hasLiked} 
+            key={idx} 
+            userImg={post.user.image} 
+            username={post.user.name} 
+            title={post.title} content={post.content} 
+            date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} 
+            likes={post.likes.length} coverImg={post.coverImg}  />
         })
       }
 
-</div>
+      </div>
     </div>
-
-
-    
   </div>
   </div>
   )

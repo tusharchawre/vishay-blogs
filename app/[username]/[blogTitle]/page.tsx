@@ -18,8 +18,7 @@ const page = async ({ params }: { params: { blogTitle: string, username: string 
 
     return (
       <>
-      
-      <div className="w-full mx-auto md:max-w-[55rem] md:px-8">
+      <div className="w-full mx-auto md:max-w-[55rem] h-full md:px-8">
         <div className="w-full flex items-center">
                 {coverImg && <img width={500} height={500} className="h-40 mx-auto object-cover w-full" src={coverImg} />
                  }

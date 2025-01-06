@@ -8,9 +8,10 @@ import { redirect } from "next/navigation"
 interface SavePostProps {
   content: Block[]
   coverImg: string
+  publishStatus: boolean
 }
 
-export const savePost = async ({content, coverImg}: SavePostProps) =>{
+export const savePost = async ({content, coverImg, publishStatus}: SavePostProps) =>{
 
 
 
@@ -29,7 +30,7 @@ export const savePost = async ({content, coverImg}: SavePostProps) =>{
           data: {
             title: parsedTitle,
             content:  JSON.stringify(content),
-            published: true,
+            published: publishStatus,
             coverImg: coverImg,
             user: {
                 connect: {

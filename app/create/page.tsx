@@ -10,14 +10,10 @@ import UploadImage from "@/components/modals/image-upload";
 const Page = () => {
 
 
-  const saveContent = (content: Block[], coverImg: string) => {
-    savePost({content, coverImg})
-
-  };
 
   return (
     <div>
-      <Editor onSave={saveContent} editable={true} />
+      <Editor editable={true} />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 "use client"
 import UploadImage from "@/components/modals/image-upload";
+import { PublishModal } from "@/components/modals/publish-post";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Block } from "@blocknote/core";
@@ -12,31 +13,16 @@ import { useTheme } from "next-themes";
 import { useState } from "react";
 
 interface EditorProps {
-    onSave?: (content: Block[], coverImg: string) => void
     initialContent?: string | undefined
     editable?: boolean
 }
 
-function Editor({onSave, initialContent, editable}: EditorProps) {
+function Editor({ initialContent, editable}: EditorProps) {
     const {theme} = useTheme()
 
     const [content, setContent] = useState<Block[]>()
     const [isLoading, setIsLoading] = useState(false)
     const [coverImg, setCoverImg] = useState<string>()
-
-
-
-
-    const handleSave = async () => {
-        setIsLoading(true)
-        setContent(editor.document)
-        if(!content) return null;
-        if(!coverImg) return null;
-        //TODO: Add AI cover image generation
-        if(onSave) onSave(content , coverImg)
-        setIsLoading(false)
-    }
-
 
 
 
@@ -78,12 +64,17 @@ function Editor({onSave, initialContent, editable}: EditorProps) {
         </div>
         
         <BlockNoteView editor={editor} editable={editable} theme={theme === "dark" ? "dark" : "light"} onChange={()=> setContent(editor.document)} />
-       {editable && <Button disabled={isLoading} className="absolute top-4 right-4" onClick={handleSave}>{isLoading ? (
+       {/* {editable && <Button disabled={isLoading} className="absolute top-4 right-4" onClick={handleSave}>{isLoading ? (
         <div className="flex items-center justify-center gap-2">
         <Loader2 className="text-white animate-spin duration-1000" />
         <p>Publishing</p>
         </div>
-        ) : "Publish"}</Button>}
+        ) : "Publish"}</Button>} */}
+
+
+
+            <PublishModal content={content} coverImg={coverImg}  />
+
 
        </div>
         </>
