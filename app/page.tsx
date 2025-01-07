@@ -52,13 +52,15 @@ async function page() {
 
   return (
 
-      <div className='flex w-full max-w-[75rem] h-fit mx-auto bg-transparent'>
+      <div className='flex w-full max-w-[75rem] h-fit min-h-screen mx-auto bg-transparent'>
         
       <div className='w-full px-8 flex flex-col gap-5 py-5'>
       {
               posts.map((post, idx)=>
                 {
                   const hasLiked = post.likes.some(like => like.user.name === user?.name);
+
+                  if(!post.published) return null;
                   
                   return <PostItem postId={post.id} hasLiked={hasLiked} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes.length} coverImg={post.coverImg}  />
               })}

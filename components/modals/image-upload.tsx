@@ -12,6 +12,8 @@ import { ImageIcon } from 'lucide-react';
 import { useEdgeStore } from '@/lib/edgestore';
 import { SingleImageDropzone } from '../SingleImageDropzone';
 import { set } from 'zod';
+import { Separator } from '../ui/separator';
+import Image from 'next/image';
 
 interface UploadImageProps {  
   setCoverImg: (coverImg: string) => void
@@ -36,8 +38,11 @@ export default function UploadImage({setCoverImg}: UploadImageProps) {
                     Add Cover
                   </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px] flex flex-col items-center">
+        <DialogContent className=" flex flex-col items-center">
           <DialogTitle>Upload Image</DialogTitle>
+
+
+        {/* TODO // Add AI Image gen section */}
           <SingleImageDropzone
         width={200}
         height={200}
@@ -46,6 +51,7 @@ export default function UploadImage({setCoverImg}: UploadImageProps) {
           setFile(file);
         }}
       />
+
 
       <DialogClose>
           <Button

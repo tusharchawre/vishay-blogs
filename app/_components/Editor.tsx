@@ -51,7 +51,7 @@ function Editor({ initialContent, editable}: EditorProps) {
 
     return (
         <>  
-        <div className="relative dark:bg-[#1F1F1F] h-screen">
+        <div className="relative dark:bg-[#1F1F1F] min-h-screen h-full">
 
        <div className="w-full flex items-center">
         {coverImg ? <img width={500} height={500} className="h-40 mx-auto object-cover w-full" src={coverImg} /> : 
@@ -64,17 +64,14 @@ function Editor({ initialContent, editable}: EditorProps) {
         </div>
         
         <BlockNoteView editor={editor} editable={editable} theme={theme === "dark" ? "dark" : "light"} onChange={()=> setContent(editor.document)} />
-       {/* {editable && <Button disabled={isLoading} className="absolute top-4 right-4" onClick={handleSave}>{isLoading ? (
-        <div className="flex items-center justify-center gap-2">
-        <Loader2 className="text-white animate-spin duration-1000" />
-        <p>Publishing</p>
-        </div>
-        ) : "Publish"}</Button>} */}
 
 
 
-            <PublishModal content={content} coverImg={coverImg}  />
 
+        {
+          editable &&
+          <PublishModal setCoverImg={setCoverImg} content={content} coverImg={coverImg}   />
+}
 
        </div>
         </>

@@ -3,6 +3,7 @@ import { ThemeSwitch } from '@/components/theme-switch'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LogOut, User } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
@@ -63,8 +64,7 @@ export const Navbar = () =>{
                             </div>
                             </Link>
 
-                            <div className='w-full border border-white my-2'>
-                            </div>
+                            <Separator className='my-2' />
                             <div onClick={()=>signOut()} className='w-full h-fit justify-center px-2 py-2 text-foreground/60 hover:bg-muted-foreground/10 rounded-md transition-all ease-out flex flex-col gap-2 cursor-pointer'>
                                 <div className='flex gap-2 items-center'>
                                 <LogOut className='size-4' />

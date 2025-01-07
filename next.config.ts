@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
   swcMinify: true,
    images: {
-    domains: ['lh3.googleusercontent.com', 'files.edgestore.dev'],
+    domains: ['lh3.googleusercontent.com', 'files.edgestore.dev', 'image.pollinations.ai'],
    },
 };
 
