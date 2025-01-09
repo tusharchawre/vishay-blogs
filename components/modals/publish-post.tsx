@@ -82,8 +82,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
 
     const generateImage = async () => {
         setIsLoading(true)
-        setPrompt(promptRef.current?.value)
-        if(prompt === undefined) return null;
+        if(prompt === undefined) setIsLoading(false)
         const imageUrl = await fetch("/api/generate-image", {
             method: "POST",
             body: JSON.stringify({prompt : prompt})
@@ -169,6 +168,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
                 <Input 
                 ref={promptRef}
                 className="w-full mr-2" 
+                onChange={()=> setPrompt(promptRef.current?.value)}
                 placeholder="Enter the Prompt for Cover Image"  />
                 <Button onClick={generateImage}>
                     Generate
