@@ -59,7 +59,7 @@ export default async function Page({
   return (
   <div className="h-fit">
   <div className="w-full h-[calc(100vh-4rem)] flex">
-    <aside className="w-[30%] h-full bg-[#ECECEC30] dark:bg-[#20202030] flex flex-col gap-2 items-center p-4">
+    <aside className="w-[30%] hidden md:flex h-full bg-[#ECECEC30] dark:bg-[#20202030] flex-col gap-2 items-center p-4">
 
     <div className="w-full h-16 flex items-center justify-around p-2 mt-8 dark:bg-[#33333373] bg-[#D9D9D973] rounded-lg" >
     {user.image ? (
@@ -78,7 +78,18 @@ export default async function Page({
 
     </aside>
 
-    <div className="w-full h-full px-16 py-4 overflow-y-scroll">
+    <div className="w-full h-full px-1 md:px-16 py-4 overflow-y-scroll">
+    <div className="w-full md:hidden max-w-[75%] mx-auto h-16 flex items-center justify-around p-2 mt-8 dark:bg-[#33333373] bg-[#D9D9D973] rounded-lg" >
+    {user.image ? (
+        <Image src={user.image.replace("s96-c", "s384-c")} width={500} height={500} alt="Profile Pic" className="rounded-lg h-12 aspect-square w-12" />
+      ) : (<Skeleton className="rounded-lg h-12 aspect-square w-12" />)}
+
+      <div>
+        <p className="text-base font-semibold text-foreground">{user.name}</p>
+        <p className="text-sm font-light text-muted-foreground text-wrap">{user.email}</p>
+      </div>
+
+    </div>
       <div className="h-full flex flex-col gap-5 py-5">
       {
         post.map((post, idx)=>

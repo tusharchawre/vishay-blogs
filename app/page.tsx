@@ -54,7 +54,7 @@ async function page() {
 
       <div className='flex w-full max-w-[75rem] h-fit min-h-screen mx-auto bg-transparent'>
         
-      <div className='w-full px-8 flex flex-col gap-5 py-5'>
+      <div className='w-full px-1 md:px-8 flex flex-col gap-5 py-5'>
       {
               posts.map((post, idx)=>
                 {

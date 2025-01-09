@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { LogOut, User } from 'lucide-react'
+import { LogOut, PenBox, User } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { Newsreader } from 'next/font/google'
@@ -18,7 +18,6 @@ export const Navbar = () =>{
     const { data: session, status } = useSession()
     const {resolvedTheme} = useTheme()
 
-    const logoSrc = resolvedTheme === "dark" ? "/Vishay-logo-dark.svg" : "/Vishay-logo.svg"
 
     return (
     <>
@@ -26,7 +25,7 @@ export const Navbar = () =>{
 
 
 
-    <Link href="/" className="relative h-[4.2rem] w-[200px] p-4 transition-all">
+    <Link href="/" className="relative h-[4.2rem] w-[200px] -translate-x-10 p-4 transition-all">
                 <Image
                     className="h-full w-full hidden dark:block"
                     width={200}
@@ -43,7 +42,13 @@ export const Navbar = () =>{
                 />
             </Link>
 
-        <div className='flex gap-4'>
+        <div className='flex gap-4 items-center'>
+            <Link href="/create">
+            <div className='flex gap-2 items-center cursor-pointer text-sm'>
+                <PenBox className='h-4 w-4 text-muted-foreground' />
+                <p className='hidden md:block text-muted-foreground'>Create Post</p>
+            </div>
+            </Link>
             <ThemeSwitch />
             {status === "authenticated" ? (
                 <div className='w-9 aspect-square rounded-full bg-gray-300 overflow-hidden flex gap-4'>

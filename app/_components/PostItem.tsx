@@ -61,7 +61,8 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
           duration: 0.2,
           delay: index * 0.2
         }}
-        className="flex w-full h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg">
+        
+        className="flex w-full h-40 md:h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg">
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
             <div className="flex gap-2 h-5 items-center">
                 {
@@ -69,8 +70,8 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
                 }
             <p className="text-sm text-black/45 dark:text-white/45">{username}</p>
             </div>
-        <h1 className="text-lg font-semibold" >{title}</h1>
-        <p className="text-black/45 dark:text-white/45 line-clamp-2 text-base font-normal">
+        <h1 className="text-base md:text-lg font-semibold" >{title}</h1>
+        <p className="text-black/45 dark:text-white/45 line-clamp-2 text-sm md:text-base font-normal">
             {parsedContent}
         </p>
         <div className="flex w-full  gap-8">
@@ -78,11 +79,11 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
             <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likesCount} <Heart className={`size-3 ${hasLikedState ? "fill-red-500" : ""}`} onClick={clickedLike} /></p>
         </div>
         </div>
-        <motion.div layoutId="coverImg" className="h-full rounded-lg p-4 ">
+        <div  className="h-full rounded-lg p-4 ">
             {
-                coverImg && <Image width={500} height={500} className="h-full object-cover w-52 rounded-lg" src={coverImg} alt={title} />
+                coverImg && <Image width={500} height={500} className="h-full object-cover w-24 md:w-52 rounded-lg" src={coverImg} alt={title} />
             }
-        </motion.div>
+        </div>
       
 
         

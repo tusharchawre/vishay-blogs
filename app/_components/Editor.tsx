@@ -54,7 +54,7 @@ function Editor({ initialContent, editable}: EditorProps) {
         <div className="relative dark:bg-[#1F1F1F] min-h-screen h-full">
 
        <div className="w-full flex items-center">
-        {coverImg ? <img width={500} height={500} className="h-40 mx-auto object-cover w-full" src={coverImg} /> : 
+        {coverImg ? <img width={500} height={500} className="h-48 mx-auto object-cover w-full" src={coverImg} /> : 
            (editable ? (
             <div className="px-8 py-4">
                 <UploadImage setCoverImg={setCoverImg} />
@@ -70,7 +70,7 @@ function Editor({ initialContent, editable}: EditorProps) {
 
         {
           editable &&
-          <PublishModal setCoverImg={setCoverImg} content={content} coverImg={coverImg}   />
+          <PublishModal  setCoverImg={setCoverImg} content={content} coverImg={coverImg}   />
 }
 
        </div>

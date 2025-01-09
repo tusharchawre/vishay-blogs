@@ -41,7 +41,7 @@ export const MostLikedItem = ({title, date,  likes,username, userImg , postId, i
             <p className="text-sm text-black/45 dark:text-white/45">{username}</p>
             </div>
         <h1 className="text-base font-semibold line-clamp-2" >{title}</h1>
-        <div className="flex w-full  gap-8">
+        <div className="flex w-full gap-8">
             <p className="text-sm text-black/45 dark:text-white/45">{date}</p>
             <p className="text-sm text-black/45 dark:text-white/45">Liked by {likes} users</p>
         </div>

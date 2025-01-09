@@ -38,7 +38,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
     const [prompt, setPrompt] = useState<string | undefined>()
     const [genImage, setGenImage] = useState("/placeholder.svg")
     const [isLoading, setIsLoading] = useState(false)
-
+    const [publishLoading, setPublishLoading] = useState(false)
 
     const promptRef = useRef<HTMLInputElement>(null)
 
@@ -47,6 +47,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
 
     const handleSave = async () => {
         //Show error to tell the user to add content.
+        setPublishLoading(true)
         if(!content) return null;
         if(!coverImg) {
 
@@ -60,6 +61,9 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
 
         }
         savePost({content, coverImg, publishStatus})
+
+        setPublishLoading(false)
+
     }
 
     const autoGenerateImage = async (title: string) => {
@@ -79,6 +83,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
     const generateImage = async () => {
         setIsLoading(true)
         setPrompt(promptRef.current?.value)
+        if(prompt === undefined) return null;
         const imageUrl = await fetch("/api/generate-image", {
             method: "POST",
             body: JSON.stringify({prompt : prompt})
@@ -175,8 +180,17 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
                 </div>
 
                 <DialogFooter>
-                    <Button type="submit" onClick={handleSave}>
-                        Publish
+                    <Button type="submit" disabled={publishLoading} onClick={handleSave}>
+                        {
+                            publishLoading ?  (
+                                <div className="flex gap-2 items-center justify-center w-full h-full dark:grayscale dark:text-gray-500">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <p >Publishing</p>
+                </div>
+                            ): (
+                                <p >Publishing</p>
+                            )
+                        }
                     </Button>
                 </DialogFooter>
 
