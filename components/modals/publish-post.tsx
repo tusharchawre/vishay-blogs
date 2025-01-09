@@ -20,7 +20,7 @@ import {
 import { Globe2Icon, Loader2, LockKeyhole } from "lucide-react"
 import { Input } from "../ui/input"
 import { Block } from "@blocknote/core"
-import { Dispatch, Ref, SetStateAction, useRef, useState } from "react"
+import { Dispatch, SetStateAction, useRef, useState } from "react"
 import { savePost } from "@/app/action"
 import { Separator } from "../ui/separator"
 import Image from "next/image"

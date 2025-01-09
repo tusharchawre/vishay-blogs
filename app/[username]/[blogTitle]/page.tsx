@@ -1,10 +1,17 @@
 import { Editor } from "@/app/_components/DynamicEditor"
 import { getPost } from "@/app/action"
+import Image from "next/image"
 
-const page = async ({ params }: { params: { blogTitle: string, username: string } }) => {
+
+type Props = {
+  params: Promise<{ username: string, blogTitle: string }>
+}
+
+
+const page = async ({ params }: Props) => {
     const encodedTitle = (await params).blogTitle
-    const blogTitle = decodeURIComponent(encodedTitle)
     const username = (await params).username
+    const blogTitle = decodeURIComponent(encodedTitle)
     
     const post = await getPost({username, blogTitle})
 
@@ -12,7 +19,7 @@ const page = async ({ params }: { params: { blogTitle: string, username: string 
         return null
     }
 
-    const userImg = post[0].user.image
+
     const coverImg = post[0].coverImg
 
 
@@ -21,7 +28,7 @@ const page = async ({ params }: { params: { blogTitle: string, username: string 
       <>
       <div className="w-full mx-auto md:max-w-[55rem] h-fit md:px-8">
         <div className="w-full flex items-center">
-                {coverImg && <img width={500} height={500} className="h-48 mx-auto object-cover w-full" src={coverImg} />
+                {coverImg && <Image alt="CoverImage" width={500} height={500} className="h-48 mx-auto object-cover w-full" src={coverImg} />
                  }
                 </div>
                 <Editor initialContent={post[0].content} editable={false} />

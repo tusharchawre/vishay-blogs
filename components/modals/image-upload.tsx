@@ -11,9 +11,7 @@ import { Button } from '../ui/button';
 import { ImageIcon } from 'lucide-react';
 import { useEdgeStore } from '@/lib/edgestore';
 import { SingleImageDropzone } from '../SingleImageDropzone';
-import { set } from 'zod';
-import { Separator } from '../ui/separator';
-import Image from 'next/image';
+
 
 interface UploadImageProps {  
   setCoverImg: (coverImg: string) => void

@@ -1,10 +1,9 @@
 "use client"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import React, { useState } from "react"
-import { handleLike } from "../action"
+import React from "react"
+
 import { motion } from "motion/react"
 
 interface PostProps {
@@ -18,7 +17,7 @@ interface PostProps {
 }
 
 
-export const MostLikedItem = ({title, date,  likes,username, userImg , postId, index = 0}: PostProps) =>{
+export const MostLikedItem = ({title, date,  likes,username, userImg , index = 0}: PostProps) =>{
 
 
 

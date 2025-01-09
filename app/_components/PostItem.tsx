@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
 import { handleLike } from "../action"
-import { motion, stagger } from "motion/react"
+import { motion } from "motion/react"
 
 interface PostProps {
     postId : number
@@ -48,7 +48,7 @@ const PostItem = ({title,content, date, coverImg, likes,username, userImg , post
 
     if(!content) return content="Content not found"
 
-const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.text)[0]
+const parsedContent = JSON.parse(content)[1].content.map((x: { text: string })=>x.text)[0]
 
     return(
         //TODO :  Encode the URL in good dash wala fashion

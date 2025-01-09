@@ -147,7 +147,7 @@ export async function handleLike(postId: number) {
       })
       return { message: "Unliked Post." };
     } catch (error) {
-      return { message: "Database Error: Failed to Unlike Post." };
+      return { message: "Database Error: Failed to Unlike Post." + error };
     }
   }
 
@@ -160,7 +160,7 @@ export async function handleLike(postId: number) {
     });
     return { message: "Liked Post." };
   } catch (error) {
-    return { message: "Database Error: Failed to Like Post." };
+    return { message: "Database Error: Failed to Like Post." + error };
   }
 }
 

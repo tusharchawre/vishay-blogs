@@ -7,8 +7,6 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LogOut, PenBox, User } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { useTheme } from 'next-themes'
-import { Newsreader } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -16,7 +14,6 @@ import Link from 'next/link'
 
 export const Navbar = () =>{
     const { data: session, status } = useSession()
-    const {resolvedTheme} = useTheme()
 
 
     return (

@@ -97,6 +97,7 @@ export default async function Page({
             const hasLiked = post.likes.some(like => like.user.name === user.name);
             
             return <PostItem 
+            key={idx}
             postId={post.id} 
             hasLiked={hasLiked} 
             index={idx} 

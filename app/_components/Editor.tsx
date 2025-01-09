@@ -1,14 +1,12 @@
 "use client"
 import UploadImage from "@/components/modals/image-upload";
 import { PublishModal } from "@/components/modals/publish-post";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Block } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
-import { Loader2, Upload } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 
@@ -21,7 +19,6 @@ function Editor({ initialContent, editable}: EditorProps) {
     const {theme} = useTheme()
 
     const [content, setContent] = useState<Block[]>()
-    const [isLoading, setIsLoading] = useState(false)
     const [coverImg, setCoverImg] = useState<string>()
 
 
