@@ -5,21 +5,25 @@ import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
 import { handleLike } from "../action"
+import { motion, stagger } from "motion/react"
 
 interface PostProps {
     postId : number
     title : string
     content: string | null
-    date: string
+    date?: string
     coverImg: string | null //TODO: Generate Image from AI for Cover
     likes: number
     username: string | null
     userImg: string | null
     hasLiked:  boolean
+    index? : number
 }
 
 
-const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId, hasLiked}: PostProps) =>{
+
+
+const PostItem = ({title,content, date, coverImg, likes,username, userImg , postId, hasLiked, index = 0}: PostProps) =>{
 
     const [hasLikedState , setHasLiked] =  useState(hasLiked)
     const [likesCount , setLikesCount] = useState(likes)
@@ -49,7 +53,15 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
     return(
         //TODO :  Encode the URL in good dash wala fashion
         <Link href={`/${username}/${encodeURIComponent(title)}`}>
-        <div className="flex w-full h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg">
+        <motion.div 
+        initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{
+          ease: "easeInOut",
+          duration: 0.2,
+          delay: index * 0.2
+        }}
+        className="flex w-full h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg">
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
             <div className="flex gap-2 h-5 items-center">
                 {
@@ -66,15 +78,15 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: any })=>x.t
             <p className="flex items-center justify-center gap-1 opacity-60 text-sm">{likesCount} <Heart className={`size-3 ${hasLikedState ? "fill-red-500" : ""}`} onClick={clickedLike} /></p>
         </div>
         </div>
-        <div className="h-full rounded-lg p-4 ">
+        <motion.div layoutId="coverImg" className="h-full rounded-lg p-4 ">
             {
                 coverImg && <Image width={500} height={500} className="h-full object-cover w-52 rounded-lg" src={coverImg} alt={title} />
             }
-        </div>
+        </motion.div>
       
 
         
-        </div>
+        </motion.div>
 
         </Link>
     )

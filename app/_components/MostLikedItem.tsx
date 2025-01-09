@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
 import { handleLike } from "../action"
+import { motion } from "motion/react"
 
 interface PostProps {
     postId : number
@@ -13,17 +14,25 @@ interface PostProps {
     likes: number
     username: string | null
     userImg: string | null
+    index: number
 }
 
 
-export const MostLikedItem = ({title, date,  likes,username, userImg , postId}: PostProps) =>{
+export const MostLikedItem = ({title, date,  likes,username, userImg , postId, index = 0}: PostProps) =>{
 
 
 
     return(
         //TODO :  Encode the URL in good dash wala fashion
         <Link href={`/${username}/${encodeURIComponent(title)}`}>
-        <div className="flex w-full h-28 ">
+        <motion.div 
+                initial={{ opacity: 0, y: 20, filter: "blur(50px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{
+                  ease: "easeInOut",
+                  duration: 0.3,
+                  delay: index * 0.2
+                }} className="flex w-full h-28 ">
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
             <div className="flex gap-2 h-5 items-center">
                 {
@@ -39,7 +48,7 @@ export const MostLikedItem = ({title, date,  likes,username, userImg , postId}: 
         </div>
 
         
-        </div>
+        </motion.div>
 
         </Link>
     )

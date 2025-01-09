@@ -60,10 +60,22 @@ export default async function Page({
   <div className="h-fit">
   <div className="w-full h-[calc(100vh-4rem)] flex">
     <aside className="w-[30%] h-full bg-[#ECECEC30] dark:bg-[#20202030] flex flex-col gap-2 items-center p-4">
-      {user.image ? (
-        <Image src={user?.image.replace("s96-c", "s384-c")} width={500} height={500} alt="Profile Pic" className="rounded-xl w-64" />
-      ) : (<Skeleton className="rounded-xl w-48" />)}
-      <p>{post.length} Post</p>
+
+    <div className="w-full h-16 flex items-center justify-around p-2 mt-8 dark:bg-[#33333373] bg-[#D9D9D973] rounded-lg" >
+    {user.image ? (
+        <Image src={user.image.replace("s96-c", "s384-c")} width={500} height={500} alt="Profile Pic" className="rounded-lg h-12 aspect-square w-12" />
+      ) : (<Skeleton className="rounded-lg h-12 aspect-square w-12" />)}
+
+      <div>
+        <p className="text-base font-semibold text-foreground">{user.name}</p>
+        <p className="text-sm font-light text-muted-foreground text-wrap">{user.email}</p>
+      </div>
+
+    </div>
+
+
+      
+
     </aside>
 
     <div className="w-full h-full px-16 py-4 overflow-y-scroll">
@@ -76,7 +88,7 @@ export default async function Page({
             return <PostItem 
             postId={post.id} 
             hasLiked={hasLiked} 
-            key={idx} 
+            index={idx} 
             userImg={post.user.image} 
             username={post.user.name} 
             title={post.title} content={post.content} 

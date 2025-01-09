@@ -11,7 +11,6 @@ import { useTheme } from 'next-themes'
 import { Newsreader } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
 
 
@@ -43,6 +42,7 @@ export const Navbar = () =>{
                     alt="Vishay Logo Light"
                 />
             </Link>
+
         <div className='flex gap-4'>
             <ThemeSwitch />
             {status === "authenticated" ? (

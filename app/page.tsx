@@ -58,11 +58,13 @@ async function page() {
       {
               posts.map((post, idx)=>
                 {
-                  const hasLiked = post.likes.some(like => like.user.name === user?.name);
+                  const hasLiked = post.likes.some( 
+                    like => session && like.user.name === user?.name
+                  );
 
                   if(!post.published) return null;
                   
-                  return <PostItem postId={post.id} hasLiked={hasLiked} key={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes.length} coverImg={post.coverImg}  />
+                  return <PostItem postId={post.id} hasLiked={hasLiked} index={idx} userImg={post.user.image} username={post.user.name} title={post.title} content={post.content} date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} likes={post.likes.length} coverImg={post.coverImg}  />
               })}
       </div>
 
@@ -75,6 +77,7 @@ async function page() {
                 {
                   return (<>
                   <MostLikedItem 
+                  index={idx}
                   postId={post.id}
                   date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getDate()}, ${post.createdAt.getFullYear()}`}
                   title={post.title}
