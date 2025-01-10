@@ -2,13 +2,16 @@
 import UploadImage from "@/components/modals/image-upload";
 import { PublishModal } from "@/components/modals/publish-post";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Block } from "@blocknote/core";
+import { Block, BlockNoteEditor, filterSuggestionItems } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
-import { useCreateBlockNote } from "@blocknote/react";
+import { DefaultReactSuggestionItem, getDefaultReactSlashMenuItems, SuggestionMenuController, useCreateBlockNote } from "@blocknote/react";
+import { BrainCircuit } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
+import { useCompletion } from "ai/react";
+
 
 interface EditorProps {
     initialContent?: string | undefined
@@ -20,6 +23,89 @@ function Editor({ initialContent, editable}: EditorProps) {
 
     const [content, setContent] = useState<Block[]>()
     const [coverImg, setCoverImg] = useState<string>()
+
+
+
+
+    const { complete } = useCompletion({
+      id: 'hackathon_starter',
+      api: '/api/generate-text',
+onResponse: async (response) => {
+  if (response.status === 429) {
+    return; // Stop if rate-limited
+  }
+
+  if (response.body) {
+    try {
+      const reader = response.body.getReader(); 
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read(); 
+        if (done) {
+          break; // Exit loop when the stream ends
+        }
+        const chunk = decoder.decode(value, { stream: true });
+
+       
+        
+
+
+
+        editor?._tiptapEditor.commands.insertContent(chunk);
+      }
+
+
+
+
+
+    } catch (error) {
+      console.error("Stream processing error:", error);
+    }
+  } else {
+    console.error("Response body is null");
+  }
+}
+
+    });
+
+
+    const insertMagicAi = (editor: BlockNoteEditor)=> {
+      const prevText = editor._tiptapEditor.state.doc.textBetween(
+        Math.max(0, editor._tiptapEditor.state.selection.from - 5000),
+        editor._tiptapEditor.state.selection.from - 1,
+        '\n'
+    );
+    complete(prevText);
+    }
+
+    const insertAiItem = (editor: BlockNoteEditor) => ({
+      title: "Insert AI Generated Text",
+      onItemClick: async () => {
+        const prevText = editor._tiptapEditor.state.doc.textBetween(
+            Math.max(0, editor._tiptapEditor.state.selection.from - 5000),
+            editor._tiptapEditor.state.selection.from - 1,
+            '\n'
+        );
+        insertMagicAi(editor);
+      },
+      aliases: ["autocomplete", "AI"],
+      group: "AI",
+      icon: <BrainCircuit size={18} />,
+      subtext: "Continuew your post with AI-generated text.",
+    });
+     
+
+
+    const getCustomSlashMenuItems = (
+      editor: BlockNoteEditor
+    ): DefaultReactSuggestionItem[] =>[
+      insertAiItem(editor),
+      ...getDefaultReactSlashMenuItems(editor)
+    ]
+
+
+
 
 
 
@@ -46,6 +132,7 @@ function Editor({ initialContent, editable}: EditorProps) {
 
 
 
+
     return (
         <>  
         <div className="relative dark:bg-[#1F1F1F] min-h-screen h-full">
@@ -60,7 +147,22 @@ function Editor({ initialContent, editable}: EditorProps) {
          }
         </div>
         
-        <BlockNoteView editor={editor} editable={editable} theme={theme === "dark" ? "dark" : "light"} onChange={()=> setContent(editor.document)} />
+        <BlockNoteView 
+        editor={editor} 
+        slashMenu={false}
+        editable={editable} 
+        theme={theme === "dark" ? "dark" : "light"} 
+        onChange={()=> setContent(editor.document)}>
+      <SuggestionMenuController
+              triggerCharacter={'/'}
+              getItems={async (query) =>
+                  filterSuggestionItems(getCustomSlashMenuItems(editor), query)
+              }
+          />
+
+
+
+        </BlockNoteView>
 
 
 

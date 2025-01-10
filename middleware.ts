@@ -1,20 +1,8 @@
 import { auth } from "@/auth"
  
 export default auth((req) => {
-    const {nextUrl} = req
-    const isLoggedIn = !!req.auth
-
-    const pathname = nextUrl.pathname
-
-    if(pathname === "/create"){
-        if(!isLoggedIn){
-            return Response.redirect(new URL("/login", nextUrl))
-        }
-
-        return ;
-    }
-
     
+    //TODO : Middleware this was creating problems with generate api so look into that.
 
 })
  

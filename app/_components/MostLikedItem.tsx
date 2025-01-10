@@ -19,6 +19,8 @@ interface PostProps {
 
 export const MostLikedItem = ({title, date,  likes,username, userImg , index = 0}: PostProps) =>{
 
+    
+
 
 
     return(
