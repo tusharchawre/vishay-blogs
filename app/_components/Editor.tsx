@@ -82,11 +82,6 @@ onResponse: async (response) => {
     const insertAiItem = (editor: BlockNoteEditor) => ({
       title: "Insert AI Generated Text",
       onItemClick: async () => {
-        const prevText = editor._tiptapEditor.state.doc.textBetween(
-            Math.max(0, editor._tiptapEditor.state.selection.from - 5000),
-            editor._tiptapEditor.state.selection.from - 1,
-            '\n'
-        );
         insertMagicAi(editor);
       },
       aliases: ["autocomplete", "AI"],

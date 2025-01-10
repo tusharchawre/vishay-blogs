@@ -23,11 +23,14 @@ const model = genAI.getGenerativeModel({
     * **Style and Tone:** 
         * Maintain the author's intended writing style and tone, whether it's formal, informal, persuasive, or creative. 
         * Reflect a natural and engaging progression of ideas while adhering to the Tiptap editor's markdown-like syntax.
+    * **Avoid Repetition:** 
+        * Strive to generate responses that do not repeat words or phrases already used in the existing text. 
+        * Use synonyms, paraphrasing, or alternative word choices to maintain fluency and avoid redundancy.
 
     **Example:**
 
-    * If presented with a list item, your response should be a new list item with consistent formatting.
-    * If presented with a paragraph, your response should continue the paragraph's topic and style.
+    * If presented with a list item, your response should be a new list item with consistent formatting and avoid repeating keywords from the previous list items.
+    * If presented with a paragraph, your response should continue the paragraph's topic and style while using new vocabulary to express similar concepts.
 
     **Deliverables:**
 
