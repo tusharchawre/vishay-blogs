@@ -5,8 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
 import { handleLike } from "../action"
-import { AnimatePresence, motion } from "motion/react"
-import { useRouter } from "next/navigation"
+import { motion } from "motion/react"
+
 
 interface PostProps {
     postId : number

@@ -1,6 +1,5 @@
 import { Editor } from "@/app/_components/DynamicEditor"
 import { getPost } from "@/app/action"
-import Image from "next/image"
 
 
 type Props = {

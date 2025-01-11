@@ -5,8 +5,7 @@ import Image from "next/image";
 import PostItem  from "../_components/PostItem";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { SelectSeparator } from "@/components/ui/select";
-import { auth } from "@/auth";
+
 import Link from "next/link";
 
 export default async function Page({
