@@ -25,21 +25,49 @@ export const savePost = async ({content, coverImg, publishStatus}: SavePostProps
 
     const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
 
+    const post = await prisma.post.findFirst({
+      where: {
+        title: parsedTitle
+      }
+    })
 
-      await prisma.post.create({
-          data: {
-            title: parsedTitle,
-            content:  JSON.stringify(content),
-            published: publishStatus,
-            coverImg: coverImg,
-            user: {
-                connect: {
-                    email: email
-                }
+    if(post){
+      await prisma.post.update({
+        where: {
+          id: post.id
+        },
+        data: {
+          title: parsedTitle,
+          content: JSON.stringify(content),
+          published: publishStatus,
+          coverImg: coverImg,
+          user: {
+            connect: {
+              email: email
             }
           }
+        }
+      })
+    }
+    else{
+      await prisma.post.create({
+        data: {
+          title: parsedTitle,
+          content:  JSON.stringify(content),
+          published: publishStatus,
+          coverImg: coverImg,
+          user: {
+              connect: {
+                  email: email
+              }
+          }
+        }
 
-        })
+      })
+    }
+    
+
+     
         redirect(`/${session.user.name}`)
 
 

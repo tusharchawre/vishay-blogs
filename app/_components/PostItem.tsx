@@ -5,7 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
 import { handleLike } from "../action"
-import { motion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
+import { useRouter } from "next/navigation"
 
 interface PostProps {
     postId : number
@@ -52,7 +53,9 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: string })=>
 
     return(
         //TODO :  Encode the URL in good dash wala fashion
+
         <Link href={`/${username}/${encodeURIComponent(title)}`}>
+
         <motion.div 
         initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -88,7 +91,6 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: string })=>
 
         
         </motion.div>
-
         </Link>
     )
 }

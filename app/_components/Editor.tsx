@@ -11,18 +11,20 @@ import { BrainCircuit } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { useCompletion } from "ai/react";
+import Image from "next/image";
 
 
 interface EditorProps {
     initialContent?: string | undefined
     editable?: boolean
+    draftImg? : string | undefined
 }
 
-function Editor({ initialContent, editable}: EditorProps) {
+function Editor({ initialContent, editable, draftImg}: EditorProps) {
     const {theme} = useTheme()
 
-    const [content, setContent] = useState<Block[]>()
-    const [coverImg, setCoverImg] = useState<string>()
+    const [content, setContent] = useState<Block[]>(initialContent ? JSON.parse(initialContent) as Block[] : [])
+    const [coverImg, setCoverImg] = useState<string | undefined>(draftImg)
 
 
 
@@ -46,12 +48,6 @@ onResponse: async (response) => {
           break; // Exit loop when the stream ends
         }
         const chunk = decoder.decode(value, { stream: true });
-
-       
-        
-
-
-
         editor?._tiptapEditor.commands.insertContent(chunk);
       }
 
@@ -106,7 +102,7 @@ onResponse: async (response) => {
 
 
     const editor = useCreateBlockNote({
-        initialContent: initialContent ? JSON.parse(initialContent) as Block[] : [
+        initialContent: initialContent ? content : [
             {
                 type: "heading",
                 content: "Your Title Here"
@@ -133,7 +129,7 @@ onResponse: async (response) => {
         <div className="relative dark:bg-[#1F1F1F] min-h-screen h-full">
 
        <div className="w-full flex items-center">
-        {coverImg ? <img width={500} height={500} className="h-48 mx-auto object-cover w-full" src={coverImg} /> : 
+        {coverImg ? <Image width={500} height={500} className="h-48 mx-auto object-cover w-full" src={coverImg} alt="Cover Image" /> : 
            (editable ? (
             <div className="px-8 py-4">
                 <UploadImage setCoverImg={setCoverImg} />

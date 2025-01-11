@@ -2,7 +2,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/prisma";
 import Image from "next/image";
-import PostItem  from "../_components/PostItem";
+import PostItem  from "@/app/_components/PostItem";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { SelectSeparator } from "@/components/ui/select";
@@ -17,6 +17,11 @@ export default async function Page({
 
   const  username  = (await params).username 
 
+  const session = await auth()
+
+  
+
+
 
   const user = await prisma.user.findFirst({
     where: {
@@ -28,13 +33,18 @@ export default async function Page({
     }
   })
 
-
-
+  if(session?.user?.email != user?.email){
+    return(
+        <div className="w-full h-screen flex items-center justify-center">
+            <h1>You do not have access to this path</h1>
+        </div>
+    )
+  }
 
   const post = await prisma.post.findMany({
     where: {
       userId: user?.id,
-      published: true
+      published: false
     },
     include:{
       user:{
@@ -110,12 +120,12 @@ export default async function Page({
     {/* TODO: Lot of code redundancy here. Prolly just need to make a better navigation and use these as components rendering on same page */}
     <div className="w-full flex flex-col gap-2">
       <Link href={`/${user.name}`}>
-      <div className="w-full h-fit dark:bg-[#33333373] bg-[#D9D9D973] flex items-center rounded-md px-4 py-2">
+      <div className="w-full h-fit  flex items-center rounded-md px-4 py-2">
         <p>Home</p>
       </div>
       </Link>
       <Link href={`/${user.name}/drafts`}>
-      <div className="w-full h-fit  flex items-center rounded-md px-4 py-2">
+      <div className="w-full h-fit dark:bg-[#33333373] bg-[#D9D9D973] flex items-center rounded-md px-4 py-2">
         <p>Drafts</p>
       </div>
       </Link>
@@ -124,12 +134,7 @@ export default async function Page({
         <p>About</p>
       </div>
       </Link> */}
-
-    </div>
-
-    
-
-
+      </div>
 
       
 

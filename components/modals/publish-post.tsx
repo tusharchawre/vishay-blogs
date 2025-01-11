@@ -36,7 +36,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
 
     const [publishStatus , setPublish] = useState(false)
     const [prompt, setPrompt] = useState<string | undefined>()
-    const [genImage, setGenImage] = useState("/placeholder.svg")
+    const [genImage, setGenImage] = useState(coverImg ? coverImg : "/placeholder.svg")
     const [isLoading, setIsLoading] = useState(false)
     const [publishLoading, setPublishLoading] = useState(false)
 
@@ -46,9 +46,9 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
 
 
     const handleSave = async () => {
-        //Show error to tell the user to add content.
+        //Show error to tell the user to add content
         setPublishLoading(true)
-        if(!content) return null;
+        if(!content) return console.error("Content Missing");
         if(!coverImg) {
 
             const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
@@ -154,11 +154,11 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
                 ) : 
                 
                 (<Image 
-                src={genImage} 
+                src={coverImg ? coverImg : genImage} 
                 height={500} 
                 width={500} 
                 className={cn("object-cover",
-                genImage == "/placeholder.svg" && "dark:brightness-[0.4] dark:grayscale scale-150")} alt="Generate Cover Image" />)}
+                genImage === "/placeholder.svg" && "dark:brightness-[0.4] dark:grayscale scale-150")} alt="Generate Cover Image" />)}
                 </div>
 
 
