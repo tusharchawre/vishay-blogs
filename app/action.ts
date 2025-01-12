@@ -3,7 +3,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/prisma"
 import { Block } from "@blocknote/core"
-import { redirect } from "next/navigation"
 
 interface SavePostProps {
   content: Block[]
@@ -16,6 +15,13 @@ export const savePost = async ({content, coverImg, publishStatus}: SavePostProps
 
 
     const session = await auth()
+
+    if(content[0] === undefined){
+        
+        return new Error("Please Insert Content")
+    }
+
+
 
     if (!session || !session.user || !session.user.email) {
         throw new Error("User not authenticated or session invalid")
@@ -65,10 +71,6 @@ export const savePost = async ({content, coverImg, publishStatus}: SavePostProps
 
       })
     }
-    
-
-     
-        redirect(`/${session.user.name}`)
 
 
 }

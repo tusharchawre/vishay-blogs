@@ -25,6 +25,9 @@ import { savePost } from "@/app/action"
 import { Separator } from "../ui/separator"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 interface PublishModalProps{
     content: Block[] | undefined
@@ -42,13 +45,15 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
 
     const promptRef = useRef<HTMLInputElement>(null)
 
+    const session = useSession()
 
+    const router = useRouter()
 
 
     const handleSave = async () => {
         //Show error to tell the user to add content
         setPublishLoading(true)
-        if(!content) return console.error("Content Missing");
+        if(!content) return toast("Please insert content");
         if(!coverImg) {
 
             const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
@@ -60,9 +65,18 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
             {return new Error("The Cover Image is still not Generated");}
 
         }
-        savePost({content, coverImg, publishStatus})
+       const result = await savePost({content, coverImg, publishStatus})
+        if(result instanceof Error){ 
+            setPublishLoading(false)
+            return toast.error(result.message)
+        }
 
+        toast.success("Post published successfully")
+        
         setPublishLoading(false)
+
+        router.push(`/${session.data?.user?.name}`)
+
 
     }
 
@@ -170,7 +184,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
                 className="w-full mr-2" 
                 onChange={()=> setPrompt(promptRef.current?.value)}
                 placeholder="Enter the Prompt for Cover Image"  />
-                <Button onClick={generateImage}>
+                <Button disabled={isLoading} onClick={generateImage}>
                     Generate
                 </Button>
 
@@ -188,7 +202,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
                         <p >Publishing</p>
                 </div>
                             ): (
-                                <p >Publishing</p>
+                                <p >Publish</p>
                             )
                         }
                     </Button>

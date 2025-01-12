@@ -3,11 +3,12 @@ import "./globals.css";
 import Providers from "@/providers";
 import { Navbar } from "./_components/Navbar";
 import { Gradient } from "@/components/Gradient";
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
-  title: "Vishay | Blogs n stuff",
-  description: "Blogs Website",
+  title: "V-shy Blogs",
+  description: "Blogging Website",
 };
 
 export default function RootLayout({
@@ -23,6 +24,7 @@ export default function RootLayout({
           <div className="relative overflow-hidden">
             <Gradient />
             <div className="relative z-10">{children}</div>
+            <Toaster />
           </div>
         </Providers>
       </body>
