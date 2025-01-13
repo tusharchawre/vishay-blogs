@@ -2,18 +2,18 @@
 
 Welcome to **V-shy Blogs**, an open-source blogging platform built with [Next.js](https://nextjs.org). Whether you're a developer looking to host your own blog or a contributor eager to improve the project, this guide will help you get started!
 
-![V-shy Blogs Hero](https://drive.google.com/file/d/1mLIx7Q-yIBk38-JYUqxUnNWUsmss9ErX/view?usp=sharing)
+### Hero Section
+![Hero Section](https://i.imgur.com/u8hFiXS.png)
 
 ---
 
 ## 📸 Screenshots/Demo
 
 ### Blog Editor Interface
-![Editor Screenshot](https://drive.google.com/file/d/1Y0C4YEBh9xlOzllg6A8LnIh-G0JPWAcq/view?usp=sharing)
+![Editor Screenshot](https://i.imgur.com/VinUVg5.png)
 
 ### UI Walkthrough
-[![Watch the demo video](https://drive.google.com/file/d/17sqQh3Wck7c-WP1zUyaxAac1H7_96pOJ/view?usp=sharing)](https://drive.google.com/file/d/17sqQh3Wck7c-WP1zUyaxAac1H7_96pOJ/view?usp=sharing)
-
+[![Watch the demo video](https://cdn-cf-east.streamable.com/image/597f0d.jpg)](https://streamable.com/597f0d)
 ---
 
 ## 🚀 Getting Started
