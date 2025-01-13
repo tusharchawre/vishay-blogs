@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# V-shy Blogs
 
-## Getting Started
+Welcome to **V-shy Blogs**, an open-source blogging platform built with [Next.js](https://nextjs.org). Whether you're a developer looking to host your own blog or a contributor eager to improve the project, this guide will help you get started!
 
-First, run the development server:
+![V-shy Blogs Hero](https://drive.google.com/file/d/1mLIx7Q-yIBk38-JYUqxUnNWUsmss9ErX/view?usp=sharing)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📸 Screenshots/Demo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Blog Editor Interface
+![Editor Screenshot](https://drive.google.com/file/d/1Y0C4YEBh9xlOzllg6A8LnIh-G0JPWAcq/view?usp=sharing)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### UI Walkthrough
+[![Watch the demo video](https://drive.google.com/file/d/17sqQh3Wck7c-WP1zUyaxAac1H7_96pOJ/view?usp=sharing)](https://drive.google.com/file/d/17sqQh3Wck7c-WP1zUyaxAac1H7_96pOJ/view?usp=sharing)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Getting Started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Follow these steps to set up V-shy Blogs locally.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Prerequisites
 
-## Deploy on Vercel
+- **Node.js**: >= 16.x
+- **npm** or **yarn**: For package management
+- **Database**: PostgreSQL (recommended)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠 Installation Guide
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/yourusername/v-shy-blogs.git
+   cd v-shy-blogs
+   ```
+
+2. **Install Dependencies**:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set Up Environment Variables**:
+
+   Create a `.env` file in the root directory and populate it using the following template:
+
+   ```env
+   DATABASE_URL=your-database-url
+
+   AUTH_SECRET=your-auth-secret
+
+   AUTH_GOOGLE_ID=your-google-client-id
+   AUTH_GOOGLE_SECRET=your-google-client-secret
+
+   EDGE_STORE_ACCESS_KEY=your-edge-store-access-key
+   EDGE_STORE_SECRET_KEY=your-edge-store-secret-key
+
+   GEMINI_API_KEY=your-gemini-api-key
+   ```
+
+4. **Run Database Migrations**:
+
+   If you're using Prisma:
+
+   ```bash
+   npx prisma migrate dev
+   ```
+
+5. **Start the Development Server**:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+   The application should now be running at [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from the community! To contribute:
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -m "Add feature"`
+4. Push to the branch: `git push origin feature-name`
+5. Open a pull request.
+
+---
+
+
+
+## 🌐 Live Version
+
+Check out the live version of the site at: [https://vishay-blogs.vercel.app/](https://vishay-blogs.vercel.app/)
+
+---
+
+Happy blogging! 🌱
+
