@@ -2,7 +2,7 @@
 import UploadImage from "@/components/modals/image-upload";
 import { PublishModal } from "@/components/modals/publish-post";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Block, BlockNoteEditor, filterSuggestionItems } from "@blocknote/core";
+import { Block, BlockNoteEditor,filterSuggestionItems } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
@@ -34,7 +34,7 @@ function Editor({ initialContent, editable, draftImg}: EditorProps) {
       api: '/api/generate-text',
 onResponse: async (response) => {
   if (response.status === 429) {
-    return; // Stop if rate-limited
+    return; 
   }
 
   if (response.body) {
@@ -105,8 +105,11 @@ onResponse: async (response) => {
                 type: "paragraph",
                 content: "Type your content here..."
             }
-        ]
+        ],
+        
     })
+
+
 
 
 
@@ -120,6 +123,21 @@ onResponse: async (response) => {
 
     return (
         <>  
+          <style>
+  {
+    `
+      .bn-editor {
+        padding-inline: 16px;
+      }
+
+      @media (min-width: 768px) {
+        .bn-editor {
+          padding-inline: 54px;
+        }
+      }
+    `
+  }
+</style>
         <div className="relative dark:bg-[#1F1F1F] min-h-screen h-full">
 
        <div className="w-full flex items-center">

@@ -14,8 +14,9 @@ export default async function Page({
   params: Promise<{ username: string }>
 }) {
 
-  const  username  = (await params).username 
+  const  usernameParams  = (await params).username 
 
+  const username =  decodeURIComponent(usernameParams)
 
   const user = await prisma.user.findFirst({
     where: {
