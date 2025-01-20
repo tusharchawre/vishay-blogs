@@ -10,12 +10,10 @@ type Props = {
 const page = async ({ params }: Props) => {
     const encodedTitle = (await params).blogTitle
     const username = (await params).username
-    const blogTitle = decodeURIComponent(encodedTitle)
+    const blogTitle = decodeURIComponent(encodedTitle).toString()
 
     
     const post = await getPost({username, blogTitle})
-
-
 
     if(!post || !post[0].content){
         return null

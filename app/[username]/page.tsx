@@ -82,7 +82,7 @@ export default async function Page({
       ) : (<Skeleton className="rounded-lg h-12 aspect-square w-12" />)}
 
       <div>
-        <p className="text-base font-semibold text-foreground">{user.name}</p>
+        <p className="text-base font-semibold text-foreground">{user.name?.replace("-", " ")}</p>
         <p className="text-sm font-light text-muted-foreground text-wrap">{user.email}</p>
       </div>
 

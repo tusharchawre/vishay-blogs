@@ -15,7 +15,7 @@ interface PostProps {
     date?: string
     coverImg: string | null //TODO: Generate Image from AI for Cover
     likes: number
-    username: string | null
+    username: string
     userImg: string | null
     hasLiked:  boolean
     index? : number
@@ -71,7 +71,9 @@ const parsedContent = JSON.parse(content)[1].content.map((x: { text: string })=>
                 {
                     userImg && <Image src={userImg} width={50} height={50} alt="Profile Pic" className="rounded-full w-4 h-4" />
                 }
-            <p className="text-sm text-black/45 dark:text-white/45">{username}</p>
+            <p className="text-sm text-black/45 dark:text-white/45">
+            {username.replace("-", " ")}
+            </p>
             </div>
         <h1 className="text-base md:text-lg font-semibold" >{title}</h1>
         <p className="text-black/45 dark:text-white/45 line-clamp-2 text-sm md:text-base font-normal">
