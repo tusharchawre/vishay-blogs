@@ -159,7 +159,7 @@ export default async function Page({
             hasLiked={hasLiked} 
             index={idx} 
             userImg={post.user.image} 
-            username={post.user.name} 
+            username={post.user.name!} 
             title={post.title} content={post.content} 
             date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`} 
             likes={post.likes.length} coverImg={post.coverImg}  />
