@@ -20,6 +20,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./docker/Dockerfile.backend
+          file: Dockerfile
           push: true
-          tags: 100xdevs/user-app-backend:${{ github.sha }}
+          tags: tushar/vishay-blogs:${{ github.sha }}
