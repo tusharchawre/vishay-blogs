@@ -26,4 +26,4 @@ jobs:
             DB_URL=${{ secrets.DB_URL }}
             EDGE_STORE_ACCESS_KEY=${{ secrets.EDGE_STORE_ACCESS_KEY }}
             EDGE_STORE_SECRET_KEY=${{ secrets.EDGE_STORE_SECRET_KEY }}
-          tags: tushar/vishay-blogs:${{ github.sha }}
+          tags: tusharchawre0240/vishay-blogs:${{ github.sha }}
