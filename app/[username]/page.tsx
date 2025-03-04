@@ -3,10 +3,7 @@ import { prisma } from "@/prisma";
 import Image from "next/image";
 import PostItem from "../_components/PostItem";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-
 import Link from "next/link";
-import { handleFollow } from "../action";
 import { ProfileSection } from "@/components/profile-section";
 
 export default async function Page({

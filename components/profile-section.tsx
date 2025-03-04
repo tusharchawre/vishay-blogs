@@ -1,5 +1,5 @@
 "use client";
-import { Post, Prisma, User } from "@prisma/client";
+import { Post, Prisma } from "@prisma/client";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { handleFollow } from "@/app/action";
