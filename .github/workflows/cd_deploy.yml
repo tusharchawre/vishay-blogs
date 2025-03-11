@@ -23,7 +23,15 @@ jobs:
           file: Dockerfile
           push: true
           build-args: |
-            DB_URL=${{ secrets.DB_URL }}
+            DB_URL=${{ secrets.DATABASE_URL }}
             EDGE_STORE_ACCESS_KEY=${{ secrets.EDGE_STORE_ACCESS_KEY }}
             EDGE_STORE_SECRET_KEY=${{ secrets.EDGE_STORE_SECRET_KEY }}
           tags: tusharchawre0240/vishay-blogs:${{ github.sha }}
+      - run: | 
+          echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
+          mkdir -p /home/runner/.ssh
+          ls /home/runner/.ssh
+          touch /home/runner/.ssh/known_hosts
+          echo "${{secrets.KNOWN_HOST}}" &> /home/runner/.ssh/known_host
+          chmod 700 /home/runner/ssh_key
+          ssh -0 StrictHostKeyChecking=no -i ~/ssh_key root@51.20.8.67 -t "docker stop vishay-blogs && sudo docker run --name vishay-blogs -d -p 3000:3000 -e DATABASE_URL= ${{secrets.DATABASE_URL}} -e AUTH_SECRET=${{secrets.AUTH_SECRET}} -e AUTH_URL=${{secrets.AUTH_URL}} -e AUTH_GOOGLE_ID= ${{secrets.AUTH_GOOGLE_ID}} -e AUTH_GOOGLE_SECRET=${{secrets.AUTH_GOOGLE_SECRET}} -e EDGE_STORE_ACCESS_KEY=${{secrets.EDGE_STORE_ACCESS_KEY}} -e EDGE_STORE_SECRET_KEY=${{secrets.EDGE_STORE_SECRET_KEY}} -e GEMINI_API_KEY=${{secrets.GEMINI_API_KEY}} tusharchawre0240/vishay-blogs:${{ github.sha }}
