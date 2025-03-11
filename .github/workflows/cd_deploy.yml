@@ -28,13 +28,11 @@ jobs:
             EDGE_STORE_SECRET_KEY=${{ secrets.EDGE_STORE_SECRET_KEY }}
           tags: tusharchawre0240/vishay-blogs:${{ github.sha }}
 
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+      - name: Install SSH Key
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOST }}
-          if_key_exists: replace
-
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no root@51.20.8.67 "
