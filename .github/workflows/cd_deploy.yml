@@ -35,7 +35,7 @@ jobs:
             
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no root@51.20.8.67 "
+          ssh -v -o StrictHostKeyChecking=no root@51.20.8.67 "
             docker stop vishay-blogs || true &&
             docker rm vishay-blogs || true &&
             docker run --name vishay-blogs -d -p 3000:3000 \
