@@ -83,7 +83,7 @@ async function page() {
                   title={post.title}
                   userImg={post.user.image}
                   key={idx}
-                  username={post.user.name?.replace("-"," ")!}
+                  username={post.user.name?.replace("-"," ")}
                   likes={post.likes.length}
                   /></>)
               })}

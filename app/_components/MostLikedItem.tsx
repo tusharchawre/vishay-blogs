@@ -11,7 +11,7 @@ interface PostProps {
   title: string;
   date: string;
   likes: number;
-  username: string | null;
+  username: string | undefined;
   userImg: string | null;
   index: number;
 }
