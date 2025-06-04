@@ -72,6 +72,8 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
         }
 
         toast.success("Post published successfully")
+
+        localStorage.removeItem("editor")
         
         setPublishLoading(false)
 

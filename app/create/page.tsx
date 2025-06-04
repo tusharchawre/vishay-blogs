@@ -1,11 +1,17 @@
-"use client"
+"use client";
 import { Editor } from "../_components/DynamicEditor";
-
 
 const Page = () => {
   return (
     <div>
-      <Editor editable={true} />
+      <Editor
+        initialContent={
+          localStorage.getItem("editor")
+            ? localStorage.getItem("editor")!
+            : undefined
+        }
+        editable={true}
+      />
     </div>
   );
 };

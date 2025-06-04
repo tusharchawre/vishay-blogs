@@ -14,7 +14,7 @@ import {
   SuggestionMenuController,
   useCreateBlockNote,
 } from "@blocknote/react";
-import { BrainCircuit } from "lucide-react";
+import { BrainCircuit, Check, Loader2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useCompletion } from "ai/react";
@@ -29,7 +29,7 @@ interface EditorProps {
 function Editor({ initialContent, editable, draftImg }: EditorProps) {
   const { theme } = useTheme();
   const [html, setHTML] = useState<string>("");
-
+  const [editing, setEditing] = useState(false);
   const [content, setContent] = useState<Block[]>(
     initialContent ? (JSON.parse(initialContent) as Block[]) : []
   );
@@ -184,12 +184,29 @@ function Editor({ initialContent, editable, draftImg }: EditorProps) {
           ) : null}
         </div>
 
+        {editing ? (
+          <p className="text-muted-foreground px-8 text-sm flex gap-1 items-center">
+            <Loader2 className="animate-spin duration-300" size={16} />
+            Saving...
+          </p>
+        ) : (
+          <p className="text-muted-foreground px-8 text-sm flex gap-1 items-center">
+            <Check size={16} />
+            Saved in your local storage...
+          </p>
+        )}
+
         <BlockNoteView
           editor={editor}
           slashMenu={false}
           editable={editable}
           theme={theme === "dark" ? "dark" : "light"}
-          onChange={() => setContent(editor.document)}
+          onChange={() => {
+            setEditing(true);
+            setContent(editor.document);
+            localStorage.setItem("editor" , JSON.stringify(editor.document))
+            setTimeout(()=> setEditing(false), 2000)
+          }}
         >
           <SuggestionMenuController
             triggerCharacter={"/"}
