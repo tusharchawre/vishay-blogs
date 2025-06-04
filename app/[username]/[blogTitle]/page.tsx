@@ -26,7 +26,7 @@ const page = async ({ params }: Props) => {
 
     return (
       <>
-      <div className="w-full mx-auto md:max-w-[55rem] h-fit md:px-8">
+      <div className="w-full mx-auto md:max-w-[55rem] min-h-[100vh] h-fit md:px-8">
         <div className="w-full flex items-center">
                 {/* {coverImg && <Image alt="CoverImage" width={500} height={500} className="h-48 mx-auto object-cover w-full" src={coverImg} />
                  } */}

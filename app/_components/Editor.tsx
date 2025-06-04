@@ -1,11 +1,13 @@
 "use client";
 import UploadImage from "@/components/modals/image-upload";
+import { motion } from "motion/react";
 import { PublishModal } from "@/components/modals/publish-post";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Block, BlockNoteEditor, filterSuggestionItems } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
+import DOMPurify from "dompurify";
 import {
   DefaultReactSuggestionItem,
   getDefaultReactSlashMenuItems,
@@ -14,7 +16,7 @@ import {
 } from "@blocknote/react";
 import { BrainCircuit } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCompletion } from "ai/react";
 import Image from "next/image";
 
@@ -26,6 +28,7 @@ interface EditorProps {
 
 function Editor({ initialContent, editable, draftImg }: EditorProps) {
   const { theme } = useTheme();
+  const [html, setHTML] = useState<string>("");
 
   const [content, setContent] = useState<Block[]>(
     initialContent ? (JSON.parse(initialContent) as Block[]) : []
@@ -82,11 +85,6 @@ function Editor({ initialContent, editable, draftImg }: EditorProps) {
     subtext: "Continuew your post with AI-generated text.",
   });
 
-  
-
-
-
-
   const getCustomSlashMenuItems = (
     editor: BlockNoteEditor
   ): DefaultReactSuggestionItem[] => [
@@ -108,6 +106,51 @@ function Editor({ initialContent, editable, draftImg }: EditorProps) {
           },
         ],
   });
+
+  if (!editable) {
+    const onChange = async () => {
+      const html = await editor.blocksToFullHTML(editor.document);
+      const sanitizedHTML = DOMPurify.sanitize(html);
+      setHTML(sanitizedHTML);
+      console.log(html);
+    };
+
+    useEffect(() => {
+      onChange();
+    }, []);
+
+    return (
+      <>
+        {coverImg && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            transition={{ duration: 1.2 }}
+          >
+            <Image
+              width={1080}
+              height={900}
+              className="h-64 mx-auto object-cover w-full mt-4 rounded-md"
+              src={coverImg}
+              alt="Cover Image"
+            />
+          </motion.div>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2 }}
+          className="prose prose-lg max-w-none dark:prose-invert"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </>
+    );
+  }
 
   return (
     <>
@@ -170,7 +213,7 @@ function Editor({ initialContent, editable, draftImg }: EditorProps) {
 
 export function EditorSkeleton() {
   return (
-    <div className="relative dark:bg-[#1F1F1F] h-screen px-8 py-2">
+    <div className="relative h-screen px-8 py-2">
       <div className="w-full">
         <Skeleton className="h-40 w-full" />
       </div>
