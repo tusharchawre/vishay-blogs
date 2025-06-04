@@ -20,9 +20,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <Navbar />
           <div className="relative overflow-hidden">
             <Gradient />
+          <Navbar />
             <div className="relative z-10">{children}</div>
             <Toaster />
           </div>

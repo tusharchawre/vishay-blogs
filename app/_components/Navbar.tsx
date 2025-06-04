@@ -18,7 +18,7 @@ export const Navbar = () =>{
 
     return (
     <>
-    <nav className="w-full h-16 flex justify-between items-center md:px-12 py-4 border-b-[0.3px] border-black/3 bg-background">
+    <nav className="w-full h-16 flex justify-between items-center md:px-12 py-4 border-b-[0.3px] border-black/3 bg-transparent">
 
 
 
