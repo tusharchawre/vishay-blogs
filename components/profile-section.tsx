@@ -13,9 +13,10 @@ type UserWithFollow = Prisma.UserGetPayload<{
 interface SectionProps {
   post: Post[];
   user: UserWithFollow;
+  selfPage: boolean;
 }
 
-export const ProfileSection = ({ post, user }: SectionProps) => {
+export const ProfileSection = ({ post, user, selfPage }: SectionProps) => {
   const [loading, setLoading] = useState(false);
 
   const clickFollow = async () => {
@@ -23,8 +24,7 @@ export const ProfileSection = ({ post, user }: SectionProps) => {
     if (!user || !user.id) {
       return null;
     }
-
-    handleFollow(user.id);
+    await handleFollow(user.id);
     setLoading(false);
   };
 
@@ -45,14 +45,20 @@ export const ProfileSection = ({ post, user }: SectionProps) => {
 
       <Button
         onClick={clickFollow}
-        disabled={loading}
+        disabled={loading || selfPage}
         className="w-full"
         variant="secondary"
       >
-        {loading ? <div>
-        <Loader2 className="h-4 w-4 animate-spin" />
-        <p>Follow</p>
-        </div> : "Follow"}
+        {loading ? (
+          <div>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <p>Follow</p>
+          </div>
+        ) : (
+          <>
+          {selfPage ? "So narcissistic!" : "Follow"}
+          </>
+        )}
       </Button>
     </div>
   );

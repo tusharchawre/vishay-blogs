@@ -58,7 +58,7 @@ export const Navbar = () =>{
                          </Avatar>
                         </PopoverTrigger>
 
-                        <PopoverContent>
+                        <PopoverContent className='bg-black/40 my-2'>
                             <Link href={`/${session.user.name}`}>
                             <div className='w-full h-fit items-center px-2 py-2 text-foreground/60 hover:bg-muted-foreground/10 rounded-md transition-all ease-out flex gap-2'>
                                 <User className='size-4' />

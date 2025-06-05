@@ -5,6 +5,7 @@ import PostItem from "../_components/PostItem";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ProfileSection } from "@/components/profile-section";
+import { getUser } from "@/hooks/useUser";
 
 export default async function Page({
   params,
@@ -12,6 +13,8 @@ export default async function Page({
   params: Promise<{ username: string }>;
 }) {
   const usernameParams = (await params).username;
+
+  const currentUser = await getUser()
 
   const username = decodeURIComponent(usernameParams);
 
@@ -24,8 +27,6 @@ export default async function Page({
       following: true,
     },
   });
-
-
 
   const post = await prisma.post.findMany({
     where: {
@@ -69,8 +70,22 @@ export default async function Page({
   ];
 
   if (!user) {
-    // TODO: User doesnt exist wala page
-    return <p>Tushar</p>;
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full flex flex-col items-center justify-center gap-4">
+        <div className="text-6xl mb-4">👤</div>
+        <h1 className="text-2xl font-semibold">User Not Found</h1>
+        <p className="text-muted-foreground text-center max-w-md">
+          We couldn't find a user with the username "{username}". They might
+          have changed their username or deleted their account.
+        </p>
+        <Link
+          href="/"
+          className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+        >
+          Return Home
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -100,7 +115,7 @@ export default async function Page({
             </div>
           </div>
 
-          <ProfileSection post={post} user={user} />
+          <ProfileSection post={post} user={user} selfPage={currentUser?.email === user.email} />
 
           <Separator />
 

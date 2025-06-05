@@ -71,12 +71,10 @@ async function page() {
       <div className='w-[30rem] hidden md:block h-full bg-[#ECECEC40] dark:bg-[#20202040] mt-5 rounded-md py-2'>
 
         <p className='px-4   text-base font-semibold'>Most Liked</p>
-        <div className='w-full h-full flex flex-col gap-2'>
+        <div  className='w-full h-full flex flex-col gap-2'>
       {
               likedPost.map((post, idx)=>
-                {
-                  return (<>
-                  <MostLikedItem 
+              ( <MostLikedItem 
                   index={idx}
                   postId={post.id}
                   date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getDate()}, ${post.createdAt.getFullYear()}`}
@@ -85,8 +83,8 @@ async function page() {
                   key={idx}
                   username={post.user.name?.replace("-"," ")}
                   likes={post.likes.length}
-                  /></>)
-              })}
+                  />
+              ))}
 </div>
       </div>
       </div>
