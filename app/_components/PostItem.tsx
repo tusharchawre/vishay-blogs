@@ -12,6 +12,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 interface PostProps {
   postId: number;
@@ -44,7 +45,8 @@ const PostItem = ({
   const [likesCount, setLikesCount] = useState(likes);
 
   const handleEdit = () => {
-    // TODO: Implement edit functionality
+    redirect(`/${username}/${title.replaceAll(" ", "-")}-${postId}/edit`)
+
   };
 
   const handleDelete = () => {

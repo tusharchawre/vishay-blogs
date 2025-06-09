@@ -29,9 +29,7 @@ const page = async ({ params }: Props) => {
       </div>
       <Editor initialContent={post.content}
         draftImg={coverImg ? coverImg : ""}
-        editable={
-          post.published ? false : true
-        } />
+       />
     </div>
   )
 }
