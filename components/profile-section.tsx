@@ -4,6 +4,11 @@ import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { handleFollow } from "@/app/action";
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { Loader2 } from "lucide-react";
 
 type UserWithFollow = Prisma.UserGetPayload<{
@@ -43,9 +48,19 @@ export const ProfileSection = ({ post, user, selfPage }: SectionProps) => {
       </p>
       <Separator />
 
-      <Button
+
+      {selfPage ? <><Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="secondary">Follow</Button>
+        </TooltipTrigger>
+        <TooltipContent >
+          <p>So Narcissistic!</p>
+        </TooltipContent>
+      </Tooltip>
+      <p className="text-muted-foreground text-xs">You can't follow yourself!</p>
+      </> : <Button
         onClick={clickFollow}
-        disabled={loading || selfPage}
+        disabled={loading}
         className="w-full"
         variant="secondary"
       >
@@ -56,10 +71,12 @@ export const ProfileSection = ({ post, user, selfPage }: SectionProps) => {
           </div>
         ) : (
           <>
-          {selfPage ? "So narcissistic!" : "Follow"}
+            "Follow"
           </>
         )}
-      </Button>
+      </Button>}
+
+
     </div>
   );
 };

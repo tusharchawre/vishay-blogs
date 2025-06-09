@@ -1,147 +1,194 @@
-
 import { Ratelimit } from '@upstash/ratelimit';
 import { kv } from '@vercel/kv';
-import {GoogleGenerativeAI, HarmBlockThreshold, HarmCategory} from "@google/generative-ai"
-
+import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai"
+import dynamic from 'next/dynamic'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
 
 const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    systemInstruction: `You are an advanced AI writing assistant specializing in seamlessly extending text within a rich-text editor environment like Blocknote (powered by Tiptap). 
+  model: "gemini-2.0-flash-exp",
+  systemInstruction: `You are an intelligent AI writing assistant that helps users extend their text naturally and contextually within a rich-text editor environment. Your goal is to provide meaningful, relevant continuations that feel like they were written by the same author.
 
-    **Key Priorities:**
+**Core Principles:**
 
-    * **Maintain Text Integrity:** 
-        * Preserve all existing formatting, including bold, italics, headers (H1-H6), lists (ordered & unordered), code blocks, and any other supported styles. 
-        * Accurately mirror the underlying structure of the editor, ensuring consistent indentation and hierarchy.
-    * **Contextual Awareness:** 
-        * Adapt your responses to the specific content type: paragraphs, lists, quotes, headings, etc. 
-        * Seamlessly integrate with existing content, avoiding disruptions to the original structure or flow.
-    * **Style and Tone:** 
-        * Maintain the author's intended writing style and tone, whether it's formal, informal, persuasive, or creative. 
-        * Reflect a natural and engaging progression of ideas while adhering to the Tiptap editor's markdown-like syntax.
-    * **Avoid Repetition:** 
-        * Strive to generate responses that do not repeat words or phrases already used in the existing text. 
-        * Use synonyms, paraphrasing, or alternative word choices to maintain fluency and avoid redundancy.
+1. **Deep Context Analysis:**
+   - Analyze the complete context: topic, purpose, audience, and writing situation
+   - Identify the document type (article, email, story, report, notes, etc.)
+   - Understand the current section's role in the larger piece
+   - Recognize patterns in argumentation, narrative flow, or information structure
 
-    **Example:**
+2. **Style Adaptation:**
+   - Mirror the author's voice: formal/informal, technical/casual, persuasive/descriptive
+   - Match sentence structure complexity and length patterns
+   - Preserve vocabulary level and terminology choices
+   - Maintain consistent perspective (1st, 2nd, 3rd person)
+   - Adapt to writing purpose: inform, persuade, entertain, instruct
 
-    * If presented with a list item, your response should be a new list item with consistent formatting and avoid repeating keywords from the previous list items.
-    * If presented with a paragraph, your response should continue the paragraph's topic and style while using new vocabulary to express similar concepts.
+3. **Logical Continuation:**
+   - Provide natural next steps in the argument, narrative, or explanation
+   - Add supporting details, examples, or elaboration where appropriate
+   - Transition smoothly from the existing content
+   - Maintain topical coherence and avoid tangents
+   - Consider what the reader would logically expect next
 
-    **Deliverables:**
+4. **Format Preservation:**
+   - Maintain all existing formatting (bold, italics, headers, lists, quotes)
+   - Respect hierarchical structure and indentation
+   - Continue list patterns with appropriate numbering or bullets
+   - Preserve code formatting and technical syntax
 
-    * Provide high-quality, relevant text extensions that enhance the user's writing experience.
-    * Ensure the output is compatible with Tiptap's editor and its underlying structure.`,
+**Content Strategy Guidelines:**
+
+- **For paragraphs:** Continue the thought, add supporting evidence, provide examples, or transition to related points
+- **For lists:** Add relevant items that fit the category and maintain parallel structure
+- **For headings:** Suggest logical subheadings or section content
+- **For incomplete sentences:** Complete the thought naturally
+- **For arguments:** Provide supporting evidence, counterpoints, or logical next steps
+- **For stories:** Continue plot development, character interaction, or scene description
+- **For instructions:** Add next steps, tips, warnings, or clarifications
+
+**Quality Standards:**
+
+- Generate 1-3 sentences typically (unless context clearly calls for more)
+- Avoid repetition of words/phrases already used
+- Ensure content adds genuine value, not filler
+- Make extensions feel inevitable and natural
+- Maintain factual accuracy and logical consistency
+- Consider the target audience's knowledge level
+
+**Avoid:**
+- Generic or vague statements
+- Obvious repetition of existing ideas
+- Contradicting established facts or tone
+- Overly complex language when simplicity is used
+- Breaking established formatting patterns
+- Adding unnecessary tangents or scope creep
+
+When you receive content, first identify: What type of writing is this? What's the author trying to accomplish? What would naturally come next? Then provide a continuation that serves the author's apparent intent while maintaining their established style and voice.`,
 })
 
 export const runtime = 'edge'
 
 export async function POST(req: Request): Promise<Response> {
+  if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "") {
+    return new Response(
+      'Missing GEMINI_API_KEY - make sure to add it to your .env file.',
+      {
+        status: 400
+      }
+    )
+  }
 
-    if(!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === ""){
-        return new Response(
-            'Missing GEMINI_API_KEY -  make sure to add it to your .env file.',
-            {
-                status: 400
-            }
-        )
-    }
-
-    if(
-        process.env.NODE_ENV != 'development' &&
-        process.env.KV_REST_API_URL &&
-        process.env.KV_REST_API_TOKEN
-    ) {
-        const ip = req.headers.get('x-forwarded-for');
-        const ratelimit  = new Ratelimit({
-            redis: kv,
-            limiter: Ratelimit.slidingWindow(100000, "1 d")
-        })
-
-        const {success , limit, reset, remaining} = await ratelimit.limit(
-            `noteblock_ratelimit_${ip}`
-        )
-
-        if(!success){
-            return new Response("You have reached your request limit for the day",
-               {
-                status: 429,
-                headers: {
-                    'X-RateLimit-Limit': limit.toString(),
-                    'X-RateLimit-Remaining': remaining.toString(),
-                    'X-RateLimit-Reset': reset.toString(),  
-                }
-               }
-            )
-        }
-    }
-
-
-    const { prompt } = await req.json();
-
-    
-    const safetySettings = [
-        {
-          category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        },
-        {
-          category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        },
-        {
-          category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        },
-        {
-          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-        },
-      ];
-
-
-      const generationConfig = {
-        maxOutputTokens: 200,
-        temperature: 0.7,
-        topP: 1
-      };
-      
-
-    const geminiStream = await model.generateContentStream({
-        contents: [
-            {
-                role: 'user',
-                parts: [
-                    {
-                        text: prompt
-                    }
-                ]
-            }
-        ],
-
-       generationConfig,
-       safetySettings,
-
+  if (
+    process.env.NODE_ENV !== 'development' &&
+    process.env.KV_REST_API_URL &&
+    process.env.KV_REST_API_TOKEN
+  ) {
+    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    const ratelimit = new Ratelimit({
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(50, "1 h") // More reasonable: 50 requests per hour
     })
 
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `noteblock_ratelimit_${ip}`
+    )
+
+    if (!success) {
+      return new Response("Rate limit exceeded. Please try again later.", {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
+        }
+      })
+    }
+  }
+
+  try {
+    const { prompt, context } = await req.json();
+
+    if (!prompt || prompt.trim().length === 0) {
+      return new Response('Prompt is required', { status: 400 });
+    }
+
+    const safetySettings = [
+      {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      {
+        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+    ];
+
+
+    const generationConfig = {
+      maxOutputTokens: 300,
+      temperature: 0.6,
+      topP: 0.8,
+      topK: 40,
+    };
+
+    const enhancedPrompt = `Here is the text that needs to be extended:
+
+${prompt}
+
+${context ? `Additional context: ${context}` : ''}
+
+Please provide a natural, contextually appropriate continuation that maintains the author's style and serves their apparent intent. Focus on adding genuine value rather than generic filler.`;
+
+    const geminiStream = await model.generateContentStream({
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: enhancedPrompt
+            }
+          ]
+        }
+      ],
+      generationConfig,
+      safetySettings,
+    })
 
     const stream = new ReadableStream({
-        async start(controller) {
-          try {
-            for await (const textPart of geminiStream.stream) {
-              const text = textPart.text() ?? ""; 
-              controller.enqueue(new TextEncoder().encode(text)); 
+      async start(controller) {
+        try {
+          for await (const textPart of geminiStream.stream) {
+            const text = textPart.text() ?? "";
+            if (text) {
+              controller.enqueue(new TextEncoder().encode(text));
             }
-            controller.close();
-          } catch (err) {
-            controller.error(err);
           }
-        },
-      });
+          controller.close();
+        } catch (err) {
+          console.error('Stream error:', err);
+          controller.error(err);
+        }
+      },
+    });
 
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache',
+      }
+    });
 
-      return new Response(stream)
-
+  } catch (error) {
+    console.error('API Error:', error);
+    return new Response('Internal server error', { status: 500 });
+  }
 }

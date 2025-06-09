@@ -26,7 +26,7 @@ export const MostLikedItem = ({
 }: PostProps) => {
   return (
     //TODO :  Encode the URL in good dash wala fashion
-    <Link href={`/${username}/${encodeURIComponent(title)}`}>
+    <Link href={`/${username?.replaceAll(" ", "-")}/${title.replaceAll(" ", "-")}`} prefetch>
       <motion.div
         initial={{ opacity: 0, y: 20, filter: "blur(50px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}

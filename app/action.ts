@@ -3,41 +3,51 @@
 import { auth } from "@/auth"
 import { prisma } from "@/prisma"
 import { Block } from "@blocknote/core"
+import { Post } from "@prisma/client"
 
 interface SavePostProps {
   content: Block[]
   coverImg: string
   publishStatus: boolean
+  postId?: number
 }
 
-export const savePost = async ({ content, coverImg, publishStatus }: SavePostProps) => {
-
-
-
+export const savePost = async ({ content, coverImg, publishStatus, postId }: SavePostProps) => {
   const session = await auth()
 
   if (content[0] === undefined) {
-
     return new Error("Please Insert Content")
   }
 
-
-
   if (!session || !session.user || !session.user.email) {
-    throw new Error("User not authenticated or session invalid")
+    return new Error("User not authenticated or session invalid")
   }
 
   const email = session.user.email
 
   const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
 
-  const post = await prisma.post.findFirst({
+  const currentUser = await prisma.user.findFirst({
     where: {
-      title: parsedTitle
+      email: session.user.email
     }
   })
 
-  if (post) {
+  if (!currentUser) {
+    return new Error("User not found")
+  }
+
+  const post = await prisma.post.findFirst({
+    where: {
+      id: postId
+    }
+  })
+
+  if (post && currentUser.id !== post.userId) {
+    return new Error("You are not authorized to edit this post")
+  }
+
+  if (post && currentUser.id === post.userId) {
     await prisma.post.update({
       where: {
         id: post.id
@@ -68,24 +78,22 @@ export const savePost = async ({ content, coverImg, publishStatus }: SavePostPro
           }
         }
       }
-
     })
   }
-
-
 }
 
 
 interface GetPostProps {
   username: string
   blogTitle: string
+  postId: string
 }
 
 
 
 
 
-export const getPost = async ({ username, blogTitle }: GetPostProps) => {
+export const getPost = async ({ username, blogTitle, postId }: GetPostProps) => {
   const user = await prisma.user.findFirst({
     where: {
       name: username
@@ -94,10 +102,12 @@ export const getPost = async ({ username, blogTitle }: GetPostProps) => {
   if (!user) {
     return null
   }
-  const post = await prisma.post.findMany({
+
+  const post = await prisma.post.findFirst({
     where: {
       userId: user?.id,
-      title: blogTitle
+      title: blogTitle,
+      id: Number(postId)!
     },
     include: {
       user: {
@@ -114,7 +124,7 @@ export const getPost = async ({ username, blogTitle }: GetPostProps) => {
     }
   })
 
-  if (!post[0].content) {
+  if (!post?.content) {
     return null
   }
 
@@ -257,10 +267,10 @@ export const getMostLiked = async () => {
 
 
 
-export const handleFollow = async (followingId : string) => {
+export const handleFollow = async (followingId: string) => {
   const session = await auth()
 
-  if(!session || !session.user || !session.user.email){
+  if (!session || !session.user || !session.user.email) {
     return null;
   }
 
@@ -270,11 +280,11 @@ export const handleFollow = async (followingId : string) => {
     }
   })
 
-  if(!user || !user.name) return null;
+  if (!user || !user.name) return null;
 
   const followerId = user?.id
 
-  if(followerId === followingId){
+  if (followerId === followingId) {
     return null;
   }
 
@@ -287,7 +297,7 @@ export const handleFollow = async (followingId : string) => {
     }
   })
 
-  if(follow){
+  if (follow) {
     await prisma.follows.delete({
       where: {
         followerId_followingId: {
@@ -298,7 +308,7 @@ export const handleFollow = async (followingId : string) => {
     })
   }
 
-  else{
+  else {
     await prisma.follows.create({
       data: {
         followerId: followerId,

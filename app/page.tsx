@@ -18,7 +18,7 @@ async function page() {
 
 
   const posts = await getAllPost()
-
+  const latestPosts = posts.reverse()
   const likedPost = await getMostLiked()
 
 
@@ -56,7 +56,7 @@ async function page() {
         
       <div className='w-full px-1 md:px-8 flex flex-col gap-5 py-5'>
       {
-              posts.map((post, idx)=>
+              latestPosts.map((post, idx)=>
                 {
                   const hasLiked = post.likes.some( 
                     like => session && like.user.name === user?.name

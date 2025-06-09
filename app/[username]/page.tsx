@@ -181,6 +181,7 @@ export default async function Page({
                   date={`${months[post.createdAt.getUTCMonth()]} ${post.createdAt.getFullYear()}`}
                   likes={post.likes.length}
                   coverImg={post.coverImg}
+                  showActions={true}
                 />
               );
             })}

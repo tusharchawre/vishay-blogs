@@ -19,14 +19,16 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useCompletion } from "ai/react";
 import Image from "next/image";
+import { Post } from "@prisma/client";
 
 interface EditorProps {
-  initialContent?: string | undefined;
+  post?: Post
+  initialContent?: string | null;
   editable?: boolean;
   draftImg?: string | undefined;
 }
 
-function Editor({ initialContent, editable, draftImg }: EditorProps) {
+function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
   const { theme } = useTheme();
   const [html, setHTML] = useState<string>("");
   const [editing, setEditing] = useState(false);
@@ -218,6 +220,7 @@ function Editor({ initialContent, editable, draftImg }: EditorProps) {
 
         {editable && (
           <PublishModal
+          postId={post?.id}
             setCoverImg={setCoverImg}
             content={content}
             coverImg={coverImg}

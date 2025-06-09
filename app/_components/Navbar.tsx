@@ -40,7 +40,7 @@ export const Navbar = () => {
                 </Link>
 
                 <div className='flex gap-4 relative z-100 items-center'>
-                    <Link href="/create">
+                    <Link href="/create" prefetch>
                         <div className='flex gap-2 items-center cursor-pointer text-sm'>
                             <PenBox className='h-4 w-4 text-muted-foreground' />
                             <p className='hidden md:block text-muted-foreground'>Create Post</p>
@@ -93,18 +93,18 @@ export const Navbar = () => {
 
                         </div>
                     ) : (
-                       
+
                         <div>
                             {status === "loading" ? (
                                 <Loader2 size={16} className='animate-spin duration-300' />
                             ) : (
-                                <Button onClick={()=>signIn("google")}>Sign In</Button>
+                                <Button onClick={() => signIn("google")}>Sign In</Button>
                             )}
                         </div>
                     )}
 
-            </div>
-        </nav >
+                </div>
+            </nav >
 
         </>
     )

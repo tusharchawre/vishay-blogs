@@ -32,10 +32,11 @@ import { useSession } from "next-auth/react"
 interface PublishModalProps{
     content: Block[] | undefined
     coverImg: string | undefined
+    postId: number | undefined
     setCoverImg : Dispatch<SetStateAction<string | undefined>>
 }
 
-export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProps) => {
+export const PublishModal = ({content , coverImg, setCoverImg , postId}: PublishModalProps) => {
 
     const [publishStatus , setPublish] = useState(false)
     const [prompt, setPrompt] = useState<string | undefined>()
@@ -65,7 +66,7 @@ export const PublishModal = ({content , coverImg, setCoverImg}: PublishModalProp
             {return new Error("The Cover Image is still not Generated");}
 
         }
-       const result = await savePost({content, coverImg, publishStatus})
+       const result = await savePost({content, coverImg, publishStatus, postId})
         if(result instanceof Error){ 
             setPublishLoading(false)
             return toast.error(result.message)

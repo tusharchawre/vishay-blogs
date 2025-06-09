@@ -1,11 +1,17 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Heart } from "lucide-react";
+import { Heart, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { handleLike } from "../action";
 import { motion } from "motion/react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 interface PostProps {
   postId: number;
@@ -18,6 +24,7 @@ interface PostProps {
   userImg: string | null;
   hasLiked: boolean;
   index?: number;
+  showActions?: boolean;
 }
 
 const PostItem = ({
@@ -31,9 +38,18 @@ const PostItem = ({
   postId,
   hasLiked,
   index = 0,
+  showActions = false,
 }: PostProps) => {
   const [hasLikedState, setHasLiked] = useState(hasLiked);
   const [likesCount, setLikesCount] = useState(likes);
+
+  const handleEdit = () => {
+    // TODO: Implement edit functionality
+  };
+
+  const handleDelete = () => {
+    // TODO: Implement delete functionality
+  };
 
   const clickedLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -57,7 +73,7 @@ const PostItem = ({
   )[0];
 
   return (
-    <Link href={`/${username.replaceAll(" ", "-")}/${title.replaceAll(" ", "-")}`}>
+    <Link href={`/${username.replaceAll(" ", "-")}/${title.replaceAll(" ", "-")}-${postId}`} prefetch>
       <motion.div
         initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -66,8 +82,45 @@ const PostItem = ({
           duration: 0.2,
           delay: index * 0.2,
         }}
-        className="flex w-full h-40 md:h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg"
+        className="flex w-full h-40 md:h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg relative"
       >
+        {showActions && (
+          <div onClick={(e)=> e.preventDefault()} className="absolute top-2 right-2 z-100">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-40 p-2">
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleEdit();
+                    }}
+                  >
+                    <Pencil className="h-4 w-4" />
+                    Edit
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDelete();
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
         <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
           <div className="flex gap-2 h-5 items-center">
             {userImg && (
