@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { Heart, MoreVertical, Pencil, Trash, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
+import { DeleteModal } from "@/components/modals/deleteModal";
 
 interface PostProps {
   postId: number;
@@ -87,7 +88,7 @@ const PostItem = ({
         className="flex w-full h-40 md:h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg relative"
       >
         {showActions && (
-          <div onClick={(e)=> e.preventDefault()} className="absolute top-2 right-2 z-100">
+          <div onClick={(e) => e.preventDefault()} className="absolute top-2 right-2 z-100">
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -107,17 +108,15 @@ const PostItem = ({
                     <Pencil className="h-4 w-4" />
                     Edit
                   </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDelete();
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    Delete
-                  </Button>
+                  <DeleteModal title={title} id={postId}>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                    >
+                      <Trash className="h-4 w-4" />
+                      Delete
+                    </Button>
+                  </DeleteModal>
                 </div>
               </PopoverContent>
             </Popover>

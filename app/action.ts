@@ -10,9 +10,10 @@ interface SavePostProps {
   coverImg: string
   publishStatus: boolean
   postId?: number
+  searchText: string
 }
 
-export const savePost = async ({ content, coverImg, publishStatus, postId }: SavePostProps) => {
+export const savePost = async ({ content, coverImg, publishStatus, postId, searchText }: SavePostProps) => {
   const session = await auth()
 
   if (content[0] === undefined) {
@@ -37,17 +38,19 @@ export const savePost = async ({ content, coverImg, publishStatus, postId }: Sav
     return new Error("User not found")
   }
 
-  const post = await prisma.post.findFirst({
-    where: {
-      id: postId
+  if (postId){
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId
+      }
+    })
+    if (!post) {
+      return new Error("Post not found")
     }
-  })
+    if (post.userId !== currentUser.id) {
+      return new Error("You are not authorized to edit this post")
+    }
 
-  if (post && currentUser.id !== post.userId) {
-    return new Error("You are not authorized to edit this post")
-  }
-
-  if (post && currentUser.id === post.userId) {
     await prisma.post.update({
       where: {
         id: post.id
@@ -57,6 +60,7 @@ export const savePost = async ({ content, coverImg, publishStatus, postId }: Sav
         content: JSON.stringify(content),
         published: publishStatus,
         coverImg: coverImg,
+        searchText: searchText,
         user: {
           connect: {
             email: email
@@ -72,6 +76,7 @@ export const savePost = async ({ content, coverImg, publishStatus, postId }: Sav
         content: JSON.stringify(content),
         published: publishStatus,
         coverImg: coverImg,
+        searchText: searchText,
         user: {
           connect: {
             email: email
@@ -317,4 +322,45 @@ export const handleFollow = async (followingId: string) => {
     })
   }
 
+}
+
+
+export const deletePost = async (id: number, title: string) => {
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.email) {
+    return new Error("User not authenticated or session invalid")
+  }
+
+  const email = session.user.email;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email
+    }
+  })
+
+  const post = await prisma.post.findUnique({
+    where: {
+      id: id,
+      title: title
+    }
+  })
+
+  if (!post) {
+    return new Error("Post not found")
+  }
+
+
+  if (post.userId !== user?.id) {
+    return new Error("You are not authorized to delete this post")
+  }
+
+  await prisma.post.delete({
+    where: {
+      id: id
+    }
+  })
+
+  return { message: "Post deleted successfully" }
 }

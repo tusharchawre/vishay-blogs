@@ -32,6 +32,7 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
   const { theme } = useTheme();
   const [html, setHTML] = useState<string>("");
   const [editing, setEditing] = useState(false);
+  const [searchText, setSearchText] = useState<string>("");
   const [content, setContent] = useState<Block[]>(
     initialContent ? (JSON.parse(initialContent) as Block[]) : []
   );
@@ -117,9 +118,14 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       console.log(html);
     };
 
+    
+
     useEffect(() => {
       onChange();
     }, []);
+
+
+
 
     return (
       <>
@@ -153,6 +159,19 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       </>
     );
   }
+
+
+
+
+  const onChange = async () => {
+    setEditing(true);
+    setContent(editor.document);
+    const html = await editor.blocksToHTMLLossy(editor.document);
+    const searchText = await html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    setSearchText(searchText);
+    localStorage.setItem("editor" , JSON.stringify(editor.document))
+    setTimeout(()=> setEditing(false), 2000)
+  };
 
   return (
     <>
@@ -203,12 +222,7 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
           slashMenu={false}
           editable={editable}
           theme={theme === "dark" ? "dark" : "light"}
-          onChange={() => {
-            setEditing(true);
-            setContent(editor.document);
-            localStorage.setItem("editor" , JSON.stringify(editor.document))
-            setTimeout(()=> setEditing(false), 2000)
-          }}
+          onChange={onChange}
         >
           <SuggestionMenuController
             triggerCharacter={"/"}
@@ -220,10 +234,11 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
 
         {editable && (
           <PublishModal
-          postId={post?.id}
+            postId={post?.id}
             setCoverImg={setCoverImg}
             content={content}
             coverImg={coverImg}
+            searchText={searchText}
           />
         )}
       </div>

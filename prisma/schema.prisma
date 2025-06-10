@@ -53,12 +53,17 @@ model Post {
   title      String
   content    String?
   published  Boolean    @default(false)
+  searchText String?    @map("search_text")
   userId     String     @map("user_id")
   coverImg   String?
   createdAt  DateTime   @default(now())
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   categories Category[] @relation("CategoryToPost")
   likes      Like[]
+
+  @@index([title])
+  @@index([searchText])
+  @@index([published])
 }
 
 model Category {
@@ -80,4 +85,3 @@ model Like {
   @@unique([postId, userId])
   @@index([userId])
 }
-
