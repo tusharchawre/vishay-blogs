@@ -38,7 +38,7 @@ export const savePost = async ({ content, coverImg, publishStatus, postId, searc
     return new Error("User not found")
   }
 
-  if (postId){
+  if (postId) {
     const post = await prisma.post.findUnique({
       where: {
         id: postId
@@ -363,4 +363,114 @@ export const deletePost = async (id: number, title: string) => {
   })
 
   return { message: "Post deleted successfully" }
+}
+
+interface SearchProps {
+  query: string
+  page: number
+  limit: number
+}
+
+export const searchPost = async ({ query, page = 1, limit = 10 }: SearchProps) => {
+  const skip = (page - 1) * limit;
+
+  if (!query || query.trim().length === 0) {
+    const posts = await prisma.post.findMany({
+      where: {
+        published: true
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true
+          },
+        },
+        likes: {
+          select: {
+            user: {
+              select: {
+                name: true,
+                image: true
+              }
+            }
+          }
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: skip,
+    })
+
+    const total = await prisma.post.count()
+
+    return { posts, total }
+  }
+
+  const searchTerm = query.trim()
+
+  const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+      OR: [
+        {
+          title: {
+            contains: searchTerm,
+            mode: "insensitive"
+          }
+        },
+        {
+          searchText: {
+            contains: searchTerm,
+            mode: "insensitive"
+          }
+        }
+      ]
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          image: true
+        },
+      },
+      likes: {
+        select: {
+          user: {
+            select: {
+              name: true,
+              image: true
+            }
+          }
+        }
+      },
+    },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    take: limit,
+    skip: skip,
+  })
+
+  const total = await prisma.post.count({
+    where: {
+      published: true,
+      OR: [
+        {
+          title: {
+            contains: searchTerm,
+            mode: "insensitive"
+          }
+        },
+        {
+          searchText: {
+            contains: searchTerm,
+            mode: "insensitive"
+          }
+        }
+      ]
+    }
+  })
+
+  return { posts, total, query: searchTerm };
 }

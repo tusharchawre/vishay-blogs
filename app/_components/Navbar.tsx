@@ -9,6 +9,7 @@ import { Loader2, LogOut, PenBox, User } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SearchBar } from './SearchBar'
 
 
 
@@ -40,13 +41,16 @@ export const Navbar = () => {
                 </Link>
 
                 <div className='flex gap-4 relative z-100 items-center'>
-                    <Link href="/create" prefetch>
-                        <div className='flex gap-2 items-center cursor-pointer text-sm'>
-                            <PenBox className='h-4 w-4 text-muted-foreground' />
-                            <p className='hidden md:block text-muted-foreground'>Create Post</p>
-                        </div>
-                    </Link>
-                    <ThemeSwitch />
+                    <SearchBar />
+                    <div className="flex items-center gap-2">
+                        <ThemeSwitch />
+                        <Link href="/create" prefetch>
+                            <Button variant="ghost" size="sm" className="gap-2">
+                                <PenBox className='h-4 w-4' />
+                                <span className="hidden md:inline text-muted-foreground">Create Post</span>
+                            </Button>
+                        </Link>
+                    </div>
 
                     {status === "authenticated" ? (
                         <div className='w-9 aspect-square rounded-full overflow-hidden flex gap-4'>
