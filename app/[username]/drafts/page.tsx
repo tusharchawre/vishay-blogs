@@ -1,4 +1,3 @@
-
 import { Skeleton } from "@/components/ui/skeleton";
 import { prisma } from "@/prisma";
 import Image from "next/image";

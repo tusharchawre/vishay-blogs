@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/prisma";
 
 type Props = {
-    params: { username: string; blogTitle: string }
+    params: Promise<{ username: string; blogTitle: string }>
 }
 
 const page = async ({ params }: Props) => {

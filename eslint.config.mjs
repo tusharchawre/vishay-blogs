@@ -8,6 +8,9 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: ['next', 'prettier'],
+    rules: {
+      'react/no-unescaped-entities': 'off'
+    }
   }),
 ]
  

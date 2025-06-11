@@ -1,15 +1,21 @@
 "use client";
 import { Editor } from "../_components/DynamicEditor";
+import { useEffect, useState } from "react";
 
 const Page = () => {
+  const [initialContent, setInitialContent] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const savedContent = localStorage.getItem("editor");
+    if (savedContent) {
+      setInitialContent(savedContent);
+    }
+  }, []);
+
   return (
     <div>
       <Editor
-        initialContent={
-          localStorage.getItem("editor")
-            ? localStorage.getItem("editor")!
-            : undefined
-        }
+        initialContent={initialContent}
         editable={true}
       />
     </div>

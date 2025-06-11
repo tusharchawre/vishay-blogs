@@ -5,7 +5,7 @@ import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/ge
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "")
 
-export const model = genAI.getGenerativeModel({
+const model = genAI.getGenerativeModel({
   model: "gemini-2.0-flash-exp",
   systemInstruction: `You are an intelligent AI writing assistant that helps users extend their text naturally and contextually within a rich-text editor environment. Your goal is to provide meaningful, relevant continuations that feel like they were written by the same author.
 

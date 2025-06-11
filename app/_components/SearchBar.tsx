@@ -38,7 +38,7 @@ export function SearchBar() {
     }, [])
 
     const debouncedSearch = useCallback(
-        debounce(async (searchQuery: string) => {
+        async (searchQuery: string) => {
             setLoading(true)
             try {
                 const response = await searchPost({
@@ -57,20 +57,20 @@ export function SearchBar() {
             } finally {
                 setLoading(false)
             }
-        }, 50),
+        },
         []
     )
 
-    const handleSearch = (searchQuery: string) => {
+    const handleSearch = useCallback((searchQuery: string) => {
         setQuery(searchQuery)
         debouncedSearch(searchQuery)
-    }
+    }, [debouncedSearch])
 
     useEffect(() => {
         if (open) {
             handleSearch("")
         }
-    }, [open])
+    }, [open, handleSearch])
 
     const handleSelect = (post: PostWithUser) => {
         if (!post?.user?.name || !post?.title || !post?.id) {

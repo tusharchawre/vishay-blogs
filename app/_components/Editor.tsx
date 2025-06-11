@@ -30,7 +30,7 @@ import {
 } from "@blocknote/react";
 import { BrainCircuit, Check, Loader2 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useCompletion } from "ai/react";
 import Image from "next/image";
 import { Post } from "@prisma/client";
@@ -141,18 +141,34 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       ...getDefaultReactSlashMenuItems(editor),
     ];
 
-  if (!editable) {
-    const onChange = async () => {
+  const onChange = useCallback(async () => {
+    if (!editable) {
       const html = await editor.blocksToFullHTML(editor.document);
       const sanitizedHTML = DOMPurify.sanitize(html);
       setHTML(sanitizedHTML);
       console.log(html);
-    };
+    } else {
+      setEditing(true);
+      setContent(editor.document);
+      const html = await editor.blocksToHTMLLossy(editor.document);
+      const searchText = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      setSearchText(searchText);
 
-    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem("editor", JSON.stringify(editor.document));
+      }
+
+      setTimeout(() => setEditing(false), 2000);
+    }
+  }, [editable, editor]);
+
+  useEffect(() => {
+    if (!editable) {
       onChange();
-    }, []);
+    }
+  }, [editable, onChange]);
 
+  if (!editable) {
     return (
       <>
         {coverImg && (
@@ -185,20 +201,6 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       </>
     );
   }
-
-  const onChange = async () => {
-    setEditing(true);
-    setContent(editor.document);
-    const html = await editor.blocksToHTMLLossy(editor.document);
-    const searchText = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-    setSearchText(searchText);
-
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem("editor", JSON.stringify(editor.document));
-    }
-
-    setTimeout(() => setEditing(false), 2000);
-  };
 
   return (
     <>
