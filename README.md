@@ -60,7 +60,7 @@ Follow these steps to set up V-shy Blogs locally.
    EDGE_STORE_ACCESS_KEY=your-edge-store-access-key
    EDGE_STORE_SECRET_KEY=your-edge-store-secret-key
 
-   GEMINI_API_KEY=your-gemini-api-key
+   GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-api-key
    ```
 
 4. **Run Database Migrations**:

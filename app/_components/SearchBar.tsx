@@ -1,6 +1,6 @@
 "use client"
 
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+
 import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
@@ -9,7 +9,6 @@ import { useEffect, useState, useCallback } from "react"
 import { searchPost } from "@/app/action"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-import { DialogTitle } from "@radix-ui/react-dialog"
 import debounce from "lodash/debounce"
 
 type PostWithUser = Post & {
@@ -67,7 +66,6 @@ export function SearchBar() {
         debouncedSearch(searchQuery)
     }
 
-    // Load recent posts when search dialog opens
     useEffect(() => {
         if (open) {
             handleSearch("")
@@ -124,7 +122,7 @@ export function SearchBar() {
                                         <div className="flex flex-col items-start">
                                             <span className="font-medium">{post.title}</span>
                                             <span className="text-sm text-muted-foreground">
-                                                by {post.user.name}
+                                                by {post.user.name.replaceAll("-", " ")}
                                             </span>
                                         </div>
                                     </CommandItem>

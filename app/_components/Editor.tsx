@@ -5,12 +5,26 @@ import { PublishModal } from "@/components/modals/publish-post";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Block, BlockNoteEditor, filterSuggestionItems } from "@blocknote/core";
 import "@blocknote/core/fonts/inter.css";
+import { createGroq } from '@ai-sdk/groq';
+import { en } from "@blocknote/core/locales";
+import { en as aiEn } from "@blocknote/xl-ai/locales";
+import {
+  AIMenuController,
+  AIToolbarButton,
+  createAIExtension,
+  createBlockNoteAIClient,
+  getAISlashMenuItems,
+} from "@blocknote/xl-ai";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
+import "@blocknote/xl-ai/style.css";
 import DOMPurify from "dompurify";
 import {
   DefaultReactSuggestionItem,
+  FormattingToolbar,
+  FormattingToolbarController,
   getDefaultReactSlashMenuItems,
+  getFormattingToolbarItems,
   SuggestionMenuController,
   useCreateBlockNote,
 } from "@blocknote/react";
@@ -21,8 +35,9 @@ import { useCompletion } from "ai/react";
 import Image from "next/image";
 import { Post } from "@prisma/client";
 
+
 interface EditorProps {
-  post?: Post
+  post?: Post;
   initialContent?: string | null;
   editable?: boolean;
   draftImg?: string | undefined;
@@ -37,6 +52,36 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
     initialContent ? (JSON.parse(initialContent) as Block[]) : []
   );
   const [coverImg, setCoverImg] = useState<string | undefined>(draftImg);
+
+
+
+  const model = createGroq({
+    apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || "",
+  })("llama-3.3-70b-versatile");
+
+  const editor = useCreateBlockNote({
+    dictionary: {
+      ...en,
+      ai: aiEn,
+    },
+    extensions: [
+      createAIExtension({
+        model,
+      }),
+    ],
+    initialContent: initialContent
+      ? content
+      : [
+        {
+          type: "heading",
+          content: "Your Title Here",
+        },
+        {
+          type: "paragraph",
+          content: "Type your content here...",
+        },
+      ],
+  });
 
   const { complete } = useCompletion({
     id: "hackathon_starter",
@@ -85,30 +130,16 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
     aliases: ["autocomplete", "AI"],
     group: "AI",
     icon: <BrainCircuit size={18} />,
-    subtext: "Continuew your post with AI-generated text.",
+    subtext: "Continue your post with AI-generated text.",
   });
 
   const getCustomSlashMenuItems = (
     editor: BlockNoteEditor
   ): DefaultReactSuggestionItem[] => [
-    insertAiItem(editor),
-    ...getDefaultReactSlashMenuItems(editor),
-  ];
-
-  const editor = useCreateBlockNote({
-    initialContent: initialContent
-      ? content
-      : [
-          {
-            type: "heading",
-            content: "Your Title Here",
-          },
-          {
-            type: "paragraph",
-            content: "Type your content here...",
-          },
-        ],
-  });
+      insertAiItem(editor),
+      ...getAISlashMenuItems(editor),
+      ...getDefaultReactSlashMenuItems(editor),
+    ];
 
   if (!editable) {
     const onChange = async () => {
@@ -118,14 +149,9 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       console.log(html);
     };
 
-    
-
     useEffect(() => {
       onChange();
     }, []);
-
-
-
 
     return (
       <>
@@ -160,33 +186,34 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
     );
   }
 
-
-
-
   const onChange = async () => {
     setEditing(true);
     setContent(editor.document);
     const html = await editor.blocksToHTMLLossy(editor.document);
-    const searchText = await html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    const searchText = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
     setSearchText(searchText);
-    localStorage.setItem("editor" , JSON.stringify(editor.document))
-    setTimeout(()=> setEditing(false), 2000)
+
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem("editor", JSON.stringify(editor.document));
+    }
+
+    setTimeout(() => setEditing(false), 2000);
   };
 
   return (
     <>
       <style>
         {`
-      .bn-editor {
-        padding-inline: 16px;
-      }
+          .bn-editor {
+            padding-inline: 16px;
+          }
 
-      @media (min-width: 768px) {
-        .bn-editor {
-          padding-inline: 54px;
-        }
-      }
-    `}
+          @media (min-width: 768px) {
+            .bn-editor {
+              padding-inline: 54px;
+            }
+          }
+        `}
       </style>
       <div className="relative dark:bg-[#1F1F1F] min-h-screen h-full">
         <div className="w-full flex items-center">
@@ -213,13 +240,14 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
         ) : (
           <p className="text-muted-foreground px-8 text-sm flex gap-1 items-center">
             <Check size={16} />
-            Saved in your local storage...
+            Saved in your session storage...
           </p>
         )}
 
         <BlockNoteView
           editor={editor}
           slashMenu={false}
+          formattingToolbar={false}
           editable={editable}
           theme={theme === "dark" ? "dark" : "light"}
           onChange={onChange}
@@ -230,6 +258,9 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
               filterSuggestionItems(getCustomSlashMenuItems(editor), query)
             }
           />
+          <FormattingToolbarWithAI />
+
+          <AIMenuController />
         </BlockNoteView>
 
         {editable && (
@@ -270,5 +301,20 @@ export function EditorSkeleton() {
     </div>
   );
 }
+
+
+function FormattingToolbarWithAI() {
+  return (
+    <FormattingToolbarController
+      formattingToolbar={() => (
+        <FormattingToolbar>
+          {...getFormattingToolbarItems()}
+          <AIToolbarButton />
+        </FormattingToolbar>
+      )}
+    />
+  );
+}
+
 
 export default Editor;
