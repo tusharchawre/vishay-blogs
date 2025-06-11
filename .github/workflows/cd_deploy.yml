@@ -26,4 +26,5 @@ jobs:
             DB_URL=${{ secrets.DATABASE_URL }}
             EDGE_STORE_ACCESS_KEY=${{ secrets.EDGE_STORE_ACCESS_KEY }}
             EDGE_STORE_SECRET_KEY=${{ secrets.EDGE_STORE_SECRET_KEY }}
+            NEXT_PUBLIC_GROQ_API_KEY=${{ secrets.NEXT_PUBLIC_GROQ_API_KEY }}
           tags: tusharchawre0240/vishay-blogs:${{ github.sha }}

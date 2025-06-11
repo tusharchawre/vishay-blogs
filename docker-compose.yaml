@@ -17,6 +17,7 @@ services:
       - EDGE_STORE_SECRET_KEY=${EDGE_STORE_SECRET_KEY}
       - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
       - NEXT_PUBLIC_GROQ_API_KEY=${NEXT_PUBLIC_GROQ_API_KEY}
+      - GROK_API_KEY=${GROK_API_KEY}
     depends_on:
       - postgres
     restart: unless-stopped
