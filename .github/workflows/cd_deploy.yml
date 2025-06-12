@@ -43,6 +43,13 @@ jobs:
             # Remove the old image
             sudo docker rmi tusharchawre0240/vishay-blogs:$(docker images -q tusharchawre0240/vishay-blogs) || true
 
+            # Clean up Docker system
+            sudo docker system prune -af --volumes
+            sudo docker builder prune -af
+
+            # Check disk space
+            df -h
+
             # Pull the new image
             sudo docker pull tusharchawre0240/vishay-blogs:${{ github.sha }}
 
