@@ -37,17 +37,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Stop and remove the existing container
-            docker stop vishay-blogs || true
-            docker rm vishay-blogs || true
+            sudo docker stop vishay-blogs || true
+            sudo docker rm vishay-blogs || true
 
             # Remove the old image
-            docker rmi tusharchawre0240/vishay-blogs:$(docker images -q tusharchawre0240/vishay-blogs) || true
+            sudo docker rmi tusharchawre0240/vishay-blogs:$(docker images -q tusharchawre0240/vishay-blogs) || true
 
             # Pull the new image
-            docker pull tusharchawre0240/vishay-blogs:${{ github.sha }}
+            sudo docker pull tusharchawre0240/vishay-blogs:${{ github.sha }}
 
             # Run the new container with environment variables
-            docker run -d \
+            sudo docker run -d \
               --name vishay-blogs \
               -p 3000:3000 \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
