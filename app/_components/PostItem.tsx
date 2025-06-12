@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 import { DeleteModal } from "@/components/modals/deleteModal";
+import { encodeBlogUri } from "@/app/utils/uriParser";
 
 interface PostProps {
   postId: number;
@@ -46,8 +47,7 @@ const PostItem = ({
   const [likesCount, setLikesCount] = useState(likes);
 
   const handleEdit = () => {
-    redirect(`/${username}/${title.replaceAll(" ", "-")}-${postId}/edit`)
-
+    redirect(`/${username}/${encodeBlogUri(title, postId)}/edit`)
   };
 
   const handleDelete = () => {
@@ -76,7 +76,7 @@ const PostItem = ({
   )[0];
 
   return (
-    <Link href={`/${username.replaceAll(" ", "-")}/${title.replaceAll(" ", "-")}-${postId}`} prefetch>
+    <Link href={`/${username.replaceAll(" ", "-")}/${encodeBlogUri(title, postId)}`} prefetch>
       <motion.div
         initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}

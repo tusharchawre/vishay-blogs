@@ -8,6 +8,7 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import { ProfileSection } from "@/components/profile-section";
 import { getUser } from "@/hooks/useUser";
+import { encodeBlogUri } from "@/app/utils/uriParser";
 
 export default async function Page({
   params,

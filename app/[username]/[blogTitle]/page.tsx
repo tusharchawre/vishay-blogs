@@ -1,5 +1,7 @@
 import { Editor } from "@/app/_components/DynamicEditor"
 import { getPost } from "@/app/action"
+import { PostNotFound } from "@/app/_components/PostNotFound"
+import { decodeBlogUri } from "@/app/utils/uriParser"
 
 type Props = {
   params: Promise<{ username: string, blogTitle: string }>
@@ -9,14 +11,12 @@ const page = async ({ params }: Props) => {
   const encodedTitleWithId = (await params).blogTitle
   const username = (await params).username
 
-  const lastDashIndex = encodedTitleWithId.lastIndexOf('-')
-  const postId = encodedTitleWithId.substring(lastDashIndex + 1)
-  const blogTitle = encodedTitleWithId.substring(0, lastDashIndex).replaceAll("-", " ")
+  const { title: blogTitle, postId } = decodeBlogUri(encodedTitleWithId);
 
-  const post = await getPost({ username, blogTitle, postId })
+  const post = await getPost({ username, postId})
 
   if (!post || !post.content) {
-    return null
+    return <PostNotFound />
   }
 
   const coverImg = post.coverImg
@@ -29,7 +29,7 @@ const page = async ({ params }: Props) => {
       </div>
       <Editor initialContent={post.content}
         draftImg={coverImg ? coverImg : ""}
-       />
+      />
     </div>
   )
 }

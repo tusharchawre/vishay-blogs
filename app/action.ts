@@ -20,13 +20,17 @@ export const savePost = async ({ content, coverImg, publishStatus, postId, searc
     return new Error("Please Insert Content")
   }
 
+  const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
+
+  if (!parsedTitle || parsedTitle.trim().length === 0) {
+    return new Error("Please provide a valid title")
+  }
+
   if (!session || !session.user || !session.user.email) {
     return new Error("User not authenticated or session invalid")
   }
 
   const email = session.user.email
-
-  const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
 
   const currentUser = await prisma.user.findFirst({
     where: {
@@ -90,15 +94,14 @@ export const savePost = async ({ content, coverImg, publishStatus, postId, searc
 
 interface GetPostProps {
   username: string
-  blogTitle: string
-  postId: string
+  postId: number
 }
 
 
 
 
 
-export const getPost = async ({ username, blogTitle, postId }: GetPostProps) => {
+export const getPost = async ({ username, postId }: GetPostProps) => {
   const user = await prisma.user.findFirst({
     where: {
       name: username
@@ -111,8 +114,7 @@ export const getPost = async ({ username, blogTitle, postId }: GetPostProps) => 
   const post = await prisma.post.findFirst({
     where: {
       userId: user?.id,
-      title: blogTitle,
-      id: Number(postId)!
+      id: postId!
     },
     include: {
       user: {

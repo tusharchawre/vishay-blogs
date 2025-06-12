@@ -3,6 +3,7 @@ import { getPost } from "@/app/action"
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/prisma";
+import { decodeBlogUri } from "@/app/utils/uriParser";
 
 type Props = {
     params: Promise<{ username: string; blogTitle: string }>
@@ -12,12 +13,10 @@ const page = async ({ params }: Props) => {
     const encodedTitleWithId = (await params).blogTitle
     const username = (await params).username
 
-    const lastDashIndex = encodedTitleWithId.lastIndexOf('-')
-    const postId = encodedTitleWithId.substring(lastDashIndex + 1)
-    const blogTitle = encodedTitleWithId.substring(0, lastDashIndex).replaceAll("-", " ")
+    const { title: blogTitle, postId } = decodeBlogUri(encodedTitleWithId);
 
     const session = await auth()
-    const post = await getPost({ username, blogTitle, postId })
+    const post = await getPost({ username, postId  })
 
     if (!post?.content) {
         return null
