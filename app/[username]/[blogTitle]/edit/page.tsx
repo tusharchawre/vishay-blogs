@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/prisma";
 import { decodeBlogUri } from "@/app/utils/uriParser";
 
+
 type Props = {
     params: Promise<{ username: string; blogTitle: string }>
 }
@@ -16,11 +17,17 @@ const page = async ({ params }: Props) => {
     const { title: blogTitle, postId } = decodeBlogUri(encodedTitleWithId);
 
     const session = await auth()
-    const post = await getPost({ username, postId  })
+    const post = await getPost({ username, postId })
+
 
     if (!post?.content) {
         return null
     }
+
+
+        
+
+
 
     const currentUser = await prisma.user.findFirst({
         where: {
@@ -34,6 +41,7 @@ const page = async ({ params }: Props) => {
 
     return (
         <div className="w-full mx-auto md:max-w-[55rem] min-h-[100vh] h-fit md:px-8">
+            
             <Editor
                 post={post!}
                 initialContent={post?.content}

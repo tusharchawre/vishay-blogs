@@ -146,7 +146,6 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       const html = await editor.blocksToFullHTML(editor.document);
       const sanitizedHTML = DOMPurify.sanitize(html);
       setHTML(sanitizedHTML);
-      console.log(html);
     } else {
       setEditing(true);
       setContent(editor.document);
