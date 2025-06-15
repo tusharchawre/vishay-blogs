@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "V-shy Blogs",
   description: "A modern blogging platform for sharing your thoughts and ideas",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  metadataBase: new URL ("https://v-shy.tusharchawre.space"),
   openGraph: {
     type: 'website',
     locale: 'en_US',
