@@ -9,6 +9,19 @@ type Props = {
 }
 
 
+
+export async function generateMetadata({ params }: Props) {
+  const { title, postId } = decodeBlogUri((await params).blogTitle);
+  const post = await getPost({ username: (await params).username, postId });
+  
+  return {
+    title: post?.title,
+    description: post?.searchText?.substring(0, 240),
+  }
+}
+
+
+
 const page = async ({ params }: Props) => {
   const encodedTitleWithId = (await params).blogTitle
   const username = (await params).username
@@ -23,11 +36,6 @@ const page = async ({ params }: Props) => {
 
   return (
     <div className="w-full mx-auto md:max-w-[55rem] min-h-[100vh] h-fit md:px-8">
-      <div className="sr-only" aria-hidden="true">
-        <h1>{post.title}</h1>
-        {post.coverImg && <img src={post.coverImg} alt="Cover Image" />}
-        <div dangerouslySetInnerHTML={{ __html: post.searchText! }} />
-      </div>
       <Editor
         initialContent={post.content}
         draftImg={post.coverImg ? post.coverImg : ""}
