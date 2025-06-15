@@ -5,13 +5,14 @@ import Link from "next/link";
 import React from "react";
 
 import { motion } from "motion/react";
+import { encodeBlogUri } from "../utils/uriParser";
 
 interface PostProps {
   postId: number;
   title: string;
   date: string;
   likes: number;
-  username: string | undefined;
+  username: string;
   userImg: string | null;
   index: number;
 }
@@ -22,11 +23,12 @@ export const MostLikedItem = ({
   likes,
   username,
   userImg,
+  postId,
   index = 0,
 }: PostProps) => {
   return (
     //TODO :  Encode the URL in good dash wala fashion
-    <Link href={`/${username?.replaceAll(" ", "-")}/${title.replaceAll(" ", "-")}`} prefetch>
+    <Link href={`/${username.replaceAll(" ", "-")}/${encodeBlogUri(title, postId)}`} prefetch>
       <motion.div
         initial={{ opacity: 0, y: 20, filter: "blur(50px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
