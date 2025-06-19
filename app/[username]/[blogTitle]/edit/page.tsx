@@ -17,7 +17,7 @@ const page = async ({ params }: Props) => {
     const { title: blogTitle, postId } = decodeBlogUri(encodedTitleWithId);
 
     const session = await auth()
-    const post = await getPost({ username, postId })
+    const post = await getPost({ postId })
 
 
     if (!post?.content) {

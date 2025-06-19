@@ -93,7 +93,6 @@ export const savePost = async ({ content, coverImg, publishStatus, postId, searc
 
 
 interface GetPostProps {
-  username: string
   postId: number
 }
 
@@ -101,19 +100,11 @@ interface GetPostProps {
 
 
 
-export const getPost = async ({ username, postId }: GetPostProps) => {
-  const user = await prisma.user.findFirst({
-    where: {
-      name: username
-    }
-  })
-  if (!user) {
-    return null
-  }
+export const getPost = async ({ postId }: GetPostProps) => {
+
 
   const post = await prisma.post.findFirst({
     where: {
-      userId: user?.id,
       id: postId!
     },
     include: {

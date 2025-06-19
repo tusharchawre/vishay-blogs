@@ -12,7 +12,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { title, postId } = decodeBlogUri((await params).blogTitle);
-  const post = await getPost({ username: (await params).username, postId });
+  const post = await getPost({ postId });
   
   return {
     title: post?.title,
@@ -27,7 +27,7 @@ const page = async ({ params }: Props) => {
   const username = (await params).username
 
   const { title: blogTitle, postId } = decodeBlogUri(encodedTitleWithId);
-  const post = await getPost({ username, postId })
+  const post = await getPost({ postId })
 
   if (!post || !post.content) {
     return <PostNotFound />
