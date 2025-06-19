@@ -16,7 +16,14 @@ export default async function Page({
 
   const currentUser = await getUser()
 
-  const username = decodeURIComponent(usernameParams);
+  // Todo -> Needs Better Parsing
+  const firstDashIndex = usernameParams.indexOf("-");
+  let username = usernameParams;
+  if (firstDashIndex !== -1) {
+    username =
+      usernameParams.slice(0, firstDashIndex + 1) +
+      usernameParams.slice(firstDashIndex + 1).replaceAll("-", " ");
+  }
 
   const user = await prisma.user.findFirst({
     where: {
