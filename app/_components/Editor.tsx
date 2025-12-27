@@ -1,24 +1,24 @@
-'use client';
-import UploadImage from '@/components/modals/image-upload';
-import { motion } from 'motion/react';
-import { PublishModal } from '@/components/modals/publish-post';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Block, BlockNoteEditor, filterSuggestionItems } from '@blocknote/core';
-import '@blocknote/core/fonts/inter.css';
-import { createGroq } from '@ai-sdk/groq';
-import { en } from '@blocknote/core/locales';
-import { en as aiEn } from '@blocknote/xl-ai/locales';
+"use client";
+import UploadImage from "@/components/modals/image-upload";
+import { motion } from "motion/react";
+import { PublishModal } from "@/components/modals/publish-post";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Block, BlockNoteEditor, filterSuggestionItems } from "@blocknote/core";
+import "@blocknote/core/fonts/inter.css";
+import { createGroq } from "@ai-sdk/groq";
+import { en } from "@blocknote/core/locales";
+import { en as aiEn } from "@blocknote/xl-ai/locales";
 import {
   AIMenuController,
   AIToolbarButton,
   createAIExtension,
   createBlockNoteAIClient,
   getAISlashMenuItems,
-} from '@blocknote/xl-ai';
-import { BlockNoteView } from '@blocknote/mantine';
-import '@blocknote/mantine/style.css';
-import '@blocknote/xl-ai/style.css';
-import DOMPurify from 'dompurify';
+} from "@blocknote/xl-ai";
+import { BlockNoteView } from "@blocknote/mantine";
+import "@blocknote/mantine/style.css";
+import "@blocknote/xl-ai/style.css";
+import DOMPurify from "dompurify";
 import {
   DefaultReactSuggestionItem,
   FormattingToolbar,
@@ -27,13 +27,13 @@ import {
   getFormattingToolbarItems,
   SuggestionMenuController,
   useCreateBlockNote,
-} from '@blocknote/react';
-import { BrainCircuit, Check, Loader2 } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { useEffect, useState, useCallback } from 'react';
-import { useCompletion } from 'ai/react';
-import Image from 'next/image';
-import { Post } from '@prisma/client';
+} from "@blocknote/react";
+import { BrainCircuit, Check, Loader2 } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState, useCallback } from "react";
+import { useCompletion } from "ai/react";
+import Image from "next/image";
+import { Post } from "@prisma/client";
 
 interface EditorProps {
   post?: Post;
@@ -44,17 +44,17 @@ interface EditorProps {
 
 function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
   const { theme } = useTheme();
-  const [html, setHTML] = useState<string>('');
+  const [html, setHTML] = useState<string>("");
   const [editing, setEditing] = useState(false);
-  const [searchText, setSearchText] = useState<string>('');
+  const [searchText, setSearchText] = useState<string>("");
   const [content, setContent] = useState<Block[]>(
-    initialContent ? (JSON.parse(initialContent) as Block[]) : []
+    initialContent ? (JSON.parse(initialContent) as Block[]) : [],
   );
   const [coverImg, setCoverImg] = useState<string | undefined>(draftImg);
 
   const model = createGroq({
-    apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || '',
-  })('llama-3.3-70b-versatile');
+    apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY || "",
+  })("llama-3.3-70b-versatile");
 
   const editor = useCreateBlockNote({
     dictionary: {
@@ -70,19 +70,19 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       ? content
       : [
           {
-            type: 'heading',
-            content: 'Your Title Here',
+            type: "heading",
+            content: "Your Title Here",
           },
           {
-            type: 'paragraph',
-            content: 'Type your content here...',
+            type: "paragraph",
+            content: "Type your content here...",
           },
         ],
   });
 
   const { complete } = useCompletion({
-    id: 'hackathon_starter',
-    api: '/api/generate-text',
+    id: "hackathon_starter",
+    api: "/api/generate-text",
     onResponse: async (response) => {
       if (response.status === 429) {
         return;
@@ -102,10 +102,10 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
             editor?._tiptapEditor.commands.insertContent(chunk);
           }
         } catch (error) {
-          console.error('Stream processing error:', error);
+          console.error("Stream processing error:", error);
         }
       } else {
-        console.error('Response body is null');
+        console.error("Response body is null");
       }
     },
   });
@@ -114,24 +114,24 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
     const prevText = editor._tiptapEditor.state.doc.textBetween(
       Math.max(0, editor._tiptapEditor.state.selection.from - 5000),
       editor._tiptapEditor.state.selection.from - 1,
-      '\n'
+      "\n",
     );
     complete(prevText);
   };
 
   const insertAiItem = (editor: BlockNoteEditor) => ({
-    title: 'Insert AI Generated Text',
+    title: "Insert AI Generated Text",
     onItemClick: async () => {
       insertMagicAi(editor);
     },
-    aliases: ['autocomplete', 'AI'],
-    group: 'AI',
+    aliases: ["autocomplete", "AI"],
+    group: "AI",
     icon: <BrainCircuit size={18} />,
-    subtext: 'Continue your post with AI-generated text.',
+    subtext: "Continue your post with AI-generated text.",
   });
 
   const getCustomSlashMenuItems = (
-    editor: BlockNoteEditor
+    editor: BlockNoteEditor,
   ): DefaultReactSuggestionItem[] => [
     insertAiItem(editor),
     ...getAISlashMenuItems(editor),
@@ -148,13 +148,13 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
       setContent(editor.document);
       const html = await editor.blocksToHTMLLossy(editor.document);
       const searchText = html
-        .replace(/<[^>]*>/g, ' ')
-        .replace(/\s+/g, ' ')
+        .replace(/<[^>]*>/g, " ")
+        .replace(/\s+/g, " ")
         .trim();
       setSearchText(searchText);
 
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('editor', JSON.stringify(editor.document));
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("editor", JSON.stringify(editor.document));
       }
 
       setTimeout(() => setEditing(false), 2000);
@@ -234,12 +234,12 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
         </div>
 
         {editing ? (
-          <p className="flex items-center gap-1 px-8 text-sm text-muted-foreground">
+          <p className="text-muted-foreground flex items-center gap-1 px-8 text-sm">
             <Loader2 className="animate-spin duration-300" size={16} />
             Saving...
           </p>
         ) : (
-          <p className="flex items-center gap-1 px-8 text-sm text-muted-foreground">
+          <p className="text-muted-foreground flex items-center gap-1 px-8 text-sm">
             <Check size={16} />
             Saved in your session storage...
           </p>
@@ -250,11 +250,11 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
           slashMenu={false}
           formattingToolbar={false}
           editable={editable}
-          theme={theme === 'dark' ? 'dark' : 'light'}
+          theme={theme === "dark" ? "dark" : "light"}
           onChange={onChange}
         >
           <SuggestionMenuController
-            triggerCharacter={'/'}
+            triggerCharacter={"/"}
             getItems={async (query) =>
               filterSuggestionItems(getCustomSlashMenuItems(editor), query)
             }

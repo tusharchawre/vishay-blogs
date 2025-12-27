@@ -1,11 +1,11 @@
-'use client';
-import { Skeleton } from '@/components/ui/skeleton';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+"use client";
+import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
-import { motion } from 'motion/react';
-import { encodeBlogUri } from '../utils/uriParser';
+import { motion } from "motion/react";
+import { encodeBlogUri } from "../utils/uriParser";
 
 interface PostProps {
   postId: number;
@@ -29,14 +29,14 @@ export const MostLikedItem = ({
   return (
     //TODO :  Encode the URL in good dash wala fashion
     <Link
-      href={`/${username.replaceAll(' ', '-')}/${encodeBlogUri(title, postId)}`}
+      href={`/${username.replaceAll(" ", "-")}/${encodeBlogUri(title, postId)}`}
       prefetch
     >
       <motion.div
-        initial={{ opacity: 0, y: 20, filter: 'blur(50px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        initial={{ opacity: 0, y: 20, filter: "blur(50px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{
-          ease: 'easeInOut',
+          ease: "easeInOut",
           duration: 0.3,
           delay: index * 0.2,
         }}

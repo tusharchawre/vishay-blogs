@@ -1,9 +1,9 @@
-import { Editor } from '@/app/_components/DynamicEditor';
-import { getPost } from '@/app/action';
-import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
-import { prisma } from '@/prisma';
-import { decodeBlogUri } from '@/app/utils/uriParser';
+import { Editor } from "@/app/_components/DynamicEditor";
+import { getPost } from "@/app/action";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import { prisma } from "@/prisma";
+import { decodeBlogUri } from "@/app/utils/uriParser";
 
 type Props = {
   params: Promise<{ username: string; blogTitle: string }>;
@@ -29,15 +29,15 @@ const page = async ({ params }: Props) => {
   });
 
   if (!currentUser || currentUser.id !== post.userId) {
-    redirect(`/${username}/${blogTitle.replaceAll(' ', '-')}-${postId}`);
+    redirect(`/${username}/${blogTitle.replaceAll(" ", "-")}-${postId}`);
   }
 
   return (
-    <div className="mx-auto h-fit min-h-[100vh] w-full md:max-w-[55rem] md:px-8">
+    <div className="mx-auto h-fit min-h-screen w-full md:max-w-220 md:px-8">
       <Editor
         post={post!}
         initialContent={post?.content}
-        draftImg={post?.coverImg ?? ''}
+        draftImg={post?.coverImg ?? ""}
         editable={true}
       />
     </div>

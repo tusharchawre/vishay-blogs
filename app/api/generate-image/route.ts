@@ -1,11 +1,11 @@
-import { auth } from '@/auth';
-import { NextResponse } from 'next/server';
+import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const session = await auth();
 
   if (!session || !session.user?.name) {
-    return NextResponse.json({ error: 'No user found' }, { status: 401 });
+    return NextResponse.json({ error: "No user found" }, { status: 401 });
   }
 
   const { prompt }: { prompt: string } = await req.json();

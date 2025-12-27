@@ -1,15 +1,15 @@
-'use client';
-import { Post, Prisma } from '@prisma/client';
-import { Button } from './ui/button';
-import { Separator } from './ui/separator';
-import { handleFollow } from '@/app/action';
-import { useState } from 'react';
+"use client";
+import { Post, Prisma } from "@prisma/client";
+import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { handleFollow } from "@/app/action";
+import { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Loader2 } from 'lucide-react';
+} from "@/components/ui/tooltip";
+import { Loader2 } from "lucide-react";
 
 type UserWithFollow = Prisma.UserGetPayload<{
   include: { followers: true; following: true };
@@ -35,15 +35,15 @@ export const ProfileSection = ({ post, user, selfPage }: SectionProps) => {
 
   return (
     <div className="mt-8 flex h-fit w-full flex-col items-center justify-around gap-2 rounded-lg bg-[#D9D9D973] p-2 dark:bg-[#33333373]">
-      <p className="text-wrap text-sm font-light text-muted-foreground">
+      <p className="text-muted-foreground text-sm font-light text-wrap">
         {post.length} Posts
       </p>
       <Separator />
-      <p className="text-wrap text-sm font-light text-muted-foreground">
+      <p className="text-muted-foreground text-sm font-light text-wrap">
         {user.followers.length} Followers
       </p>
       <Separator />
-      <p className="text-wrap text-sm font-light text-muted-foreground">
+      <p className="text-muted-foreground text-sm font-light text-wrap">
         {user.following.length} Following
       </p>
       <Separator />
@@ -58,7 +58,7 @@ export const ProfileSection = ({ post, user, selfPage }: SectionProps) => {
               <p>So Narcissistic!</p>
             </TooltipContent>
           </Tooltip>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             You can't follow yourself!
           </p>
         </>

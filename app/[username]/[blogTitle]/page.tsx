@@ -1,7 +1,7 @@
-import { Editor } from '@/app/_components/DynamicEditor';
-import { getPost } from '@/app/action';
-import { PostNotFound } from '@/app/_components/PostNotFound';
-import { decodeBlogUri } from '@/app/utils/uriParser';
+import { Editor } from "@/app/_components/DynamicEditor";
+import { getPost } from "@/app/action";
+import { PostNotFound } from "@/app/_components/PostNotFound";
+import { decodeBlogUri } from "@/app/utils/uriParser";
 
 type Props = {
   params: Promise<{ username: string; blogTitle: string }>;
@@ -29,10 +29,10 @@ const page = async ({ params }: Props) => {
   }
 
   return (
-    <div className="mx-auto h-fit min-h-[100vh] w-full md:max-w-[55rem] md:px-8">
+    <div className="mx-auto h-fit min-h-screen w-full md:max-w-220 md:px-8">
       <Editor
         initialContent={post.content}
-        draftImg={post.coverImg ? post.coverImg : ''}
+        draftImg={post.coverImg ? post.coverImg : ""}
         editable={false}
       />
     </div>

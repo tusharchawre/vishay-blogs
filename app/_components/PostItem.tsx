@@ -1,20 +1,20 @@
-'use client';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Heart, MoreVertical, Pencil, Trash, Trash2 } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useState } from 'react';
-import { handleLike } from '../action';
-import { motion } from 'motion/react';
+"use client";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Heart, MoreVertical, Pencil, Trash, Trash2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState } from "react";
+import { handleLike } from "../action";
+import { motion } from "motion/react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
-import { DeleteModal } from '@/components/modals/deleteModal';
-import { encodeBlogUri } from '@/app/utils/uriParser';
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+import { DeleteModal } from "@/components/modals/deleteModal";
+import { encodeBlogUri } from "@/app/utils/uriParser";
 
 interface PostProps {
   postId: number;
@@ -65,35 +65,35 @@ const PostItem = ({
     } catch (error) {
       setHasLiked((prev) => !prev);
       setLikesCount((prev) => (hasLikedState ? prev + 1 : prev - 1));
-      console.error('Failed to update like status', error);
+      console.error("Failed to update like status", error);
     }
   };
 
-  if (!content) return (content = 'Content not found');
+  if (!content) return (content = "Content not found");
 
   const parsedContent = JSON.parse(content)[1].content.map(
-    (x: { text: string }) => x.text
+    (x: { text: string }) => x.text,
   )[0];
 
   return (
     <Link
-      href={`/${username.replaceAll(' ', '-')}/${encodeBlogUri(title, postId)}`}
+      href={`/${username.replaceAll(" ", "-")}/${encodeBlogUri(title, postId)}`}
       prefetch
     >
       <motion.div
-        initial={{ opacity: 0, y: 10, filter: 'blur(10px)' }}
-        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{
-          ease: 'easeInOut',
+          ease: "easeInOut",
           duration: 0.2,
           delay: index * 0.2,
         }}
-        className="relative flex h-40 w-full rounded-lg bg-[#dfdfdf]/30 px-2 dark:bg-[#24242447] md:h-48"
+        className="relative flex h-40 w-full rounded-lg bg-[#dfdfdf]/30 px-2 md:h-48 dark:bg-[#24242447]"
       >
         {showActions && (
           <div
             onClick={(e) => e.preventDefault()}
-            className="z-100 absolute right-2 top-2"
+            className="absolute top-2 right-2 z-100"
           >
             <Popover>
               <PopoverTrigger asChild>
@@ -140,19 +140,19 @@ const PostItem = ({
               />
             )}
             <p className="text-sm text-black/45 dark:text-white/45">
-              {username.replace('-', ' ')}
+              {username.replace("-", " ")}
             </p>
           </div>
           <h1 className="text-base font-semibold md:text-lg">{title}</h1>
-          <p className="line-clamp-2 text-sm font-normal text-black/45 dark:text-white/45 md:text-base">
+          <p className="line-clamp-2 text-sm font-normal text-black/45 md:text-base dark:text-white/45">
             {parsedContent}
           </p>
           <div className="flex w-full gap-8">
             <p className="text-sm text-black/45 dark:text-white/45">{date}</p>
             <p className="flex items-center justify-center gap-1 text-sm opacity-60">
-              {likesCount}{' '}
+              {likesCount}{" "}
               <Heart
-                className={`size-3 ${hasLikedState ? 'fill-red-500' : ''}`}
+                className={`size-3 ${hasLikedState ? "fill-red-500" : ""}`}
                 onClick={clickedLike}
               />
             </p>

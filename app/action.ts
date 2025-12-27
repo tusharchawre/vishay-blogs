@@ -1,9 +1,9 @@
-'use server';
+"use server";
 
-import { auth } from '@/auth';
-import { prisma } from '@/prisma';
-import { Block } from '@blocknote/core';
-import { Post } from '@prisma/client';
+import { auth } from "@/auth";
+import { prisma } from "@/prisma";
+import { Block } from "@blocknote/core";
+import { Post } from "@prisma/client";
 
 interface SavePostProps {
   content: Block[];
@@ -23,19 +23,19 @@ export const savePost = async ({
   const session = await auth();
 
   if (content[0] === undefined) {
-    return new Error('Please Insert Content');
+    return new Error("Please Insert Content");
   }
 
   const parsedTitle = JSON.parse(
-    JSON.stringify(content[0].content, ['text'])
+    JSON.stringify(content[0].content, ["text"]),
   )[0].text;
 
   if (!parsedTitle || parsedTitle.trim().length === 0) {
-    return new Error('Please provide a valid title');
+    return new Error("Please provide a valid title");
   }
 
   if (!session || !session.user || !session.user.email) {
-    return new Error('User not authenticated or session invalid');
+    return new Error("User not authenticated or session invalid");
   }
 
   const email = session.user.email;
@@ -47,7 +47,7 @@ export const savePost = async ({
   });
 
   if (!currentUser) {
-    return new Error('User not found');
+    return new Error("User not found");
   }
 
   if (postId) {
@@ -57,10 +57,10 @@ export const savePost = async ({
       },
     });
     if (!post) {
-      return new Error('Post not found');
+      return new Error("Post not found");
     }
     if (post.userId !== currentUser.id) {
-      return new Error('You are not authorized to edit this post');
+      return new Error("You are not authorized to edit this post");
     }
 
     await prisma.post.update({
@@ -133,7 +133,7 @@ export async function handleLike(postId: number) {
   const session = await auth();
 
   if (!session || !session.user || !session.user.email) {
-    throw new Error('User not authenticated or session invalid');
+    throw new Error("User not authenticated or session invalid");
   }
 
   const userEmail = session.user.email;
@@ -146,7 +146,7 @@ export async function handleLike(postId: number) {
 
   const userId = user?.id;
   if (!userId) {
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 
   const post = await prisma.post.findUnique({
@@ -156,7 +156,7 @@ export async function handleLike(postId: number) {
   });
 
   if (!post) {
-    throw new Error('Post not found');
+    throw new Error("Post not found");
   }
 
   const like = await prisma.like.findUnique({
@@ -178,9 +178,9 @@ export async function handleLike(postId: number) {
           },
         },
       });
-      return { message: 'Unliked Post.' };
+      return { message: "Unliked Post." };
     } catch (error) {
-      return { message: 'Database Error: Failed to Unlike Post.' + error };
+      return { message: "Database Error: Failed to Unlike Post." + error };
     }
   }
 
@@ -191,9 +191,9 @@ export async function handleLike(postId: number) {
         userId,
       },
     });
-    return { message: 'Liked Post.' };
+    return { message: "Liked Post." };
   } catch (error) {
-    return { message: 'Database Error: Failed to Like Post.' + error };
+    return { message: "Database Error: Failed to Like Post." + error };
   }
 }
 
@@ -244,7 +244,7 @@ export const getMostLiked = async () => {
     },
     orderBy: {
       likes: {
-        _count: 'desc',
+        _count: "desc",
       },
     },
     take: 3,
@@ -306,7 +306,7 @@ export const deletePost = async (id: number, title: string) => {
   const session = await auth();
 
   if (!session || !session.user || !session.user.email) {
-    return new Error('User not authenticated or session invalid');
+    return new Error("User not authenticated or session invalid");
   }
 
   const email = session.user.email;
@@ -325,11 +325,11 @@ export const deletePost = async (id: number, title: string) => {
   });
 
   if (!post) {
-    return new Error('Post not found');
+    return new Error("Post not found");
   }
 
   if (post.userId !== user?.id) {
-    return new Error('You are not authorized to delete this post');
+    return new Error("You are not authorized to delete this post");
   }
 
   await prisma.post.delete({
@@ -338,7 +338,7 @@ export const deletePost = async (id: number, title: string) => {
     },
   });
 
-  return { message: 'Post deleted successfully' };
+  return { message: "Post deleted successfully" };
 };
 
 interface SearchProps {
@@ -377,7 +377,7 @@ export const searchPost = async ({
           },
         },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       take: limit,
       skip: skip,
     });
@@ -396,13 +396,13 @@ export const searchPost = async ({
         {
           title: {
             contains: searchTerm,
-            mode: 'insensitive',
+            mode: "insensitive",
           },
         },
         {
           searchText: {
             contains: searchTerm,
-            mode: 'insensitive',
+            mode: "insensitive",
           },
         },
       ],
@@ -426,7 +426,7 @@ export const searchPost = async ({
       },
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
     take: limit,
     skip: skip,
@@ -439,13 +439,13 @@ export const searchPost = async ({
         {
           title: {
             contains: searchTerm,
-            mode: 'insensitive',
+            mode: "insensitive",
           },
         },
         {
           searchText: {
             contains: searchTerm,
-            mode: 'insensitive',
+            mode: "insensitive",
           },
         },
       ],

@@ -1,16 +1,16 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '../ui/button';
-import { ImageIcon } from 'lucide-react';
-import { useEdgeStore } from '@/lib/edgestore';
-import { SingleImageDropzone } from '../SingleImageDropzone';
+} from "@/components/ui/dialog";
+import { Button } from "../ui/button";
+import { ImageIcon } from "lucide-react";
+import { useEdgeStore } from "@/lib/edgestore";
+import { SingleImageDropzone } from "../SingleImageDropzone";
 
 interface UploadImageProps {
   setCoverImg: (coverImg: string) => void;
@@ -26,7 +26,7 @@ export default function UploadImage({ setCoverImg }: UploadImageProps) {
         <DialogTrigger asChild>
           <Button
             variant="secondary"
-            className="flex h-full text-foreground/60 transition-all ease-out hover:bg-foreground/5 dark:hover:bg-foreground/30"
+            className="text-foreground/60 hover:bg-foreground/5 dark:hover:bg-foreground/30 flex h-full transition-all ease-out"
           >
             <ImageIcon />
             Add Cover

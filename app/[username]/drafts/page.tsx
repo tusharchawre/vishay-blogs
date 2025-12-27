@@ -1,14 +1,14 @@
-import { Skeleton } from '@/components/ui/skeleton';
-import { prisma } from '@/prisma';
-import Image from 'next/image';
-import PostItem from '@/app/_components/PostItem';
-import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
-import { auth } from '@/auth';
-import Link from 'next/link';
-import { ProfileSection } from '@/components/profile-section';
-import { getUser } from '@/hooks/useUser';
-import { encodeBlogUri } from '@/app/utils/uriParser';
+import { Skeleton } from "@/components/ui/skeleton";
+import { prisma } from "@/prisma";
+import Image from "next/image";
+import PostItem from "@/app/_components/PostItem";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
+import Link from "next/link";
+import { ProfileSection } from "@/components/profile-section";
+import { getUser } from "@/hooks/useUser";
+import { encodeBlogUri } from "@/app/utils/uriParser";
 
 export default async function Page({
   params,
@@ -66,18 +66,18 @@ export default async function Page({
   });
 
   const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sept',
-    'Oct',
-    'Nov',
-    'Dec',
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   if (!user) {
@@ -85,13 +85,13 @@ export default async function Page({
       <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center gap-4">
         <div className="mb-4 text-6xl">👤</div>
         <h1 className="text-2xl font-semibold">User Not Found</h1>
-        <p className="max-w-md text-center text-muted-foreground">
+        <p className="text-muted-foreground max-w-md text-center">
           We couldn't find a user with the username "{username}". They might
           have changed their username or deleted their account.
         </p>
         <Link
           href="/"
-          className="mt-4 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 rounded-md px-4 py-2 transition-colors"
         >
           Return Home
         </Link>
@@ -102,11 +102,11 @@ export default async function Page({
   return (
     <div className="h-fit">
       <div className="flex h-[calc(100vh-4rem)] w-full">
-        <aside className="hidden h-full w-[30%] flex-col items-center gap-2 bg-[#ECECEC30] p-4 dark:bg-[#20202030] md:flex">
+        <aside className="hidden h-full w-[30%] flex-col items-center gap-2 bg-[#ECECEC30] p-4 md:flex dark:bg-[#20202030]">
           <div className="mt-8 flex h-16 w-full items-center justify-around rounded-lg bg-[#D9D9D973] p-2 dark:bg-[#33333373]">
             {user.image ? (
               <Image
-                src={user.image.replace('s96-c', 's384-c')}
+                src={user.image.replace("s96-c", "s384-c")}
                 width={500}
                 height={500}
                 alt="Profile Pic"
@@ -117,10 +117,10 @@ export default async function Page({
             )}
 
             <div>
-              <p className="text-base font-semibold text-foreground">
+              <p className="text-foreground text-base font-semibold">
                 {user.name}
               </p>
-              <p className="text-wrap text-sm font-light text-muted-foreground">
+              <p className="text-muted-foreground text-sm font-light text-wrap">
                 {user.email}
               </p>
             </div>
@@ -155,10 +155,10 @@ export default async function Page({
         </aside>
 
         <div className="h-full w-full overflow-y-scroll px-1 py-4 md:px-16">
-          <div className="mx-auto mt-8 flex h-16 w-full max-w-[75%] items-center justify-around rounded-lg bg-[#D9D9D973] p-2 dark:bg-[#33333373] md:hidden">
+          <div className="mx-auto mt-8 flex h-16 w-full max-w-[75%] items-center justify-around rounded-lg bg-[#D9D9D973] p-2 md:hidden dark:bg-[#33333373]">
             {user.image ? (
               <Image
-                src={user.image.replace('s96-c', 's384-c')}
+                src={user.image.replace("s96-c", "s384-c")}
                 width={500}
                 height={500}
                 alt="Profile Pic"
@@ -169,10 +169,10 @@ export default async function Page({
             )}
 
             <div>
-              <p className="text-base font-semibold text-foreground">
+              <p className="text-foreground text-base font-semibold">
                 {user.name}
               </p>
-              <p className="text-wrap text-sm font-light text-muted-foreground">
+              <p className="text-muted-foreground text-sm font-light text-wrap">
                 {user.email}
               </p>
             </div>
@@ -180,7 +180,7 @@ export default async function Page({
           <div className="flex h-full flex-col gap-5 py-5">
             {post.map((post, idx) => {
               const hasLiked = post.likes.some(
-                (like) => like.user.name === user.name
+                (like) => like.user.name === user.name,
               );
 
               return (

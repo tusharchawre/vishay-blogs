@@ -8,17 +8,17 @@ export function encodeBlogUri(title: string, postId: number): string {
   // First encode the title to handle special characters
   const encodedTitle = encodeURIComponent(title)
     // Replace encoded spaces with dashes
-    .replace(/%20/g, '-')
+    .replace(/%20/g, "-")
     // Replace encoded colons with dashes
-    .replace(/%3A/g, '-')
+    .replace(/%3A/g, "-")
     // Replace encoded commas with dashes
-    .replace(/%2C/g, '-')
+    .replace(/%2C/g, "-")
     // Replace encoded periods with dashes
-    .replace(/\./g, '-')
+    .replace(/\./g, "-")
     // Replace multiple dashes with a single dash
-    .replace(/-+/g, '-')
+    .replace(/-+/g, "-")
     // Remove leading and trailing dashes
-    .replace(/^-+|-+$/g, '');
+    .replace(/^-+|-+$/g, "");
 
   return `${encodedTitle}-${postId}`;
 }
@@ -30,10 +30,10 @@ export function encodeBlogUri(title: string, postId: number): string {
  */
 export function decodeBlogUri(uri: string): { title: string; postId: number } {
   // Split the URI by the last dash to separate title and postId
-  const lastDashIndex = uri.lastIndexOf('-');
+  const lastDashIndex = uri.lastIndexOf("-");
 
   if (lastDashIndex === -1) {
-    throw new Error('Invalid URI format');
+    throw new Error("Invalid URI format");
   }
 
   // Get the encoded title part
@@ -41,7 +41,7 @@ export function decodeBlogUri(uri: string): { title: string; postId: number } {
   const postId = parseInt(uri.substring(lastDashIndex + 1), 10);
 
   if (isNaN(postId)) {
-    throw new Error('Invalid post ID in URI');
+    throw new Error("Invalid post ID in URI");
   }
 
   // Decode the title back to its original form

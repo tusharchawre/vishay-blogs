@@ -1,17 +1,17 @@
-import { Ratelimit } from '@upstash/ratelimit';
-import { kv } from '@vercel/kv';
+import { Ratelimit } from "@upstash/ratelimit";
+import { kv } from "@vercel/kv";
 import {
   GoogleGenerativeAI,
   HarmBlockThreshold,
   HarmCategory,
-} from '@google/generative-ai';
+} from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(
-  process.env.GOOGLE_GENERATIVE_AI_API_KEY || ''
+  process.env.GOOGLE_GENERATIVE_AI_API_KEY || "",
 );
 
 const model = genAI.getGenerativeModel({
-  model: 'gemini-2.0-flash-exp',
+  model: "gemini-2.0-flash-exp",
   systemInstruction: `You are an intelligent AI writing assistant that helps users extend their text naturally and contextually within a rich-text editor environment. Your goal is to provide meaningful, relevant continuations that feel like they were written by the same author.
 
 **Core Principles:**
@@ -72,46 +72,46 @@ const model = genAI.getGenerativeModel({
 When you receive content, first identify: What type of writing is this? What's the author trying to accomplish? What would naturally come next? Then provide a continuation that serves the author's apparent intent while maintaining their established style and voice.`,
 });
 
-export const runtime = 'edge';
+export const runtime = "edge";
 
 export async function POST(req: Request): Promise<Response> {
   if (
     !process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
-    process.env.GOOGLE_GENERATIVE_AI_API_KEY === ''
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY === ""
   ) {
     return new Response(
-      'Missing GOOGLE_GENERATIVE_AI_API_KEY - make sure to add it to your .env file.',
+      "Missing GOOGLE_GENERATIVE_AI_API_KEY - make sure to add it to your .env file.",
       {
         status: 400,
-      }
+      },
     );
   }
 
   if (
-    process.env.NODE_ENV !== 'development' &&
+    process.env.NODE_ENV !== "development" &&
     process.env.KV_REST_API_URL &&
     process.env.KV_REST_API_TOKEN
   ) {
     const ip =
-      req.headers.get('x-forwarded-for') ||
-      req.headers.get('x-real-ip') ||
-      'unknown';
+      req.headers.get("x-forwarded-for") ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
     const ratelimit = new Ratelimit({
       redis: kv,
-      limiter: Ratelimit.slidingWindow(50, '1 h'), // More reasonable: 50 requests per hour
+      limiter: Ratelimit.slidingWindow(50, "1 h"), // More reasonable: 50 requests per hour
     });
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
-      `noteblock_ratelimit_${ip}`
+      `noteblock_ratelimit_${ip}`,
     );
 
     if (!success) {
-      return new Response('Rate limit exceeded. Please try again later.', {
+      return new Response("Rate limit exceeded. Please try again later.", {
         status: 429,
         headers: {
-          'X-RateLimit-Limit': limit.toString(),
-          'X-RateLimit-Remaining': remaining.toString(),
-          'X-RateLimit-Reset': reset.toString(),
+          "X-RateLimit-Limit": limit.toString(),
+          "X-RateLimit-Remaining": remaining.toString(),
+          "X-RateLimit-Reset": reset.toString(),
         },
       });
     }
@@ -121,7 +121,7 @@ export async function POST(req: Request): Promise<Response> {
     const { prompt, context } = await req.json();
 
     if (!prompt || prompt.trim().length === 0) {
-      return new Response('Prompt is required', { status: 400 });
+      return new Response("Prompt is required", { status: 400 });
     }
 
     const safetySettings = [
@@ -154,14 +154,14 @@ export async function POST(req: Request): Promise<Response> {
 
 ${prompt}
 
-${context ? `Additional context: ${context}` : ''}
+${context ? `Additional context: ${context}` : ""}
 
 Please provide a natural, contextually appropriate continuation that maintains the author's style and serves their apparent intent. Focus on adding genuine value rather than generic filler.`;
 
     const geminiStream = await model.generateContentStream({
       contents: [
         {
-          role: 'user',
+          role: "user",
           parts: [
             {
               text: enhancedPrompt,
@@ -177,14 +177,14 @@ Please provide a natural, contextually appropriate continuation that maintains t
       async start(controller) {
         try {
           for await (const textPart of geminiStream.stream) {
-            const text = textPart.text() ?? '';
+            const text = textPart.text() ?? "";
             if (text) {
               controller.enqueue(new TextEncoder().encode(text));
             }
           }
           controller.close();
         } catch (err) {
-          console.error('Stream error:', err);
+          console.error("Stream error:", err);
           controller.error(err);
         }
       },
@@ -192,12 +192,12 @@ Please provide a natural, contextually appropriate continuation that maintains t
 
     return new Response(stream, {
       headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache',
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-cache",
       },
     });
   } catch (error) {
-    console.error('API Error:', error);
-    return new Response('Internal server error', { status: 500 });
+    console.error("API Error:", error);
+    return new Response("Internal server error", { status: 500 });
   }
 }

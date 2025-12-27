@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { signIn } from 'next-auth/react';
+} from "@/components/ui/card";
+import { signIn } from "next-auth/react";
 
 export const LoginCard = () => {
   return (
@@ -20,7 +20,7 @@ export const LoginCard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="w-full" onClick={() => signIn('google')}>
+            <Button className="w-full" onClick={() => signIn("google")}>
               Sign In
             </Button>
           </CardContent>

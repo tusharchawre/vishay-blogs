@@ -1,9 +1,9 @@
-import React from 'react';
-import { prisma } from '@/prisma';
-import PostItem, { ItemSkeleton } from './_components/PostItem';
-import { auth } from '@/auth';
-import { MostLikedItem } from './_components/MostLikedItem';
-import { getAllPost, getMostLiked } from './action';
+import React from "react";
+import { prisma } from "@/prisma";
+import PostItem, { ItemSkeleton } from "./_components/PostItem";
+import { auth } from "@/auth";
+import { MostLikedItem } from "./_components/MostLikedItem";
+import { getAllPost, getMostLiked } from "./action";
 
 async function page() {
   const session = await auth();
@@ -21,13 +21,13 @@ async function page() {
   if (!posts) {
     return (
       <div>
-        <div className="mx-auto flex w-full max-w-[75rem]">
+        <div className="mx-auto flex w-full max-w-300">
           <div className="w-full px-8">
             <ItemSkeleton />
             <ItemSkeleton />
             <ItemSkeleton />
           </div>
-          <div className="h-screen w-[30rem]">
+          <div className="h-screen w-120">
             <ItemSkeleton />
             <ItemSkeleton />
             <ItemSkeleton />
@@ -39,26 +39,26 @@ async function page() {
   }
 
   const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sept',
-    'Oct',
-    'Nov',
-    'Dec',
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   return (
-    <div className="mx-auto flex h-fit min-h-screen w-full max-w-[75rem] bg-transparent">
+    <div className="mx-auto flex h-fit min-h-screen w-full max-w-300 bg-transparent">
       <div className="flex w-full flex-col gap-5 px-1 py-5 md:px-8">
         {latestPosts.map((post, idx) => {
           const hasLiked = post.likes.some(
-            (like) => session && like.user.name === user?.name
+            (like) => session && like.user.name === user?.name,
           );
 
           if (!post.published) return null;
@@ -70,7 +70,7 @@ async function page() {
               hasLiked={hasLiked}
               index={idx}
               userImg={post.user.image}
-              username={post.user.name!.replace('-', ' ')}
+              username={post.user.name!.replace("-", " ")}
               title={post.title}
               content={post.content}
               date={`${
@@ -83,7 +83,7 @@ async function page() {
         })}
       </div>
 
-      <div className="mt-5 hidden h-full w-[30rem] rounded-md bg-[#ECECEC40] py-2 dark:bg-[#20202040] md:block">
+      <div className="mt-5 hidden h-full w-120 rounded-md bg-[#ECECEC40] py-2 md:block dark:bg-[#20202040]">
         <p className="px-4 text-base font-semibold">Most Liked</p>
         <div className="flex h-full w-full flex-col gap-2">
           {likedPost.map((post, idx) => (

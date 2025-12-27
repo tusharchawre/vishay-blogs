@@ -1,5 +1,5 @@
-import { auth } from '@/auth';
-import { prisma } from '@/prisma';
+import { auth } from "@/auth";
+import { prisma } from "@/prisma";
 
 export const getUser = async () => {
   const session = await auth();

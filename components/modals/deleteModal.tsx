@@ -1,5 +1,5 @@
-import { Loader2, Trash } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Loader2, Trash } from "lucide-react";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,13 +8,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog';
-import { Label } from '../ui/label';
-import { Input } from '../ui/input';
-import { useRef, useState } from 'react';
-import { deletePost } from '@/app/action';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { useRef, useState } from "react";
+import { deletePost } from "@/app/action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface DeleteModalProps {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ interface DeleteModalProps {
 
 export const DeleteModal = ({ children, title, id }: DeleteModalProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -32,12 +32,12 @@ export const DeleteModal = ({ children, title, id }: DeleteModalProps) => {
     try {
       setIsLoading(true);
       await deletePost(id, title);
-      toast.success('Post was successfully deleted');
+      toast.success("Post was successfully deleted");
       setTimeout(() => {
         router.refresh();
       }, 1000);
     } catch (error) {
-      toast.error('Failed to delete post');
+      toast.error("Failed to delete post");
     } finally {
       setIsLoading(false);
     }
@@ -46,7 +46,7 @@ export const DeleteModal = ({ children, title, id }: DeleteModalProps) => {
   return (
     <>
       <Dialog>
-        <DialogTrigger asChild className="relative z-[100]">
+        <DialogTrigger asChild className="relative z-100">
           {children}
         </DialogTrigger>
 
@@ -74,7 +74,7 @@ export const DeleteModal = ({ children, title, id }: DeleteModalProps) => {
           <DialogFooter>
             <Button
               onClick={handleDelete}
-              disabled={input !== 'Delete this blog' || isLoading}
+              disabled={input !== "Delete this blog" || isLoading}
               type="submit"
               className="w-full"
             >

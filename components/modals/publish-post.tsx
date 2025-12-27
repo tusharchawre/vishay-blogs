@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -7,9 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
+} from "@/components/ui/dialog";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectGroup,
@@ -18,18 +18,18 @@ import {
   SelectContent,
   SelectValue,
   SelectItem,
-} from '../ui/select';
-import { Globe2Icon, Loader2, LockKeyhole } from 'lucide-react';
-import { Input } from '../ui/input';
-import { Block } from '@blocknote/core';
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { savePost } from '@/app/action';
-import { Separator } from '../ui/separator';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+} from "../ui/select";
+import { Globe2Icon, Loader2, LockKeyhole } from "lucide-react";
+import { Input } from "../ui/input";
+import { Block } from "@blocknote/core";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { savePost } from "@/app/action";
+import { Separator } from "../ui/separator";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface PublishModalProps {
   content: Block[] | undefined;
@@ -49,7 +49,7 @@ export const PublishModal = ({
   const [publishStatus, setPublish] = useState(false);
   const [prompt, setPrompt] = useState<string | undefined>();
   const [genImage, setGenImage] = useState(
-    coverImg ? coverImg : '/placeholder.svg'
+    coverImg ? coverImg : "/placeholder.svg",
   );
   const [isLoading, setIsLoading] = useState(false);
   const [publishLoading, setPublishLoading] = useState(false);
@@ -63,21 +63,21 @@ export const PublishModal = ({
   const handleSave = async () => {
     //Show error to tell the user to add content
     setPublishLoading(true);
-    if (!content) return toast('Please insert content');
+    if (!content) return toast("Please insert content");
     if (!coverImg) {
       const parsedTitle = JSON.parse(
-        JSON.stringify(content[0].content, ['text'])
+        JSON.stringify(content[0].content, ["text"]),
       )[0].text;
 
       const coverImageGen = await autoGenerateImage(parsedTitle);
       setCoverImg(coverImageGen);
 
       if (!coverImg) {
-        return new Error('The Cover Image is still not Generated');
+        return new Error("The Cover Image is still not Generated");
       }
     }
     if (!searchText) {
-      return toast.error('Please insert content');
+      return toast.error("Please insert content");
     }
     console.log(searchText);
     const result = await savePost({
@@ -92,9 +92,9 @@ export const PublishModal = ({
       return toast.error(result.message);
     }
 
-    toast.success('Post published successfully');
+    toast.success("Post published successfully");
 
-    localStorage.removeItem('editor');
+    localStorage.removeItem("editor");
 
     setPublishLoading(false);
 
@@ -104,8 +104,8 @@ export const PublishModal = ({
   const autoGenerateImage = async (title: string) => {
     setIsLoading(true);
     setPrompt(promptRef.current?.value);
-    const imageUrl = await fetch('/api/generate-image', {
-      method: 'POST',
+    const imageUrl = await fetch("/api/generate-image", {
+      method: "POST",
       body: JSON.stringify({ prompt: title }),
     });
     const data = await imageUrl.json();
@@ -117,8 +117,8 @@ export const PublishModal = ({
   const generateImage = async () => {
     setIsLoading(true);
     if (prompt === undefined) setIsLoading(false);
-    const imageUrl = await fetch('/api/generate-image', {
-      method: 'POST',
+    const imageUrl = await fetch("/api/generate-image", {
+      method: "POST",
       body: JSON.stringify({ prompt: prompt }),
     });
     const data = await imageUrl.json();
@@ -130,7 +130,7 @@ export const PublishModal = ({
   return (
     <>
       <Dialog>
-        <DialogTrigger asChild className="absolute right-10 top-5">
+        <DialogTrigger asChild className="absolute top-5 right-10">
           <Button>Publish</Button>
         </DialogTrigger>
 
@@ -143,7 +143,7 @@ export const PublishModal = ({
           </DialogHeader>
 
           <Label htmlFor="type">Save or Publish</Label>
-          <Select onValueChange={(value) => setPublish(value === 'true')}>
+          <Select onValueChange={(value) => setPublish(value === "true")}>
             <SelectTrigger>
               <SelectValue placeholder="Select the Visibility" />
             </SelectTrigger>
@@ -168,7 +168,7 @@ export const PublishModal = ({
 
           <Separator className="my-2" />
 
-          <div className="mx-auto aspect-square h-40 overflow-hidden rounded-md border-[.3px] border-white/10 bg-muted">
+          <div className="bg-muted mx-auto aspect-square h-40 overflow-hidden rounded-md border-[.3px] border-white/10">
             {isLoading ? (
               <div className="flex h-full w-full items-center justify-center gap-2 dark:text-gray-500 dark:grayscale">
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -180,9 +180,9 @@ export const PublishModal = ({
                 height={500}
                 width={500}
                 className={cn(
-                  'object-cover',
-                  genImage === '/placeholder.svg' &&
-                    'scale-150 dark:brightness-[0.4] dark:grayscale'
+                  "object-cover",
+                  genImage === "/placeholder.svg" &&
+                    "scale-150 dark:brightness-[0.4] dark:grayscale",
                 )}
                 alt="Generate Cover Image"
               />

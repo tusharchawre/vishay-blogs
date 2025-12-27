@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Command,
@@ -10,15 +10,15 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from '@/components/ui/command';
-import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
-import { Post, User } from '@prisma/client';
-import { useEffect, useState, useCallback } from 'react';
-import { searchPost } from '@/app/action';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
-import debounce from 'lodash/debounce';
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
+import { Post, User } from "@prisma/client";
+import { useEffect, useState, useCallback } from "react";
+import { searchPost } from "@/app/action";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import debounce from "lodash/debounce";
 
 type PostWithUser = Post & {
   user: {
@@ -29,21 +29,21 @@ type PostWithUser = Post & {
 
 export function SearchBar() {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<PostWithUser[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
       }
     };
 
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, []);
 
   const debouncedSearch = useCallback(async (searchQuery: string) => {
@@ -60,7 +60,7 @@ export function SearchBar() {
         setResults([]);
       }
     } catch (error) {
-      console.error('Search failed:', error);
+      console.error("Search failed:", error);
       setResults([]);
     } finally {
       setLoading(false);
@@ -72,18 +72,18 @@ export function SearchBar() {
       setQuery(searchQuery);
       debouncedSearch(searchQuery);
     },
-    [debouncedSearch]
+    [debouncedSearch],
   );
 
   useEffect(() => {
     if (open) {
-      handleSearch('');
+      handleSearch("");
     }
   }, [open, handleSearch]);
 
   const handleSelect = (post: PostWithUser) => {
     if (!post?.user?.name || !post?.title || !post?.id) {
-      console.error('Invalid post data:', post);
+      console.error("Invalid post data:", post);
       return;
     }
     router.push(`/${post.user.name}/${post.title}/${post.id}`);
@@ -98,11 +98,11 @@ export function SearchBar() {
         onClick={() => setOpen(true)}
       >
         <Search className="h-4 w-4 xl:mr-2" />
-        <span className="hidden text-muted-foreground xl:inline-flex">
+        <span className="text-muted-foreground hidden xl:inline-flex">
           Search...
         </span>
         <span className="sr-only">Search</span>
-        <kbd className="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 xl:flex">
+        <kbd className="bg-muted pointer-events-none absolute top-2 right-1.5 hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none xl:flex">
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
@@ -132,8 +132,8 @@ export function SearchBar() {
                   >
                     <div className="flex flex-col items-start">
                       <span className="font-medium">{post.title}</span>
-                      <span className="text-sm text-muted-foreground">
-                        by {post.user.name.replaceAll('-', ' ')}
+                      <span className="text-muted-foreground text-sm">
+                        by {post.user.name.replaceAll("-", " ")}
                       </span>
                     </div>
                   </CommandItem>

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Moon, Sun } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Moon, Sun } from "lucide-react";
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
@@ -22,11 +22,11 @@ export function ThemeSwitch() {
     <div className="flex items-center space-x-2">
       <Switch
         id="theme-switch"
-        checked={theme === 'dark'}
-        onCheckedChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        checked={theme === "dark"}
+        onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
       />
       <Label htmlFor="theme-switch" className="flex items-center space-x-2">
-        {theme === 'dark' ? (
+        {theme === "dark" ? (
           <>
             <Moon className="h-4 w-4" />
           </>
