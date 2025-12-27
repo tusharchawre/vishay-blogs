@@ -1,12 +1,14 @@
-"use client";
-import { Editor } from "../_components/DynamicEditor";
-import { useEffect, useState } from "react";
+'use client';
+import { Editor } from '../_components/DynamicEditor';
+import { useEffect, useState } from 'react';
 
 const Page = () => {
-  const [initialContent, setInitialContent] = useState<string | undefined>(undefined);
+  const [initialContent, setInitialContent] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
-    const savedContent = localStorage.getItem("editor");
+    const savedContent = localStorage.getItem('editor');
     if (savedContent) {
       setInitialContent(savedContent);
     }
@@ -14,10 +16,7 @@ const Page = () => {
 
   return (
     <div>
-      <Editor
-        initialContent={initialContent}
-        editable={true}
-      />
+      <Editor initialContent={initialContent} editable={true} />
     </div>
   );
 };

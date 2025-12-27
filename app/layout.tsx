@@ -1,34 +1,36 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import Providers from "@/providers";
-import { Navbar } from "./_components/Navbar";
-import { Gradient } from "@/components/Gradient";
-import { Toaster } from "sonner";
+import type { Metadata } from 'next';
+import './globals.css';
+import Providers from '@/providers';
+import { Navbar } from './_components/Navbar';
+import { Gradient } from '@/components/Gradient';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: "V-shy Blogs",
-  description: "A modern blogging platform for sharing your thoughts and ideas",
-  metadataBase: new URL ("https://v-shy.tusharchawre.space"),
+  title: 'V-shy Blogs',
+  description: 'A modern blogging platform for sharing your thoughts and ideas',
+  metadataBase: new URL('https://v-shy.tusharchawre.space'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: '/',
     siteName: 'V-shy Blogs',
     title: 'V-shy Blogs - Share Your Stories',
-    description: 'A modern blogging platform for sharing your thoughts and ideas',
+    description:
+      'A modern blogging platform for sharing your thoughts and ideas',
     images: [
       {
         url: '/opengraph-image.png',
         width: 1200,
         height: 630,
         alt: 'V-shy Blogs',
-      }
+      },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'V-shy Blogs - Share Your Stories',
-    description: 'A modern blogging platform for sharing your thoughts and ideas',
+    description:
+      'A modern blogging platform for sharing your thoughts and ideas',
     images: ['/twitter-image.png'],
     creator: '@tusharctwt',
   },
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-site-verification'
+    google: 'your-google-site-verification',
   },
 };
 

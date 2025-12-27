@@ -1,11 +1,9 @@
-"use client"
-import React from 'react'
-import { LoginCard } from '../_components/Login-Card'
+'use client';
+import React from 'react';
+import { LoginCard } from '../_components/Login-Card';
 
 function page() {
-  return (
-    <LoginCard />
-  )
+  return <LoginCard />;
 }
 
-export default page
+export default page;

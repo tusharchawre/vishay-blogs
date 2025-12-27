@@ -1,11 +1,11 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { prisma } from "@/prisma";
-import Image from "next/image";
-import PostItem from "../_components/PostItem";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { ProfileSection } from "@/components/profile-section";
-import { getUser } from "@/hooks/useUser";
+import { Skeleton } from '@/components/ui/skeleton';
+import { prisma } from '@/prisma';
+import Image from 'next/image';
+import PostItem from '../_components/PostItem';
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { ProfileSection } from '@/components/profile-section';
+import { getUser } from '@/hooks/useUser';
 
 export default async function Page({
   params,
@@ -14,15 +14,15 @@ export default async function Page({
 }) {
   const usernameParams = (await params).username;
 
-  const currentUser = await getUser()
+  const currentUser = await getUser();
 
   // Todo -> Needs Better Parsing
-  const firstDashIndex = usernameParams.indexOf("-");
+  const firstDashIndex = usernameParams.indexOf('-');
   let username = usernameParams;
   if (firstDashIndex !== -1) {
     username =
       usernameParams.slice(0, firstDashIndex + 1) +
-      usernameParams.slice(firstDashIndex + 1).replaceAll("-", " ");
+      usernameParams.slice(firstDashIndex + 1).replaceAll('-', ' ');
   }
 
   const user = await prisma.user.findFirst({
@@ -62,32 +62,32 @@ export default async function Page({
   });
 
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   if (!user) {
     return (
-      <div className="h-[calc(100vh-4rem)] w-full flex flex-col items-center justify-center gap-4">
-        <div className="text-6xl mb-4">👤</div>
+      <div className="flex h-[calc(100vh-4rem)] w-full flex-col items-center justify-center gap-4">
+        <div className="mb-4 text-6xl">👤</div>
         <h1 className="text-2xl font-semibold">User Not Found</h1>
-        <p className="text-muted-foreground text-center max-w-md">
+        <p className="max-w-md text-center text-muted-foreground">
           We couldn't find a user with the username "{username}". They might
           have changed their username or deleted their account.
         </p>
         <Link
           href="/"
-          className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+          className="mt-4 rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Return Home
         </Link>
@@ -97,44 +97,48 @@ export default async function Page({
 
   return (
     <div className="h-fit">
-      <div className="w-full h-[calc(100vh-4rem)] flex">
-        <aside className="w-[30%] hidden md:flex h-full bg-[#ECECEC30] dark:bg-[#20202030] flex-col gap-2 items-center p-4">
-          <div className="w-full h-16 flex items-center justify-around p-2 mt-8 dark:bg-[#33333373] bg-[#D9D9D973] rounded-lg">
+      <div className="flex h-[calc(100vh-4rem)] w-full">
+        <aside className="hidden h-full w-[30%] flex-col items-center gap-2 bg-[#ECECEC30] p-4 dark:bg-[#20202030] md:flex">
+          <div className="mt-8 flex h-16 w-full items-center justify-around rounded-lg bg-[#D9D9D973] p-2 dark:bg-[#33333373]">
             {user.image ? (
               <Image
-                src={user.image.replace("s96-c", "s384-c")}
+                src={user.image.replace('s96-c', 's384-c')}
                 width={500}
                 height={500}
                 alt="Profile Pic"
-                className="rounded-lg h-12 aspect-square w-12"
+                className="aspect-square h-12 w-12 rounded-lg"
               />
             ) : (
-              <Skeleton className="rounded-lg h-12 aspect-square w-12" />
+              <Skeleton className="aspect-square h-12 w-12 rounded-lg" />
             )}
 
             <div>
               <p className="text-base font-semibold text-foreground">
-                {user.name?.replace("-", " ")}
+                {user.name?.replace('-', ' ')}
               </p>
-              <p className="text-sm font-light text-muted-foreground text-wrap">
+              <p className="text-wrap text-sm font-light text-muted-foreground">
                 {user.email}
               </p>
             </div>
           </div>
 
-          <ProfileSection post={post} user={user} selfPage={currentUser?.email === user.email} />
+          <ProfileSection
+            post={post}
+            user={user}
+            selfPage={currentUser?.email === user.email}
+          />
 
           <Separator />
 
           {/* TODO: Lot of code redundancy here. Prolly just need to make a better navigation and use these as components rendering on same page */}
-          <div className="w-full flex flex-col gap-2">
+          <div className="flex w-full flex-col gap-2">
             <Link href={`/${user.name}`}>
-              <div className="w-full h-fit dark:bg-[#33333373] bg-[#D9D9D973] flex items-center rounded-md px-4 py-2">
+              <div className="flex h-fit w-full items-center rounded-md bg-[#D9D9D973] px-4 py-2 dark:bg-[#33333373]">
                 <p>Home</p>
               </div>
             </Link>
             <Link href={`/${user.name}/drafts`}>
-              <div className="w-full h-fit  flex items-center rounded-md px-4 py-2">
+              <div className="flex h-fit w-full items-center rounded-md px-4 py-2">
                 <p>Drafts</p>
               </div>
             </Link>
@@ -146,30 +150,30 @@ export default async function Page({
           </div>
         </aside>
 
-        <div className="w-full h-full px-1 md:px-16 py-4 overflow-y-scroll">
-          <div className="w-full md:hidden max-w-[75%] mx-auto h-16 flex items-center justify-around p-2 mt-8 dark:bg-[#33333373] bg-[#D9D9D973] rounded-lg">
+        <div className="h-full w-full overflow-y-scroll px-1 py-4 md:px-16">
+          <div className="mx-auto mt-8 flex h-16 w-full max-w-[75%] items-center justify-around rounded-lg bg-[#D9D9D973] p-2 dark:bg-[#33333373] md:hidden">
             {user.image ? (
               <Image
-                src={user.image.replace("s96-c", "s384-c")}
+                src={user.image.replace('s96-c', 's384-c')}
                 width={500}
                 height={500}
                 alt="Profile Pic"
-                className="rounded-lg h-12 aspect-square w-12"
+                className="aspect-square h-12 w-12 rounded-lg"
               />
             ) : (
-              <Skeleton className="rounded-lg h-12 aspect-square w-12" />
+              <Skeleton className="aspect-square h-12 w-12 rounded-lg" />
             )}
 
             <div>
               <p className="text-base font-semibold text-foreground">
                 {user.name}
               </p>
-              <p className="text-sm font-light text-muted-foreground text-wrap">
+              <p className="text-wrap text-sm font-light text-muted-foreground">
                 {user.email}
               </p>
             </div>
           </div>
-          <div className="h-full flex flex-col gap-5 py-5">
+          <div className="flex h-full flex-col gap-5 py-5">
             {post.map((post, idx) => {
               const hasLiked = post.likes.some(
                 (like) => like.user.name === user.name

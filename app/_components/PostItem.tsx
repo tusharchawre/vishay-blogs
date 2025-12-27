@@ -1,20 +1,20 @@
-"use client";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, MoreVertical, Pencil, Trash, Trash2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
-import { handleLike } from "../action";
-import { motion } from "motion/react";
+'use client';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Heart, MoreVertical, Pencil, Trash, Trash2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { handleLike } from '../action';
+import { motion } from 'motion/react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
-import { DeleteModal } from "@/components/modals/deleteModal";
-import { encodeBlogUri } from "@/app/utils/uriParser";
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { redirect } from 'next/navigation';
+import { DeleteModal } from '@/components/modals/deleteModal';
+import { encodeBlogUri } from '@/app/utils/uriParser';
 
 interface PostProps {
   postId: number;
@@ -47,7 +47,7 @@ const PostItem = ({
   const [likesCount, setLikesCount] = useState(likes);
 
   const handleEdit = () => {
-    redirect(`/${username}/${encodeBlogUri(title, postId)}/edit`)
+    redirect(`/${username}/${encodeBlogUri(title, postId)}/edit`);
   };
 
   const handleDelete = () => {
@@ -65,30 +65,36 @@ const PostItem = ({
     } catch (error) {
       setHasLiked((prev) => !prev);
       setLikesCount((prev) => (hasLikedState ? prev + 1 : prev - 1));
-      console.error("Failed to update like status", error);
+      console.error('Failed to update like status', error);
     }
   };
 
-  if (!content) return (content = "Content not found");
+  if (!content) return (content = 'Content not found');
 
   const parsedContent = JSON.parse(content)[1].content.map(
     (x: { text: string }) => x.text
   )[0];
 
   return (
-    <Link href={`/${username.replaceAll(" ", "-")}/${encodeBlogUri(title, postId)}`} prefetch>
+    <Link
+      href={`/${username.replaceAll(' ', '-')}/${encodeBlogUri(title, postId)}`}
+      prefetch
+    >
       <motion.div
-        initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 10, filter: 'blur(10px)' }}
+        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         transition={{
-          ease: "easeInOut",
+          ease: 'easeInOut',
           duration: 0.2,
           delay: index * 0.2,
         }}
-        className="flex w-full h-40 md:h-48 bg-[#dfdfdf]/30 dark:bg-[#24242447] px-2 rounded-lg relative"
+        className="relative flex h-40 w-full rounded-lg bg-[#dfdfdf]/30 px-2 dark:bg-[#24242447] md:h-48"
       >
         {showActions && (
-          <div onClick={(e) => e.preventDefault()} className="absolute top-2 right-2 z-100">
+          <div
+            onClick={(e) => e.preventDefault()}
+            className="z-100 absolute right-2 top-2"
+          >
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -111,7 +117,7 @@ const PostItem = ({
                   <DeleteModal title={title} id={postId}>
                     <Button
                       variant="ghost"
-                      className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                      className="w-full justify-start gap-2 text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950"
                     >
                       <Trash className="h-4 w-4" />
                       Delete
@@ -122,42 +128,42 @@ const PostItem = ({
             </Popover>
           </div>
         )}
-        <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
-          <div className="flex gap-2 h-5 items-center">
+        <div className="flex h-full w-[80%] flex-col justify-around px-4 py-2">
+          <div className="flex h-5 items-center gap-2">
             {userImg && (
               <Image
                 src={userImg}
                 width={50}
                 height={50}
                 alt="Profile Pic"
-                className="rounded-full w-4 h-4"
+                className="h-4 w-4 rounded-full"
               />
             )}
             <p className="text-sm text-black/45 dark:text-white/45">
-              {username.replace("-", " ")}
+              {username.replace('-', ' ')}
             </p>
           </div>
-          <h1 className="text-base md:text-lg font-semibold">{title}</h1>
-          <p className="text-black/45 dark:text-white/45 line-clamp-2 text-sm md:text-base font-normal">
+          <h1 className="text-base font-semibold md:text-lg">{title}</h1>
+          <p className="line-clamp-2 text-sm font-normal text-black/45 dark:text-white/45 md:text-base">
             {parsedContent}
           </p>
-          <div className="flex w-full  gap-8">
+          <div className="flex w-full gap-8">
             <p className="text-sm text-black/45 dark:text-white/45">{date}</p>
-            <p className="flex items-center justify-center gap-1 opacity-60 text-sm">
-              {likesCount}{" "}
+            <p className="flex items-center justify-center gap-1 text-sm opacity-60">
+              {likesCount}{' '}
               <Heart
-                className={`size-3 ${hasLikedState ? "fill-red-500" : ""}`}
+                className={`size-3 ${hasLikedState ? 'fill-red-500' : ''}`}
                 onClick={clickedLike}
               />
             </p>
           </div>
         </div>
-        <div className="h-full rounded-lg p-4 ">
+        <div className="h-full rounded-lg p-4">
           {coverImg && (
             <Image
               width={500}
               height={500}
-              className="h-full object-cover w-24 md:w-52 rounded-lg"
+              className="h-full w-24 rounded-lg object-cover md:w-52"
               src={coverImg}
               alt={title}
             />
@@ -170,22 +176,22 @@ const PostItem = ({
 
 export function ItemSkeleton() {
   return (
-    <div className="flex w-full h-56 border-b border-black/25 ">
-      <div className="w-[80%] h-full flex flex-col justify-around px-4 py-2">
-        <div className="flex gap-2 h-5 items-center">
-          <Skeleton className="rounded-md w-5 h-5" />
+    <div className="flex h-56 w-full border-b border-black/25">
+      <div className="flex h-full w-[80%] flex-col justify-around px-4 py-2">
+        <div className="flex h-5 items-center gap-2">
+          <Skeleton className="h-5 w-5 rounded-md" />
           <Skeleton className="h-4 w-16" />
         </div>
         <h1 className="text-2xl font-bold">
-          <Skeleton className="w-full h-8" />
+          <Skeleton className="h-8 w-full" />
         </h1>
-        <p className="text-black/70 line-clamp-2">
-          <Skeleton className="w-full h-6" />
+        <p className="line-clamp-2 text-black/70">
+          <Skeleton className="h-6 w-full" />
         </p>
         <div className="flex w-full gap-8">
-          <Skeleton className="w-full h-4" />
+          <Skeleton className="h-4 w-full" />
           <p className="text-sm opacity-60">
-            <Skeleton className="w-full h-4" />
+            <Skeleton className="h-4 w-full" />
           </p>
         </div>
       </div>

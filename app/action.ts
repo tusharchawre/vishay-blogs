@@ -1,63 +1,71 @@
-"use server"
+'use server';
 
-import { auth } from "@/auth"
-import { prisma } from "@/prisma"
-import { Block } from "@blocknote/core"
-import { Post } from "@prisma/client"
+import { auth } from '@/auth';
+import { prisma } from '@/prisma';
+import { Block } from '@blocknote/core';
+import { Post } from '@prisma/client';
 
 interface SavePostProps {
-  content: Block[]
-  coverImg: string
-  publishStatus: boolean
-  postId?: number
-  searchText: string
+  content: Block[];
+  coverImg: string;
+  publishStatus: boolean;
+  postId?: number;
+  searchText: string;
 }
 
-export const savePost = async ({ content, coverImg, publishStatus, postId, searchText }: SavePostProps) => {
-  const session = await auth()
+export const savePost = async ({
+  content,
+  coverImg,
+  publishStatus,
+  postId,
+  searchText,
+}: SavePostProps) => {
+  const session = await auth();
 
   if (content[0] === undefined) {
-    return new Error("Please Insert Content")
+    return new Error('Please Insert Content');
   }
 
-  const parsedTitle = JSON.parse(JSON.stringify(content[0].content, ["text"]))[0].text;
+  const parsedTitle = JSON.parse(
+    JSON.stringify(content[0].content, ['text'])
+  )[0].text;
 
   if (!parsedTitle || parsedTitle.trim().length === 0) {
-    return new Error("Please provide a valid title")
+    return new Error('Please provide a valid title');
   }
 
   if (!session || !session.user || !session.user.email) {
-    return new Error("User not authenticated or session invalid")
+    return new Error('User not authenticated or session invalid');
   }
 
-  const email = session.user.email
+  const email = session.user.email;
 
   const currentUser = await prisma.user.findFirst({
     where: {
-      email: session.user.email
-    }
-  })
+      email: session.user.email,
+    },
+  });
 
   if (!currentUser) {
-    return new Error("User not found")
+    return new Error('User not found');
   }
 
   if (postId) {
     const post = await prisma.post.findUnique({
       where: {
-        id: postId
-      }
-    })
+        id: postId,
+      },
+    });
     if (!post) {
-      return new Error("Post not found")
+      return new Error('Post not found');
     }
     if (post.userId !== currentUser.id) {
-      return new Error("You are not authorized to edit this post")
+      return new Error('You are not authorized to edit this post');
     }
 
     await prisma.post.update({
       where: {
-        id: post.id
+        id: post.id,
       },
       data: {
         title: parsedTitle,
@@ -67,13 +75,12 @@ export const savePost = async ({ content, coverImg, publishStatus, postId, searc
         searchText: searchText,
         user: {
           connect: {
-            email: email
-          }
-        }
-      }
-    })
-  }
-  else {
+            email: email,
+          },
+        },
+      },
+    });
+  } else {
     await prisma.post.create({
       data: {
         title: parsedTitle,
@@ -83,62 +90,53 @@ export const savePost = async ({ content, coverImg, publishStatus, postId, searc
         searchText: searchText,
         user: {
           connect: {
-            email: email
-          }
-        }
-      }
-    })
+            email: email,
+          },
+        },
+      },
+    });
   }
-}
-
+};
 
 interface GetPostProps {
-  postId: number
+  postId: number;
 }
 
-
-
-
-
 export const getPost = async ({ postId }: GetPostProps) => {
-
-
   const post = await prisma.post.findFirst({
     where: {
-      id: postId!
+      id: postId!,
     },
     include: {
       user: {
         select: {
           name: true,
-          image: true
-        }
+          image: true,
+        },
       },
       likes: {
         select: {
-          user: true
-        }
-      }
-    }
-  })
+          user: true,
+        },
+      },
+    },
+  });
 
   if (!post?.content) {
-    return null
+    return null;
   }
-
 
   return post;
-}
-
+};
 
 export async function handleLike(postId: number) {
-  const session = await auth()
+  const session = await auth();
 
   if (!session || !session.user || !session.user.email) {
-    throw new Error("User not authenticated or session invalid")
+    throw new Error('User not authenticated or session invalid');
   }
 
-  const userEmail = session.user.email
+  const userEmail = session.user.email;
 
   const user = await prisma.user.findUnique({
     where: {
@@ -148,7 +146,7 @@ export async function handleLike(postId: number) {
 
   const userId = user?.id;
   if (!userId) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
   const post = await prisma.post.findUnique({
@@ -158,7 +156,7 @@ export async function handleLike(postId: number) {
   });
 
   if (!post) {
-    throw new Error("Post not found");
+    throw new Error('Post not found');
   }
 
   const like = await prisma.like.findUnique({
@@ -179,10 +177,10 @@ export async function handleLike(postId: number) {
             userId,
           },
         },
-      })
-      return { message: "Unliked Post." };
+      });
+      return { message: 'Unliked Post.' };
     } catch (error) {
-      return { message: "Database Error: Failed to Unlike Post." + error };
+      return { message: 'Database Error: Failed to Unlike Post.' + error };
     }
   }
 
@@ -193,14 +191,11 @@ export async function handleLike(postId: number) {
         userId,
       },
     });
-    return { message: "Liked Post." };
+    return { message: 'Liked Post.' };
   } catch (error) {
-    return { message: "Database Error: Failed to Like Post." + error };
+    return { message: 'Database Error: Failed to Like Post.' + error };
   }
 }
-
-
-
 
 export const getAllPost = async () => {
   const posts = await prisma.post.findMany({
@@ -208,7 +203,7 @@ export const getAllPost = async () => {
       user: {
         select: {
           name: true,
-          image: true
+          image: true,
         },
       },
       likes: {
@@ -216,18 +211,16 @@ export const getAllPost = async () => {
           user: {
             select: {
               name: true,
-              image: true
-            }
-          }
-        }
+              image: true,
+            },
+          },
+        },
       },
-    }
-  })
-
+    },
+  });
 
   return posts;
-}
-
+};
 
 export const getMostLiked = async () => {
   const likedPost = await prisma.post.findMany({
@@ -235,38 +228,33 @@ export const getMostLiked = async () => {
       user: {
         select: {
           name: true,
-          image: true
-        }
+          image: true,
+        },
       },
       likes: {
         select: {
           user: {
             select: {
               name: true,
-              image: true
-            }
-          }
-        }
+              image: true,
+            },
+          },
+        },
       },
-
     },
     orderBy: {
       likes: {
-        _count: "desc"
-      }
+        _count: 'desc',
+      },
     },
-    take: 3
-  })
-
+    take: 3,
+  });
 
   return likedPost;
-
-}
-
-
+};
 
 export const handleFollow = async (followingId: string) => {
-  const session = await auth()
+  const session = await auth();
 
   if (!session || !session.user || !session.user.email) {
     return null;
@@ -274,13 +262,13 @@ export const handleFollow = async (followingId: string) => {
 
   const user = await prisma.user.findUnique({
     where: {
-      email: session?.user?.email
-    }
-  })
+      email: session?.user?.email,
+    },
+  });
 
   if (!user || !user.name) return null;
 
-  const followerId = user?.id
+  const followerId = user?.id;
 
   if (followerId === followingId) {
     return null;
@@ -290,93 +278,92 @@ export const handleFollow = async (followingId: string) => {
     where: {
       followerId_followingId: {
         followerId,
-        followingId
-      }
-    }
-  })
+        followingId,
+      },
+    },
+  });
 
   if (follow) {
     await prisma.follows.delete({
       where: {
         followerId_followingId: {
           followerId,
-          followingId
-        }
-      }
-    })
-  }
-
-  else {
+          followingId,
+        },
+      },
+    });
+  } else {
     await prisma.follows.create({
       data: {
         followerId: followerId,
-        followingId: followingId
-      }
-    })
+        followingId: followingId,
+      },
+    });
   }
-
-}
-
+};
 
 export const deletePost = async (id: number, title: string) => {
   const session = await auth();
 
   if (!session || !session.user || !session.user.email) {
-    return new Error("User not authenticated or session invalid")
+    return new Error('User not authenticated or session invalid');
   }
 
   const email = session.user.email;
 
   const user = await prisma.user.findUnique({
     where: {
-      email: email
-    }
-  })
+      email: email,
+    },
+  });
 
   const post = await prisma.post.findUnique({
     where: {
       id: id,
-      title: title
-    }
-  })
+      title: title,
+    },
+  });
 
   if (!post) {
-    return new Error("Post not found")
+    return new Error('Post not found');
   }
 
-
   if (post.userId !== user?.id) {
-    return new Error("You are not authorized to delete this post")
+    return new Error('You are not authorized to delete this post');
   }
 
   await prisma.post.delete({
     where: {
-      id: id
-    }
-  })
+      id: id,
+    },
+  });
 
-  return { message: "Post deleted successfully" }
-}
+  return { message: 'Post deleted successfully' };
+};
 
 interface SearchProps {
-  query: string
-  page: number
-  limit: number
+  query: string;
+  page: number;
+  limit: number;
 }
 
-export const searchPost = async ({ query, page = 1, limit = 10 }: SearchProps) => {
+export const searchPost = async ({
+  query,
+  page = 1,
+  limit = 10,
+}: SearchProps) => {
   const skip = (page - 1) * limit;
 
   if (!query || query.trim().length === 0) {
     const posts = await prisma.post.findMany({
       where: {
-        published: true
+        published: true,
       },
       include: {
         user: {
           select: {
             name: true,
-            image: true
+            image: true,
           },
         },
         likes: {
@@ -384,23 +371,23 @@ export const searchPost = async ({ query, page = 1, limit = 10 }: SearchProps) =
             user: {
               select: {
                 name: true,
-                image: true
-              }
-            }
-          }
+                image: true,
+              },
+            },
+          },
         },
       },
       orderBy: { createdAt: 'desc' },
       take: limit,
       skip: skip,
-    })
+    });
 
-    const total = await prisma.post.count()
+    const total = await prisma.post.count();
 
-    return { posts, total }
+    return { posts, total };
   }
 
-  const searchTerm = query.trim()
+  const searchTerm = query.trim();
 
   const posts = await prisma.post.findMany({
     where: {
@@ -409,22 +396,22 @@ export const searchPost = async ({ query, page = 1, limit = 10 }: SearchProps) =
         {
           title: {
             contains: searchTerm,
-            mode: "insensitive"
-          }
+            mode: 'insensitive',
+          },
         },
         {
           searchText: {
             contains: searchTerm,
-            mode: "insensitive"
-          }
-        }
-      ]
+            mode: 'insensitive',
+          },
+        },
+      ],
     },
     include: {
       user: {
         select: {
           name: true,
-          image: true
+          image: true,
         },
       },
       likes: {
@@ -432,18 +419,18 @@ export const searchPost = async ({ query, page = 1, limit = 10 }: SearchProps) =
           user: {
             select: {
               name: true,
-              image: true
-            }
-          }
-        }
+              image: true,
+            },
+          },
+        },
       },
     },
     orderBy: {
-      createdAt: 'desc'
+      createdAt: 'desc',
     },
     take: limit,
     skip: skip,
-  })
+  });
 
   const total = await prisma.post.count({
     where: {
@@ -452,18 +439,18 @@ export const searchPost = async ({ query, page = 1, limit = 10 }: SearchProps) =
         {
           title: {
             contains: searchTerm,
-            mode: "insensitive"
-          }
+            mode: 'insensitive',
+          },
         },
         {
           searchText: {
             contains: searchTerm,
-            mode: "insensitive"
-          }
-        }
-      ]
-    }
-  })
+            mode: 'insensitive',
+          },
+        },
+      ],
+    },
+  });
 
   return { posts, total, query: searchTerm };
-}
+};

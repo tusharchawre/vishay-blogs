@@ -1,15 +1,15 @@
-"use client";
-import { Post, Prisma } from "@prisma/client";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
-import { handleFollow } from "@/app/action";
-import { useState } from "react";
+'use client';
+import { Post, Prisma } from '@prisma/client';
+import { Button } from './ui/button';
+import { Separator } from './ui/separator';
+import { handleFollow } from '@/app/action';
+import { useState } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/tooltip';
+import { Loader2 } from 'lucide-react';
 
 type UserWithFollow = Prisma.UserGetPayload<{
   include: { followers: true; following: true };
@@ -34,49 +34,51 @@ export const ProfileSection = ({ post, user, selfPage }: SectionProps) => {
   };
 
   return (
-    <div className="w-full h-fit flex gap-2 flex-col items-center justify-around p-2 mt-8 dark:bg-[#33333373] bg-[#D9D9D973] rounded-lg">
-      <p className="text-sm font-light text-muted-foreground text-wrap">
+    <div className="mt-8 flex h-fit w-full flex-col items-center justify-around gap-2 rounded-lg bg-[#D9D9D973] p-2 dark:bg-[#33333373]">
+      <p className="text-wrap text-sm font-light text-muted-foreground">
         {post.length} Posts
       </p>
       <Separator />
-      <p className="text-sm font-light text-muted-foreground text-wrap">
+      <p className="text-wrap text-sm font-light text-muted-foreground">
         {user.followers.length} Followers
       </p>
       <Separator />
-      <p className="text-sm font-light text-muted-foreground text-wrap">
+      <p className="text-wrap text-sm font-light text-muted-foreground">
         {user.following.length} Following
       </p>
       <Separator />
 
-
-      {selfPage ? <><Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="secondary">Follow</Button>
-        </TooltipTrigger>
-        <TooltipContent >
-          <p>So Narcissistic!</p>
-        </TooltipContent>
-      </Tooltip>
-      <p className="text-muted-foreground text-xs">You can't follow yourself!</p>
-      </> : <Button
-        onClick={clickFollow}
-        disabled={loading}
-        className="w-full"
-        variant="secondary"
-      >
-        {loading ? (
-          <div>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <p>Follow</p>
-          </div>
-        ) : (
-          <>
-            "Follow"
-          </>
-        )}
-      </Button>}
-
-
+      {selfPage ? (
+        <>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="secondary">Follow</Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>So Narcissistic!</p>
+            </TooltipContent>
+          </Tooltip>
+          <p className="text-xs text-muted-foreground">
+            You can't follow yourself!
+          </p>
+        </>
+      ) : (
+        <Button
+          onClick={clickFollow}
+          disabled={loading}
+          className="w-full"
+          variant="secondary"
+        >
+          {loading ? (
+            <div>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <p>Follow</p>
+            </div>
+          ) : (
+            <>"Follow"</>
+          )}
+        </Button>
+      )}
     </div>
   );
 };
