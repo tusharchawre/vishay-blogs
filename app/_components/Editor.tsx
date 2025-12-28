@@ -141,7 +141,10 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
   const onChange = useCallback(async () => {
     if (!editable) {
       const html = await editor.blocksToFullHTML(editor.document);
-      const sanitizedHTML = DOMPurify.sanitize(html);
+      const sanitizedHTML = DOMPurify.sanitize(
+        html.replace(/<p([^>]*)><\/p>/g, "<p$1><br></p>"),
+      );
+      console.log(sanitizedHTML);
       setHTML(sanitizedHTML);
     } else {
       setEditing(true);
