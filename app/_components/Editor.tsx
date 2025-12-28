@@ -169,7 +169,7 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
 
   if (!editable) {
     return (
-      <>
+      <div className="mt-4 overflow-hidden rounded-xl bg-neutral-900">
         {coverImg && (
           <motion.div
             initial={{
@@ -183,7 +183,7 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
             <Image
               width={1080}
               height={900}
-              className="mx-auto mt-4 h-64 w-full rounded-md object-cover"
+              className="mx-auto h-64 w-full rounded-md mask-b-from-0% mask-b-to-90% object-cover opacity-80"
               src={coverImg}
               alt="Cover Image"
             />
@@ -194,10 +194,10 @@ function Editor({ initialContent, editable, draftImg, post }: EditorProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
-          className="prose prose-lg dark:prose-invert max-w-none"
+          className="prose prose-lg dark:prose-invert max-w-none px-8"
           dangerouslySetInnerHTML={{ __html: html }}
         />
-      </>
+      </div>
     );
   }
 
